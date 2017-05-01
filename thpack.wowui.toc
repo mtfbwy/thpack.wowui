@@ -1,0 +1,28 @@
+## Interface: 50004
+## Title: thpack
+## DefaultState: Enabled
+## Version: r50004320
+## Author: tanghao
+## Date: 2017-04-30
+## SavedVariables: RES_HEIGHT
+
+src/framework.lua
+src/resource.lua
+src/env.lua
+src/api.lua
+
+src/character.lua
+#src/hotkey.lua
+src/misc.lua
+src/notifier.lua
+src/yard.lua
+
+src/tweak/backpack.lua
+#src/tweak/castingBar.lua
+src/tweak/chat.lua
+src/tweak/errorsFrame.lua
+#src/tweak/minimap.lua
+#src/tweak/nameplate.lua
+src/tweak/quest.lua
+src/tweak/targetFrame.lua
+src/tweak/tooltip.lua

@@ -1,0 +1,11 @@
+<Bindings>
+    <Binding name="TH_TOGGLE_MAP" runOnUp="true" header="TH_BIND">
+        if keystate == "down" then
+            if not InCombatLockdown() then
+                ShowUIPanel(WorldMapFrame)
+            end
+        else
+            HideUIPanel(WorldMapFrame)
+        end
+    </Binding>
+</Bindings>
