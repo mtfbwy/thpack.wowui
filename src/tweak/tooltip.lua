@@ -26,7 +26,7 @@ T.ask("resource", "env", "api").answer("tweakTooltip", function(res, env, api)
     api.setFrameBackdrop(GameTooltipStatusBar, 0, 1);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
-    hpPercentage:SetWidth(60 * env.dotsPerPixel);
+    hpPercentage:SetWidth(80 * env.dotsPerPixel);
     hpPercentage:SetJustifyH("right");
     hpPercentage:SetPoint("left", -8 * env.dotsPerPixel, 0);
 
@@ -148,12 +148,23 @@ end);
 
 -- timer manager
 T.ask("VARIABLES_LOADED", "api").answer("timerManagerTooltip", function(_, api)
-
     hooksecurefunc("TimeManagerClockButton_Update", function()
         TimeManagerClockTicker:SetVertexColor(select(2, api.getLag()));
     end)
 
+    local lastUpdateTime = 0;
     function TimeManagerClockButton_UpdateTooltip()
+        -- avoid seeing fast growing memory
+        if not GameTooltip:IsShown() then
+            lastUpdateTime = GetSessionTime();
+        else
+            if GetSessionTime() > lastUpdateTime + 2 then
+                lastUpdateTime = GetSessionTime();
+            else
+                return;
+            end
+        end
+
         GameTooltip:ClearLines();
         if TimeManagerClockTicker.alarmFiring then
             if gsub(Settings.alarmMessage, "%s", "") ~= "" then
@@ -195,6 +206,7 @@ T.ask("VARIABLES_LOADED", "api").answer("timerManagerTooltip", function(_, api)
         else
             if (button == "LeftButton") then
                 collectgarbage("collect");
+                lastUpdateTime = 0;
             else
                 TimeManager_Toggle();
             end

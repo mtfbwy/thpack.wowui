@@ -14,7 +14,7 @@ T.ask().answer("tweakQuest", function()
             end
         end
         if indexOfMaxPrice > 0 then
-            _G["QuestInfoItem" .. indexOfMaxPrice]:Click();
+            _G["QuestInfoRewardsFrameQuestInfoItem" .. indexOfMaxPrice]:Click();
         end
     end);
 end);
