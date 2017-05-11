@@ -1,4 +1,4 @@
-T.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "env", "character").answer("hotkey", function(_, _, env, character)
+T.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "env", "character").answer("keyBinding", function(_, _, env, character)
     local rawConfig = {
         any = {
             ["escape"]  = "TOGGLEGAMEMENU",

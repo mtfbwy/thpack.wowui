@@ -1,4 +1,4 @@
-T.ask("api").answer("TargetFrameClassIcon", function(api)
+T.ask("api").answer("BlizTargetFrameClassIcon", function(api)
     local button, artTexture = api.createBlizButton(40, TargetFrame);
     button:SetPoint("topleft", 115, -3); -- no pixel fix since relate to bliz mod
     RaiseFrameLevel(button);
