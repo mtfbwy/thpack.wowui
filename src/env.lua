@@ -1,27 +1,27 @@
 T.ask("VARIABLES_LOADED").answer("env", function()
 
     SetCVar("screenshotQuality", 10);
-    SetCVar("ShowClassColorInNameplate", 1);
 
-    RegisterCVar("bloatnameplates", 0);
-    SetCVar("bloatnameplates", 0);
-
-    RegisterCVar("bloatthreat", 0);
-    SetCVar("bloatthreat", 0);
-
-    -- 语言过滤器
     RegisterCVar("profanityFilter", 0);
     SetCVar("profanityFilter", 0);
 
+    SetCVar("lootUnderMouse", 0);
+    SetCVar("autoLootDefault", 1);
+    SetCVar("autoOpenLootHistory", 0);
+
+    SetCVar("alwaysShowActionBars", 1);
+
+    SetCVar("nameplateMaxDistance", 50);
+    SetCVar("nameplateOtherTopInset", GetCVarDefault("nameplateOtherTopInset"));
+    SetCVar("nameplateOtherBottomInset", GetCVarDefault("nameplateOtherBottomInset"));
+
     RegisterCVar("targetNearestDistance", 50);
     SetCVar("targetNearestDistance", 50);
-
     RegisterCVar("targetNearestDistanceRadius", 50);
     SetCVar("targetNearestDistanceRadius", 50);
 
     RegisterCVar("CombatLogRangeCreature", 50);
     SetCVar("CombatLogRangeCreature", 50);
-
     RegisterCVar("CombatLogRangeHostilePlayers", 50);
     SetCVar("CombatLogRangeHostilePlayers", 50);
 
@@ -44,22 +44,35 @@ T.ask("VARIABLES_LOADED").answer("env", function()
     -- but now I have to ask for it
     -- although it might be too late - every frame have been settled when user types something
 
-    -- save to wtf may work
     local physicalHeight = 1024
     if RES_HEIGHT ~= nil then
         physicalHeight = RES_HEIGHT;
+    else
+        L.logi("screen resolution height is not set, using default");
+        L.logi("to set, type \"/resHeight\"");
     end
-    L.logi("loaded screen height [" .. physicalHeight .. "]");
+    L.logi("screen resolution height [" .. physicalHeight .. "] loaded");
 
-    _G["SLASH_thScreenHeight1"] = "/screenHeight";
-    SlashCmdList["thScreenHeight"] = function(x)
-        local h = math.floor(tonumber(x))
-        if (h < 768) then
-            L.logi("ignored invalid screen height [" .. x .. "]")
-            return
+    _G["SLASH_thResHeight1"] = "/resHeight";
+    SlashCmdList["thResHeight"] = function(x)
+        if (x == nil or x == "") then
+            L.logi("screen resolution height affects pixel-perfect art like border and backdrop")
+            L.logi("usage: /resHeight \"reset\" | <number>");
+            return;
         end
-        RES_HEIGHT = h;
-        L.logi("saved screen height [" .. h .."], reload to take effect")
+        if (x == "unset" or x == "reset" or x == "nil") then
+            RES_HEIGHT = nil;
+            L.logi("reset screen resolution height");
+            return;
+        end
+        local h = math.floor(tonumber(x))
+        if (h >= 768) then
+            RES_HEIGHT = h;
+            L.logi("screen resolution height [" .. h .."] saved")
+            L.logi("reload to take effect");
+            return;
+        end
+        L.logi("invalid screen resolution height [" .. x .. "] ignored");
     end;
 
     function round6(number)
