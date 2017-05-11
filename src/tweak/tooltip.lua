@@ -85,8 +85,8 @@ T.ask().answer("buffCasterTooltip", function()
     hooksecurefunc(GameTooltip, "SetUnitBuff", addCasterName)
 end);
 
--- unit target
-T.ask("resource").answer("unitTargetTooltip", function(res)
+-- unit, item and spell
+T.ask("resource").answer("miscTooltip", function(res)
     GameTooltip:HookScript("OnTooltipSetUnit", function(self)
         local _, unit = self:GetUnit();
         if unit then
@@ -112,10 +112,7 @@ T.ask("resource").answer("unitTargetTooltip", function(res)
             end
         end
     end);
-end);
 
--- item border quality
-T.ask().answer("itemQualityTooltip", function()
     GameTooltip:HookScript("OnTooltipSetItem", function(self)
         local itemName, itemLink = self:GetItem()
         if itemLink then
@@ -125,23 +122,19 @@ T.ask().answer("itemQualityTooltip", function()
             end
             local _, _, q, lv = GetItemInfo(itemLink);
 
-            -- 4.3 BlizUI已加入了物品lv
-            -- if lv then
-            -- self:AddLine("lv: " .. lv, 0, 1, 1);
-            -- end
+            if lv then
+                self:AddLine("lv: " .. lv, 0, 1, 1);
+            end
             if q then
                 self:SetBackdropBorderColor(GetItemQualityColor(q));
             end
         end
     end);
-end);
 
--- spell id
-T.ask().answer("spellIdTooltip", function()
     GameTooltip:HookScript("OnTooltipSetSpell", function(self)
         local spellName, spellRank, spellId = self:GetSpell()
         if spellId then
-            self:AddLine("spellId: " .. spellId, 0, 1, 1);
+            self:AddLine("id: " .. spellId, 0, 1, 1);
         end
     end);
 end);
