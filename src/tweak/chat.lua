@@ -4,17 +4,20 @@
 --CHAT_WHISPER_INFORM_GET = "→%s\32"
 T.ask().answer("tweakChat", function()
     local nextChatType = {
-        ["SAY"] = "RAID",
+        ["SAY"] = "PARTY",
+        ["PARTY"] = "RAID",
         ["RAID"] = "INSTANCE_CHAT",
         ["INSTANCE_CHAT"] = "GUILD",
         ["GUILD"] = "SAY",
     }
 
-    local isAvailable = {
-        ["GUILD"] = IsInGuild,
-        ["INSTANCE_CHAT"] = IsInInstance,
-        ["RAID"] = IsInRaid,
+    local isApplicable = {
         ["SAY"] = function() return 1 end,
+        ["PARTY"] = function() return not IsInRaid() and IsInGroup(LE_PARTY_CATEGORY_HOME); end,
+        ["RAID"] = IsInRaid,
+        -- ["INSTANCE_CHAT"] = IsInInstance,
+        ["INSTANCE_CHAT"] = function() return IsInGroup(LE_PARTY_CATEGORY_INSTANCE); end,
+        ["GUILD"] = IsInGuild,
     }
 
     function ChatEdit_CustomTabPressed(self)
@@ -24,7 +27,7 @@ T.ask().answer("tweakChat", function()
         local chatType = self:GetAttribute("chatType")
         repeat
             chatType = nextChatType[chatType] or "SAY"
-        until isAvailable[chatType]()
+        until isApplicable[chatType]()
         self:SetAttribute("chatType", chatType)
         ChatEdit_UpdateHeader(self)
     end
