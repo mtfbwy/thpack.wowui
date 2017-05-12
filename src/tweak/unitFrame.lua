@@ -1,4 +1,4 @@
-T.ask("api").answer("BlizTargetFrameClassIcon", function(api)
+T.ask("api").answer("addTargetFrameClassIcon", function(api)
     local button, artTexture = api.createBlizButton(40, TargetFrame);
     button:SetPoint("topleft", 115, -3); -- no pixel fix since relate to bliz mod
     RaiseFrameLevel(button);
@@ -6,7 +6,11 @@ T.ask("api").answer("BlizTargetFrameClassIcon", function(api)
 
     button:SetScript("OnMouseDown", function(self, button)
         if not UnitCanAttack("player", "target") and UnitIsPlayer("target") then
-            InspectUnit("target");
+            if InspectFrame and InspectFrame:IsShown() then
+                InspectFrame:Hide();
+            else
+                InspectUnit("target");
+            end
         end
     end);
 
