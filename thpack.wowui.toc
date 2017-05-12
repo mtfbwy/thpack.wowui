@@ -15,10 +15,10 @@ src/character.lua
 #src/keyBinding.lua
 src/misc.lua
 src/notifier.lua
+src/unitFrame.lua
 src/yard.lua
 
 src/tweak/backpack.lua
-#src/tweak/castingBar.lua
 src/tweak/chat.lua
 src/tweak/errorsFrame.lua
 #src/tweak/minimap.lua

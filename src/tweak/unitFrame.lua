@@ -31,3 +31,6 @@ T.ask("api").answer("addTargetFrameClassIcon", function(api)
 
     updateClassIcon("target", button, artTexture);
 end);
+
+-- TODO duplicate unit casting bar over its hp bar or name line
+-- TODO and change avatar changed to spell icon
