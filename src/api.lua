@@ -144,24 +144,26 @@ T.ask("resource", "env").answer("api", function(res, env)
     end
 
     local function createProgressbar(parent, backdropOutsetPixels)
-        local statusbar = createFrame("statusbar", parent);
-        setFrameBackdrop(statusbar, 0, backdropOutsetPixels); -- 边框透明
-        statusbar:SetMinMaxValues(0, 1);
-        statusbar:SetStatusBarTexture(res.texture.SQUARE);
-        statusbar:SetStatusBarColor(res.color.toSequence("008000")); -- for test
-        statusbar:SetValue(0.8); -- for test
+        local bar = createFrame("statusbar", parent);
+        setFrameBackdrop(bar, 0, backdropOutsetPixels); -- 边框透明
+        bar:SetMinMaxValues(0, 1);
+        bar:SetStatusBarTexture(res.texture.SQUARE);
+        bar:SetStatusBarColor(res.color.toSequence("008000")); -- for test
+        bar:SetValue(0.8); -- for test
 
-        local fsTimer = statusbar:CreateFontString();
-        fsTimer:SetFont(res.font.LBRITED, 14 * env.dotsPerPixel, "outline");
-        fsTimer:SetJustifyH("right");
-        fsTimer:SetPoint("right", -env.dotsPerPixel, -env.dotsPerPixel);
+        local text1 = bar:CreateFontString();
+        text1:SetFont(res.font.DEFAULT, 14 * env.dotsRelative, "outline");
+        text1:SetJustifyH("left");
+        text1:SetPoint("left", 2 * env.dotsPerPixel, -env.dotsPerPixel);
+        bar.text1 = text1;
 
-        local fsCaption = statusbar:CreateFontString();
-        fsCaption:SetFont(res.font.DEFAULT, 14 * env.dotsPerPixel, "outline");
-        fsCaption:SetJustifyH("left");
-        fsCaption:SetPoint("left", 2 * env.dotsPerPixel, -env.dotsPerPixel);
+        local text2 = bar:CreateFontString();
+        text2:SetFont(res.font.LBRITED, 14 * env.dotsRelative, "outline");
+        text2:SetJustifyH("right");
+        text2:SetPoint("right", -env.dotsPerPixel, -env.dotsPerPixel);
+        bar.text2 = text2;
 
-        return statusbar, fsTimer, fsCaption;
+        return bar
     end
 
     local function createAnchor(sideDots, parent)
