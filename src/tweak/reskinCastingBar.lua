@@ -1,5 +1,4 @@
--- a total style change, although reusing Bliz's code
-T.ask("resource", "env", "api").answer("castingBar", function(res, env, api)
+T.ask("resource", "env", "api").answer(function(res, env, api)
     CastingBarFrame:SetStatusBarTexture(res.texture.SQUARE);
     CastingBarFrame:SetSize(240 * env.dotsRelative, 24 * env.dotsRelative);
     api.setFrameBackdrop(CastingBarFrame, 1, 0);
