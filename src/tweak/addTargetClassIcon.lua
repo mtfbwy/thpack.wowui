@@ -1,4 +1,4 @@
-T.ask("api").answer(function(api)
+T.ask("api", "ClassIcon").answer(function(api, ClassIcon)
     local button, artTexture = api.createBlizButton(40, TargetFrame);
     button:SetPoint("topleft", 115, -3); -- no pixel fix since relate to bliz mod
     RaiseFrameLevel(button);
@@ -6,9 +6,9 @@ T.ask("api").answer(function(api)
     button.texture = artTexture;
 
     button:SetScript("OnMouseDown", function(self, button)
-        local unit = "target"
-        if not UnitCanAttack("player", unit) and UnitIsPlayer(unit) then
-            if button == "LeftButton" then
+        if button == "LeftButton" then
+            local unit = "target";
+            if UnitIsPlayer(unit) and not UnitCanAttack("player", unit) then
                 if InspectFrame and InspectFrame:IsShown() then
                     InspectFrame:Hide();
                 else
@@ -18,22 +18,18 @@ T.ask("api").answer(function(api)
         end
     end);
 
-    local function updateClassIcon(unit, button)
-        if UnitIsPlayer(unit) then
-            local unitClass = select(2, UnitClass(unit));
-            button.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[unitClass]));
-            button:Show();
+    local function onChangeTarget(self)
+        if ClassIcon.update(self, "target") then
+            self:Show();
         else
-            button:Hide();
+            self:Hide();
         end
     end
 
     button:RegisterEvent("PLAYER_TARGET_CHANGED");
-    button:SetScript("OnEvent", function(self, event, ...)
-        updateClassIcon("target", button);
-    end);
+    button:SetScript("OnEvent", onChangeTarget);
 
-    updateClassIcon("target", button);
+    onChangeTarget(button);
 end);
 
 -- TODO duplicate unit casting bar over its hp bar or name line

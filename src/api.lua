@@ -58,7 +58,7 @@ T.ask("resource", "env").answer("api", function(res, env)
         return UnitHealth(unit), UnitHealthMax(unit)
     end
 
-    function getUnitPp(unit, powerType)
+    function getUnitMp(unit, powerType)
         return UnitPower(unit, powerType), UnitPowerMax(unit, powerType)
     end
 
@@ -143,29 +143,6 @@ T.ask("resource", "env").answer("api", function(res, env)
         return frameGlow;
     end
 
-    local function createProgressbar(parent, backdropOutsetPixels)
-        local bar = createFrame("statusbar", parent);
-        setFrameBackdrop(bar, 0, backdropOutsetPixels); -- 边框透明
-        bar:SetMinMaxValues(0, 1);
-        bar:SetStatusBarTexture(res.texture.SQUARE);
-        bar:SetStatusBarColor(res.color.toSequence("008000")); -- for test
-        bar:SetValue(0.8); -- for test
-
-        local text1 = bar:CreateFontString();
-        text1:SetFont(res.font.DEFAULT, 14 * env.dotsRelative, "outline");
-        text1:SetJustifyH("left");
-        text1:SetPoint("left", 2 * env.dotsPerPixel, -env.dotsPerPixel);
-        bar.text1 = text1;
-
-        local text2 = bar:CreateFontString();
-        text2:SetFont(res.font.LBRITED, 14 * env.dotsRelative, "outline");
-        text2:SetJustifyH("right");
-        text2:SetPoint("right", -env.dotsPerPixel, -env.dotsPerPixel);
-        bar.text2 = text2;
-
-        return bar
-    end
-
     local function createAnchor(sideDots, parent)
         local anchor = createFrame("frame", parent);
         anchor:SetSize(sideDots, sideDots);
@@ -198,7 +175,7 @@ T.ask("resource", "env").answer("api", function(res, env)
         return anchor;
     end
 
-    local function listenToEvents(frame, events)
+    local function attachEvents(frame, events)
         for k,v in pairs(events) do
             frame:RegisterEvent(k)
         end
@@ -215,14 +192,13 @@ T.ask("resource", "env").answer("api", function(res, env)
         getFps = getFps,
         getLag = getLag,
         getUnitHp = getUnitHp,
-        getUnitPp = getUnitPp,
+        getUnitMp = getUnitMp,
         addCmd = addCmd,
         createBlizButton = createBlizButton,
         createAnchor = createAnchor,
         createFrame = createFrame,
         createFrameGlow = createFrameGlow,
-        createProgressbar = createProgressbar,
-        listenToEvents = listenToEvents,
+        attachEvents = attachEvents,
         setFrameBackdrop = setFrameBackdrop,
     };
 end);

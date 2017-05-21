@@ -26,4 +26,9 @@ src/tweak/reskinCastingBar.lua
 
 src/mod/notifier.lua
 src/mod/simpleCommand.lua
+src/mod/unitFrames.lua
 src/mod/yard.lua
+
+src/mod/Bar.lua
+src/mod/ClassIcon.lua
+src/mod/UnitFrame.lua
