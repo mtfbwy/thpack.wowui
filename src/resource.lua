@@ -76,9 +76,7 @@ T.ask().answer("resource", function()
         end
     end;
 
-    COLOR.fromPower = function(unit)
-        -- PowerBarColor参见FrameXML/UnitFrame.lua
-        local powerType = UnitPowerType(unit or "player")
+    COLOR.fromPowerType = function(powerType)
         if powerType == 0 then
             return pick("royalblue");
         elseif powerType == 1 then
@@ -94,6 +92,16 @@ T.ask().answer("resource", function()
         end
     end;
 
+    COLOR.fromUnitPowerType = function(unit)
+        local powerType = UnitPowerType(unit or "player");
+        return COLOR.fromPowerType(powerType);
+    end;
+
+    COLOR.fromVertex = function(r, g, b, a)
+        a = a or 1
+        return string.format("%2X%2X%2X%2X", r * 255, g * 255, b * 255, a * 255);
+    end;
+
     COLOR.toSequence = function(color)
         --c = c or "9D9D9D"
         color = pick(color) or color
@@ -106,6 +114,14 @@ T.ask().answer("resource", function()
         b = not b or b / 255;
         a = not a or a / 255;
         return r, g, b, a;
+    end;
+
+    COLOR.toVertex = function(color)
+        if color[0] == '#' then
+            return COLOR.toSequence(strsub(color, 1, 6));
+        else
+            return COLOR.toSequence(color);
+        end
     end;
 
     return {

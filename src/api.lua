@@ -59,7 +59,8 @@ T.ask("resource", "env").answer("api", function(res, env)
     end
 
     function getUnitMp(unit, powerType)
-        return UnitPower(unit, powerType), UnitPowerMax(unit, powerType)
+        powerType = powerType or UnitPowerType(unit);
+        return UnitPower(unit, powerType), UnitPowerMax(unit, powerType), powerType;
     end
 
     function addCmd(id, cmd, callback)
@@ -127,20 +128,20 @@ T.ask("resource", "env").answer("api", function(res, env)
     end
 
     -- 边框与光晕都源于backdrop->edgeFile，因此两者不可共存于同一frame中
-    local function createFrameGlow(frame, offPixels)
-        local frameGlow = createFrame("frame", frame);
-        frameGlow:SetFrameStrata(frame:GetFrameStrata());
-        frameGlow:SetFrameLevel(frame:GetFrameLevel());
-        frameGlow:SetBackdrop({
+    local function createFrameGlow(frame, offPixels, wavedPixels)
+        wavedPixels = wavedPixels or 5;
+        local glow = createFrame("frame", frame);
+        glow:SetFrameStrata(frame:GetFrameStrata());
+        glow:SetFrameLevel(frame:GetFrameLevel() - 1);
+        glow:SetBackdrop({
             edgeFile = res.texture.GLOW1,
-            edgeSize = 5 * env.dotsPerPixel
+            edgeSize = wavedPixels * env.dotsPerPixel
         });
-        local outsetPixels = 5 + offPixels;
-        frameGlow:SetBackdropBorderColor(res.color.toSequence("FFFFFF"))
-        frameGlow:SetPoint("topleft", -outsetPixels * env.dotsPerPixel, outsetPixels * env.dotsPerPixel);
-        frameGlow:SetPoint("bottomright", outsetPixels * env.dotsPerPixel, -outsetPixels * env.dotsPerPixel);
-        frameGlow:SetFrameLevel(0);
-        return frameGlow;
+        local insetPixels = -wavedPixels - offPixels;
+        glow:SetBackdropBorderColor(res.color.toSequence("FFFFFF"))
+        glow:SetPoint("topleft", insetPixels * env.dotsPerPixel, -insetPixels * env.dotsPerPixel);
+        glow:SetPoint("bottomright", -insetPixels * env.dotsPerPixel, insetPixels * env.dotsPerPixel);
+        return glow;
     end
 
     local function createAnchor(sideDots, parent)

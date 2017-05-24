@@ -1,4 +1,14 @@
-T.ask("api", "ClassIcon").answer(function(api, ClassIcon)
+T.ask("api").answer(function(api)
+
+    local function update(classIcon, unit)
+        if UnitIsPlayer(unit) then
+            local unitClass = select(2, UnitClass(unit));
+            classIcon.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[unitClass]));
+            return true;
+        end
+        return false;
+    end
+
     local button, artTexture = api.createBlizButton(40, TargetFrame);
     button:SetPoint("topleft", 115, -3); -- no pixel fix since relate to bliz mod
     RaiseFrameLevel(button);
@@ -19,7 +29,7 @@ T.ask("api", "ClassIcon").answer(function(api, ClassIcon)
     end);
 
     local function onChangeTarget(self)
-        if ClassIcon.update(self, "target") then
+        if update(self, "target") then
             self:Show();
         else
             self:Hide();
