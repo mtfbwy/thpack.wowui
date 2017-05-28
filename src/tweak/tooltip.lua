@@ -3,13 +3,13 @@ T.ask("resource", "env", "api").answer("tweakTooltip", function(res, env, api)
     GameTooltip:SetBackdrop({
         bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
         insets = {
-            left = -env.dotsPerPixel,
-            right = -env.dotsPerPixel,
-            top = -env.dotsPerPixel,
-            bottom = -env.dotsPerPixel
+            left = -env.pixel,
+            right = -env.pixel,
+            top = -env.pixel,
+            bottom = -env.pixel
         },
         edgeFile = res.texture.SQUARE,
-        edgeSize = env.dotsPerPixel,
+        edgeSize = env.pixel,
         tile = false,
         tileSize = 0
     });
@@ -19,20 +19,20 @@ T.ask("resource", "env", "api").answer("tweakTooltip", function(res, env, api)
             TOOLTIP_DEFAULT_BACKGROUND_COLOR.b)
 
     GameTooltipStatusBar:ClearAllPoints();
-    GameTooltipStatusBar:SetPoint("topleft", GameTooltip, "bottomleft", 0, -env.dotsPerPixel);
-    GameTooltipStatusBar:SetPoint("topright", GameTooltip, "bottomright", 0, -env.dotsPerPixel);
+    GameTooltipStatusBar:SetPoint("topleft", GameTooltip, "bottomleft", 0, -env.pixel);
+    GameTooltipStatusBar:SetPoint("topright", GameTooltip, "bottomright", 0, -env.pixel);
 
     GameTooltipStatusBar:SetStatusBarTexture(res.texture.SQUARE);
-    api.setFrameBackdrop(GameTooltipStatusBar, 0, 1);
+    api.setFrameBackdrop(GameTooltipStatusBar, 0, env.pixel);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
-    hpPercentage:SetWidth(80 * env.dotsPerPixel);
+    hpPercentage:SetWidth(80 * env.pixel);
     hpPercentage:SetJustifyH("right");
-    hpPercentage:SetPoint("left", -8 * env.dotsPerPixel, 0);
+    hpPercentage:SetPoint("left", -8 * env.pixel, 0);
 
     local hpValue = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpValue:SetJustifyH("right");
-    hpValue:SetPoint("right", -2 * env.dotsPerPixel, 0);
+    hpValue:SetPoint("right", -2 * env.pixel, 0);
 
     local function updateStatusbarText(self)
         local curhp = self:GetValue();
@@ -86,13 +86,13 @@ T.ask().answer("buffCasterTooltip", function()
 end);
 
 -- unit, item and spell
-T.ask("resource").answer("miscTooltip", function(res)
+T.ask("api").answer("miscTooltip", function(api)
     GameTooltip:HookScript("OnTooltipSetUnit", function(self)
         local _, unit = self:GetUnit();
         if unit then
             if UnitIsPlayer(unit) then
                 self:SetBackdropBorderColor(
-                        res.color.toSequence(res.color.fromClass(unit)));
+                        api.color.toVertex(api.color.fromUnitClass(unit)));
             else
                 self:SetBackdropBorderColor(UnitSelectionColor(unit))
             end

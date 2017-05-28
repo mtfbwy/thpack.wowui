@@ -2,7 +2,7 @@
 T.ask("resource", "env", "api").answer("notifier", function(res, env, api)
 
     -- not to dot, not to pixel, but relative to the canvas
-    local normalSize = 32 * env.dotsRelative;
+    local normalSize = 32 * env.on1024;
     local largerSize = 1.25 * normalSize;
     local diffSize = 0.25 * normalSize;
 
@@ -34,7 +34,7 @@ T.ask("resource", "env", "api").answer("notifier", function(res, env, api)
         t3 = t2 + t3;
 
         fs:SetText(text);
-        fs:SetTextColor(res.color.toSequence(color));
+        fs:SetTextColor(api.color.toVertex(color));
         fs.startTime = GetTime();
         fs:SetAlpha(0);
         fs.time1, fs.time2, fs.time3 = t1, t2, t3;

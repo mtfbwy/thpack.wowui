@@ -1,4 +1,4 @@
-T.ask("VARIABLES_LOADED").answer("character", function()
+T.ask("PLAYER_LOGIN").answer("character", function()
     local name, server = UnitName("player");
     return {
         guid = UnitGUID("player"),

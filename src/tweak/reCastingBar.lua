@@ -8,7 +8,7 @@ T.ask("resource", "env", "api").answer(function(res, env, api)
         nameText:SetJustifyH("LEFT");
         nameText:ClearAllPoints();
         --nameText:SetPoint("TOP", 0, 5);
-        nameText:SetPoint("LEFT", 2 * env.dotsPerPixel, 0);
+        nameText:SetPoint("LEFT", 2 * env.pixel, 0);
         nameText:SetPoint("RIGHT");
 
         if not castingBar.numberText then
@@ -18,7 +18,7 @@ T.ask("resource", "env", "api").answer(function(res, env, api)
         numberText:SetJustifyH("RIGHT");
         numberText:ClearAllPoints();
         numberText:SetPoint("LEFT");
-        numberText:SetPoint("RIGHT", -2 * env.dotsPerPixel, 0);
+        numberText:SetPoint("RIGHT", -2 * env.pixel, 0);
 
         if not castingBar.icon then
             castingBar.icon = castingBar:CreateTexture(nil, "ARTWORK", nil, 1);
@@ -49,7 +49,7 @@ T.ask("resource", "env", "api").answer(function(res, env, api)
 
         completeCastingBar(castingBar);
 
-        api.setFrameBackdrop(CastingBarFrame, 1, 0);
+        api.setFrameBackdrop(CastingBarFrame, env.pixel, 0);
         castingBar:SetMinMaxValues(0, 1);
         castingBar:SetStatusBarTexture(res.texture.SQUARE);
         castingBar:SetValue(0.7749); -- for test
@@ -60,24 +60,24 @@ T.ask("resource", "env", "api").answer(function(res, env, api)
     local castingBar = CastingBarFrame;
 
     recreateBlizCastingBar(castingBar);
-    castingBar:SetSize(240 * env.dotsRelative, 24 * env.dotsRelative);
+    castingBar:SetSize(240 * env.on1024, 24 * env.on1024);
 
     if not castingBar.iconFrame then
         castingBar.iconFrame = CreateFrame("frame", nil, castingBar);
     end
     local iconFrame = castingBar.iconFrame;
-    api.setFrameBackdrop(iconFrame, 1, 1);
+    api.setFrameBackdrop(iconFrame, env.pixel, env.pixel);
     iconFrame:SetFrameStrata(castingBar:GetFrameStrata());
     iconFrame:SetFrameLevel(castingBar:GetFrameLevel());
-    local size = castingBar:GetHeight() * 1.5 + 4 * env.dotsRelative;
+    local size = castingBar:GetHeight() * 1.5 + 4 * env.on1024;
     iconFrame:SetSize(size, size);
-    iconFrame:SetPoint("RIGHT", castingBar, "LEFT", -8 * env.dotsRelative, 0);
+    iconFrame:SetPoint("RIGHT", castingBar, "LEFT", -8 * env.on1024, 0);
 
     local icon = castingBar.icon;
     icon:SetParent(iconFrame);
     icon:ClearAllPoints();
-    icon:SetPoint("TOPLEFT", 2 * env.dotsRelative, -2 * env.dotsRelative);
-    icon:SetPoint("BOTTOMRIGHT", -2 * env.dotsRelative, 2 * env.dotsRelative);
+    icon:SetPoint("TOPLEFT", 2 * env.on1024, -2 * env.on1024);
+    icon:SetPoint("BOTTOMRIGHT", -2 * env.on1024, 2 * env.on1024);
     icon:Show();
 
     castingBar:HookScript("OnUpdate", function(self, elapsed)

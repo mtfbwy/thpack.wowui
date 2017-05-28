@@ -64,13 +64,13 @@ T.ask("PLAYER_LOGIN", "resource", "env").answer("yard", function(_, res, env)
     local pendingUpdate = nil;
 
     local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(160 * env.dotsRelative, 32 * env.dotsRelative)
+    f:SetSize(160 * env.on1024, 32 * env.on1024)
     f:SetFrameStrata("BACKGROUND")
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * env.dotsRelative)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * env.on1024)
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont(res.font.COMBAT, 32 * env.dotsRelative, "OUTLINE");
+    fs:SetFont(res.font.COMBAT, 32 * env.on1024, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

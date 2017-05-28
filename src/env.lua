@@ -1,4 +1,4 @@
-T.ask("VARIABLES_LOADED").answer("env", function()
+T.ask("PLAYER_LOGIN").answer("env", function()
 
     SetCVar("screenshotQuality", 10);
 
@@ -83,7 +83,7 @@ T.ask("VARIABLES_LOADED").answer("env", function()
         return physicalHeight * uiScale / 768;
     end
 
-    function pixel2dot(x)
+    function pixelToDot(x)
         -- more percisely, uiScale would be:
         -- self:GetScale() * self:GetParent():GetScale() * ... * UIParent():GetEffectiveScale()
         return 768 / (uiScale * physicalHeight);
@@ -91,15 +91,15 @@ T.ask("VARIABLES_LOADED").answer("env", function()
 
     -- sometimes I want to keep the ratio of size against the screen
     -- the ratio designed in a 1024-heighted *design canvas*
-    -- thus I have to introduce the unit, name it "spot"
-    function spot2dot(x)
+    function pixelOn1024ToDot(x)
         return 768 / (uiScale * 1024);
     end
 
     return {
         -- for anyone parenting to UIParent
-        pixel2dot = function(x) return round6(pixel2dot(x)); end,
-        dotsPerPixel = round6(pixel2dot(1)),
-        dotsRelative = round6(spot2dot(1))
+        dot = 1,
+        pixelToDot = function(x) return round6(pixelToDot(x)); end,
+        pixel = round6(pixelToDot(1)),
+        on1024 = round6(pixelOn1024ToDot(1)),
     };
 end);
