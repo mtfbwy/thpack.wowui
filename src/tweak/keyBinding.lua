@@ -1,4 +1,4 @@
-T.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "env", "character").answer("keyBinding", function(_, _, env, character)
+T.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "env").answer("keyBinding", function(_, _, env)
     local rawConfig = {
         any = {
             ["escape"]  = "TOGGLEGAMEMENU",
@@ -42,7 +42,7 @@ T.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "env", "character").answer("keyBinding
     };
 
     local config = (function()
-        local classConfig = rawConfig[character.class] or {};
+        local classConfig = rawConfig[string.lower(select(2, UnitClass("player")))] or {};
         local config = {
             [0] = rawConfig.any,
             [1] = classConfig[1] or {},

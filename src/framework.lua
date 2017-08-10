@@ -1,16 +1,20 @@
-_G["tmerge"] = function(...)
+table.merge = function(o, ...)
+    local OVERWRITES = false;
     local args = {...};
-    local merged = {};
     for i = 1, #args do
         local t = args[i];
-        if (type(t) ~= "table") then
+        if type(t) ~= "table" then
             error("E: invalid argument: expect a table");
         end
         for k, v in pairs(t) do
-            merged[k] = v;
+            if o[k] == nil then
+                o[k] = v;
+            elseif OVERWRITES then
+                o[k] = v;
+            end
         end
     end
-    return merged;
+    return o;
 end
 
 ------------------------------------------------------------
@@ -169,7 +173,8 @@ _G["T"] = (function(NAME)
     };
 end)(...);
 
--- enabling logger
+------------------------------------------------------------
+-- logger
 _G["L"] = (function()
     function loge(message, modName, methodName)
         modName = modName or "Noname";
@@ -205,7 +210,8 @@ _G["L"] = (function()
     };
 end)();
 
--- enabling console
+------------------------------------------------------------
+-- console debug
 (function()
     _G["SLASH_thDebug1"] = "/debug";
     SlashCmdList["thDebug"] = function(x)

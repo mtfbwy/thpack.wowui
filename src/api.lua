@@ -1,108 +1,5 @@
-T.ask().answer("api.color", function()
-
-    local COLOR_NAME = {
-        -- RAID_CLASS_COLORS[CLASS]
-        ["deathknight"] = "#cc0033",
-        ["demonhunter"] = "#9933cc",
-        ["druid"]       = "#ff6600",
-        ["hunter"]      = "#99cc66",
-        ["mage"]        = "#99ccff", -- source: 0.41,0.80,0.94
-        ["monk"]        = "#00ff99", -- source: 0.00,1.00,0.59
-        ["paladin"]     = "#ff99cc", -- source: 0.96,0.55,0.73
-        ["priest"]      = "#ffffff",
-        ["rogue"]       = "#ffff66",
-        ["shaman"]      = "#3366ff",
-        ["warlock"]     = "#9999cc",
-        ["warrior"]     = "#cc9966",
-
-        ["coral"]       = "#ff7f50",
-        ["crimson"]     = "#dc143c",
-        ["darkorange"]  = "#ff8c00",
-        ["darkred"]     = "#8b0000",
-        ["dodgerblue"]  = "#1e90ff",
-        ["firebrick"]   = "#b22222",
-        ["forestgreen"] = "#228b22",
-        ["gold"]        = "#ffd700",
-        ["gray"]        = "#808080",
-        ["green"]       = "#00ff00",
-        ["hotpink"]     = "#ff69b4",     -- paladin
-        ["maroon"]      = "#800000",
-        ["mediumpurple"]    = "9370d8",
-        ["orangered"]   = "#ff4500",
-        ["royalblue"]   = "#4169e1",     -- shaman
-        ["skyblue"]     = "#87ceeb",     -- mage
-        ["turquoise"]   = "#40e0d0",
-        ["white"]       = "#ffffff",
-        ["yellowgreen"] = "#9acd32",     -- hunter
-    };
-
-    local function pick(key)
-        assert(type(key) == "string");
-        return COLOR_NAME[key];
-    end
-
-    local function fromUnitClass(unit)
-        local _, unitClass = UnitClass(unit);
-        return pick(string.lower(unitClass or ""));
-    end
-
-    local function fromUnitHostile(unit)
-        if UnitIsEnemy("player", unit) then
-            return pick("orangered");
-        elseif UnitIsFriend("player", unit) then
-            return pick("green");
-        else
-            return pick("gold");
-        end
-    end
-
-    local function fromPowerType(powerType)
-        if powerType == 0 then
-            return pick("royalblue");
-        elseif powerType == 1 then
-            return pick("firebrick");
-        elseif powerType == 2 then
-            return pick("coral");
-        elseif powerType == 3 then
-            return pick("gold");
-        elseif powerType == 6 then
-            return pick("turquoise");
-        else
-            return pick("white");
-        end
-    end
-
-    local function fromUnitPowerType(unit)
-        local powerType = UnitPowerType(unit or "player");
-        return fromPowerType(powerType);
-    end
-
-    local function fromVertex(r, g, b, a)
-        a = a or 1;
-        return string.format("#%2X%2X%2X%2X", r * 255, g * 255, b * 255, a * 255);
-    end
-
-    local function toVertex(color)
-        local color = pick(color) or color;
-        local r = tonumber(strsub(color, 2, 3), 16);
-        local g = tonumber(strsub(color, 4, 5), 16);
-        local b = tonumber(strsub(color, 6, 7), 16);
-        local a = tonumber(strsub(color, 8, 9), 16);
-        r = not r or r / 255;
-        g = not g or g / 255;
-        b = not b or b / 255;
-        a = not a or a / 255;
-        return r, g, b, a;
-    end
-
-    return {
-        fromUnitClass = fromUnitClass,
-        fromUnitHostile = fromUnitHostile,
-        fromPowerType = fromPowerType,
-        fromUnitPowerType = fromUnitPowerType,
-        fromVertex = fromVertex,
-        toVertex = toVertex,
-    };
+T.ask("widget.Color").answer("api.color", function(Color)
+    return Color;
 end);
 
 T.ask().answer("api.case", function()
@@ -179,11 +76,15 @@ T.ask().answer("api.case", function()
         for k,v in pairs(events) do
             frame:RegisterEvent(k)
         end
-        frame:HookScript("OnEvent", function(self, event, ...)
-            if events[event] then
-                events[event](self, ...);
-            end
-        end);
+        frame.events = frame.events or {};
+        table.merge(frame.events, events);
+        if not frame:GetScript("OnEvent") then
+            frame:SetScript("OnEvent", function(self, event, ...)
+                if self.events[event] then
+                    self.events[event](self, ...);
+                end
+            end);
+        end
     end
 
     return {
@@ -245,8 +146,8 @@ T.ask("resource", "env", "api.color").answer("api.widget", function(res, env, Co
 
     local function createFrame(frameType, parent, template)
         local frame = CreateFrame(frameType, nil, parent, template);
-        frame:SetFrameStrata(FRAME_STRATA_LOW);
-        frame:SetFrameLevel(1);
+        frame:SetFrameStrata(FRAME_STRATA_BACKGROUND);
+        frame:SetFrameLevel(0);
         return frame;
     end
 
@@ -341,7 +242,7 @@ T.ask("resource", "env", "api.color").answer("api.widget", function(res, env, Co
 end);
 
 T.ask("api.color", "api.case", "api.widget").answer("api", function(Color, Case, Widget)
-    local t = tmerge(Case, Widget);
+    local t = table.merge({}, Case, Widget);
     t.color = Color;
     return t;
 end);

@@ -6,6 +6,7 @@ T.ask().answer("resource", function()
         COMBOPOINT1 = PATH .. "combopoint1",
         NORM1 = PATH .. "norm1", -- norm: status bar texture
         GLOW1 = PATH .. "glow1", -- glow: status bar shining
+        HP = PATH .. "th-hp",
     };
 
     local FONT = {
