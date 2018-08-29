@@ -1,8 +1,6 @@
-------------------------------------------------------------
 -- 使打开/关闭背包的行为映射成打开/关闭所有包
 -- 在交易时打开所有包
-
-T.ask("PLAYER_LOGIN").answer("pack", function()
+P.ask().answer("backpack", function()
 
     function getContainerFrame(id)
         if (id < 0) then
@@ -97,67 +95,6 @@ T.ask("PLAYER_LOGIN").answer("pack", function()
             toggleAll("HIDE");
         else
             toggleAll("SHOW");
-        end
-    end);
-end);
-
-------------------------------------------------------------
--- 自动修理/卖货
-T.ask("PLAYER_LOGIN").answer("sell", function()
-
-    local amountOnTip = 0;
-    local tip = CreateFrame("gametooltip");
-    tip:SetScript("OnTooltipAddMoney", function(self, amount)
-        amountOnTip = amount;
-    end)
-
-    local function sellThem()
-        local amount = 0;
-        for id = 0, NUM_BAG_FRAMES, 1 do
-            for slot = 1, GetContainerNumSlots(id), 1 do
-                amountOnTip = 0;
-                local link = GetContainerItemLink(id, slot);
-                if link and link:match(ITEM_QUALITY_COLORS[0].hex) then
-                    tip:SetBagItem(id, slot);
-                    amount = amount + amountOnTip;
-                    UseContainerItem(id, slot);
-                end
-            end
-        end
-        return amount;
-    end
-
-    local function repairThem()
-        local amount, fixable = GetRepairAllCost();
-        if fixable then
-            RepairAllItems(); -- api to repair equiped items
-            ShowRepairCursor();
-            for id = 0, NUM_BAG_FRAMES, 1 do
-                for slot = 1, GetContainerNumSlots(id), 1 do
-                    local _, repairCost = tip:SetBagItem(id, slot);
-                    if repairCost and repairCost > 0 then
-                        amount = amount + repairCost;
-                        PickupContainerItem(id, slot);
-                    end
-                end
-            end
-            HideRepairCursor();
-        end
-        return amount;
-    end
-
-    local f = CreateFrame("frame");
-    f:RegisterEvent("MERCHANT_SHOW");
-    f:SetScript("OnEvent", function(self, event, ...)
-        local amount = sellThem();
-        if amount > 0 then
-            L.logi("+" .. GetCoinTextureString(amount));
-        end
-        if CanMerchantRepair() then
-            amount = repairThem();
-            if amount > 0 then
-                L.logi("-" .. GetCoinTextureString(amount));
-            end
         end
     end);
 end);

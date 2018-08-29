@@ -2,7 +2,7 @@
 -- 不改变以下两个变量，避免产生taint
 --CHAT_WHISPER_GET = "%s→\32"
 --CHAT_WHISPER_INFORM_GET = "→%s\32"
-T.ask().answer("tweakChat", function()
+P.ask().answer(nil, function()
     local nextChatType = {
         ["SAY"] = "PARTY",
         ["PARTY"] = "RAID",

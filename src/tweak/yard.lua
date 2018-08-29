@@ -1,5 +1,7 @@
 -- 距离显示
-T.ask("PLAYER_LOGIN", "resource", "env").answer("yard", function(_, res, env)
+P.ask("PLAYER_LOGIN", "res").answer(nil, function(_, res)
+
+    local dip = res.dip;
 
     local rawConfig = {
         item = {
@@ -13,7 +15,7 @@ T.ask("PLAYER_LOGIN", "resource", "env").answer("yard", function(_, res, env)
             "火球术", "寒冰箭", "冰枪术", "奥术冲击", "变形术",
             "惩击", "暗言术：痛",
             "审判", "制裁之锤", "圣光术", "驱邪术",
-            "闪电箭", "大地震击", "治疗波", "先祖之魂",
+            "闪电箭", "大地震击", "治疗波", "治疗之涌", "先祖之魂", "风剪",
             "冲锋", "英勇投掷",
         }
     };
@@ -64,13 +66,13 @@ T.ask("PLAYER_LOGIN", "resource", "env").answer("yard", function(_, res, env)
     local pendingUpdate = nil;
 
     local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(160 * env.on1024, 32 * env.on1024)
+    f:SetSize(160 * dip, 32 * dip)
     f:SetFrameStrata("BACKGROUND")
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * env.on1024)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * dip)
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont(res.font.COMBAT, 32 * env.on1024, "OUTLINE");
+    fs:SetFont(res.font.COMBAT, 32 * dip, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

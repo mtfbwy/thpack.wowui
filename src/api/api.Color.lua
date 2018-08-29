@@ -1,4 +1,4 @@
-T.ask().answer("widget.Color", function()
+P.ask("api").answer("api.Color", function(api)
 
     local COLOR_NAME = {
         -- RAID_CLASS_COLORS[CLASS]
@@ -105,7 +105,7 @@ T.ask().answer("widget.Color", function()
         return r, g, b, a;
     end
 
-    return {
+    api.Color = {
         fromUnitClass = fromUnitClass,
         fromUnitHostile = fromUnitHostile,
         fromUnitPowerType = fromUnitPowerType,

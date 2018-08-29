@@ -1,0 +1,58 @@
+P.ask().answer("sellJunkAndRepair", function()
+
+    local tooltipAmount = 0;
+    local tooltip = CreateFrame("gametooltip");
+    tooltip:SetScript("OnTooltipAddMoney", function(self, amount)
+        tooltipAmount = amount;
+    end)
+
+    function sellThem()
+        local amount = 0;
+        for id = 0, NUM_BAG_FRAMES, 1 do
+            for slot = 1, GetContainerNumSlots(id), 1 do
+                tooltipAmount = 0;
+                local link = GetContainerItemLink(id, slot);
+                if link and link:match(ITEM_QUALITY_COLORS[0].hex) then
+                    tooltip:SetBagItem(id, slot);
+                    amount = amount + tooltipAmount;
+                    UseContainerItem(id, slot);
+                end
+            end
+        end
+        return amount;
+    end
+
+    function repairThem()
+        local amount, fixable = GetRepairAllCost();
+        if fixable then
+            RepairAllItems(); -- api to repair equiped items
+            ShowRepairCursor();
+            for id = 0, NUM_BAG_FRAMES, 1 do
+                for slot = 1, GetContainerNumSlots(id), 1 do
+                    local _, repairCost = tooltip:SetBagItem(id, slot);
+                    if repairCost and repairCost > 0 then
+                        amount = amount + repairCost;
+                        PickupContainerItem(id, slot);
+                    end
+                end
+            end
+            HideRepairCursor();
+        end
+        return amount;
+    end
+
+    local f = CreateFrame("frame");
+    f:RegisterEvent("MERCHANT_SHOW");
+    f:SetScript("OnEvent", function(self, event, ...)
+        local amount = sellThem();
+        if amount > 0 then
+            logi("+" .. GetCoinTextureString(amount));
+        end
+        if CanMerchantRepair() then
+            amount = repairThem();
+            if amount > 0 then
+                logi("-" .. GetCoinTextureString(amount));
+            end
+        end
+    end);
+end);

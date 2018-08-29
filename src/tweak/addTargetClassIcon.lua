@@ -1,21 +1,41 @@
-T.ask("api").answer(function(api)
+P.ask().answer(nil, function()
 
-    local function update(classIcon, unit)
-        if UnitIsPlayer(unit) then
-            local unitClass = select(2, UnitClass(unit));
-            classIcon.texture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[unitClass]));
-            return true;
-        end
-        return false;
+    function createBlizButton(sideDots, parent, template)
+        local button = CreateFrame("button", nil, parent, template);
+        button:SetSize(sideDots, sideDots);
+
+        local highlightTexture = button:CreateTexture(nil, "highlight");
+        highlightTexture:SetTexture([[Interface\Minimap\UI-Minimap-ZoomButton-Highlight]]);
+        highlightTexture:SetPoint("topleft", sideDots * -1/64, sideDots * 1/64);
+        highlightTexture:SetPoint("bottomright", sideDots * -1/64, sideDots * 1/64);
+        button:SetHighlightTexture(highlightTexture);
+
+        local backgroundTexture = button:CreateTexture(nil, "background");
+        backgroundTexture:SetTexture([[Interface\Minimap\UI-Minimap-Background]]);
+        backgroundTexture:SetVertexColor(0, 0, 0, 0.6);
+        backgroundTexture:SetPoint("topleft", sideDots * 4/64, "topleft", sideDots * -4/64);
+        backgroundTexture:SetPoint("bottomright", sideDots * -4/64, "topleft", sideDots * 4/64);
+
+        local borderTexture = button:CreateTexture(nil, "overlay");
+        borderTexture:SetTexture([[Interface\Minimap\MiniMap-TrackingBorder]]);
+        borderTexture:SetTexCoord(0, 38/64, 0, 38/64);
+        borderTexture:SetAllPoints();
+
+        local artworkTexture = button:CreateTexture(nil, "artwork");
+        artworkTexture:SetPoint("topleft", sideDots * 12/64, sideDots * -10/64);
+        artworkTexture:SetPoint("bottomright", sideDots * -12/64, sideDots * 14/64);
+        button.artworkTexture = artworkTexture;
+
+        return button;
     end
 
-    local button, artTexture = api.createBlizButton(40, TargetFrame);
-    button:SetPoint("topleft", 115, -3); -- no pixel fix since relate to bliz mod
-    RaiseFrameLevel(button);
-    artTexture:SetTexture([[Interface\WorldStateFrame\Icons-Classes]]);
-    button.texture = artTexture;
+    local classIcon = createBlizButton(40, TargetFrame);
+    classIcon:SetPoint("topleft", 115, -3); -- no pixel fix since align to bliz mod
+    RaiseFrameLevel(classIcon);
+    classIcon.artworkTexture:SetTexture([[Interface\WorldStateFrame\Icons-Classes]]);
 
-    button:SetScript("OnMouseDown", function(self, button)
+    -- inspect target when click
+    classIcon:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" then
             local unit = "target";
             if UnitIsPlayer(unit) and not UnitCanAttack("player", unit) then
@@ -28,19 +48,19 @@ T.ask("api").answer(function(api)
         end
     end);
 
-    local function onChangeTarget(self)
-        if update(self, "target") then
+    classIcon.onChangeTarget = function(self)
+        local unit = "target";
+        if UnitIsPlayer(unit) then
+            local unitClass = select(2, UnitClass(unit));
+            self.artworkTexture:SetTexCoord(unpack(CLASS_ICON_TCOORDS[unitClass]));
             self:Show();
         else
             self:Hide();
         end
-    end
+    end;
 
-    button:RegisterEvent("PLAYER_TARGET_CHANGED");
-    button:SetScript("OnEvent", onChangeTarget);
+    classIcon:RegisterEvent("PLAYER_TARGET_CHANGED");
+    classIcon:SetScript("OnEvent", classIcon.onChangeTarget);
 
-    onChangeTarget(button);
+    classIcon:onChangeTarget();
 end);
-
--- TODO duplicate unit casting bar over its hp bar or name line
--- TODO and change avatar changed to spell icon

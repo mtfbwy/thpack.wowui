@@ -1,5 +1,5 @@
-T.ask().answer("tweakQuest", function()
-    -- 自动选择最贵的任务奖励
+-- 自动选择最贵的任务奖励
+P.ask().answer("chooseExpensiveReward", function()
     local f = CreateFrame("frame");
     f:RegisterEvent("QUEST_COMPLETE");
     f:SetScript("OnEvent", function()
