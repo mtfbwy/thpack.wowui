@@ -66,17 +66,6 @@ P.ask("VARIABLES_LOADED").answer("res", function(_)
     SetCVar("useUiScale", 1);
     SetCVar("uiScale", uiScale);
 
-    local screenHeight = 768;
-    if SCREEN_HEIGHT ~= nil then
-        screenHeight = SCREEN_HEIGHT;
-        logi(string.format("Screen height [%s] loaded.", screenHeight));
-    else
-        local resolution = ({GetScreenResolutions()})[GetCurrentResolution()];
-        screenHeight = string.match(resolution, "%d+x(%d+)");
-        logi(string.format("Screen height [%s] detected.", screenHeight));
-    end
-    logi(string.format("Type \"%s\" to learn more.", "/screenHeight"));
-
     _G["SLASH_thpackScreenHeight1"] = "/screenHeight";
     SlashCmdList["thpackScreenHeight"] = function(x)
         if (x == nil or x == "") then
@@ -94,6 +83,17 @@ P.ask("VARIABLES_LOADED").answer("res", function(_)
             logi(string.format("Screen height has min value 768. [%s] ignored.", x));
         end
     end;
+
+    local screenHeight = 768;
+    if SCREEN_HEIGHT ~= nil then
+        screenHeight = SCREEN_HEIGHT;
+        logi(string.format("Screen height [%s] loaded.", screenHeight));
+    else
+        local resolution = ({GetScreenResolutions()})[GetCurrentResolution()];
+        screenHeight = string.match(resolution, "%d+x(%d+)");
+        logi(string.format("Screen height [%s] detected.", screenHeight));
+    end
+    logi(string.format("Type \"%s\" to learn more.", "/screenHeight"));
 
     -- I am easily pleased with pixel art
     -- for tooltip I like 1 px border and 1 px margin

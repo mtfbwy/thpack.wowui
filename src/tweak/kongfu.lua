@@ -6,7 +6,7 @@ P.ask("api").answer("kongfu", function(api)
         ["消失"]    = "消失",
         ["圣盾术"]  = "无敌",
         ["圣疗术"]  = "圣疗",
-        ["斩杀"]    = "say:斩杀",
+        ["斩杀"]    = "斩杀",
         ["雷霆风暴"] = "雷霆风暴",
     }
 
@@ -26,6 +26,7 @@ P.ask("api").answer("kongfu", function(api)
     end
 
     local enabled = false;
+
     api.addCmd("thpackKongfu", "/kongfu", function(x)
         if (x == "on") then
             enabled = true;
@@ -33,6 +34,9 @@ P.ask("api").answer("kongfu", function(api)
         elseif (x == "off") then
             enabled = false;
             logi("你不再是武林高手");
+        else
+            logi("武林高手过招时总会喊出自己的招式。");
+            logi("Usage: /kongfu on | off");
         end
     end);
 
@@ -49,4 +53,6 @@ P.ask("api").answer("kongfu", function(api)
             end
         end
     end);
+
+    logi(string.format("kongfu loaded. Type \"%s\" to learn more.", "/kongfu"));
 end);

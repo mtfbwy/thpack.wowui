@@ -1,6 +1,6 @@
-P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
+P.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "api").answer("bindKey", function(_, _, api)
 
-    function clearHotkeys(config)
+    function clearAllOtherHotkeys(config)
         local modifiers = [[ctrl-:alt-:shift-:ctrl-shift-:]]
         local keys = [[button3:button4:mousewheelup:mousewheeldown]];
         keys = keys .. ":" .. [[0:1:2:3:4:5:6:7:8:9]];
@@ -22,6 +22,9 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
     end
 
     function setHotkeys(config)
+        if (config == nil) then
+            return;
+        end
         for key, v in pairs(config) do
             SetBinding(string.upper(key), v);
         end
@@ -98,17 +101,15 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
         local classConfig = rawConfig[string.lower(select(2, UnitClass("player")))] or {};
         local config = {
             [0] = rawConfig.any,
-            [1] = classConfig[1] or {},
-            [2] = classConfig[2] or {},
-            [3] = classConfig[3] or {},
+            [1] = classConfig[1],
+            [2] = classConfig[2],
+            [3] = classConfig[3],
         };
         for k, v in pairs(classConfig[0] or {}) do
             config[0][k] = v;
         end
 
-        if (GetBindingByKey("8") ~= nil) then
-            clearHotkeys(config[0]);
-        end
+        clearAllOtherHotkeys(config[0]);
 
         rawConfig = nil;
 
@@ -116,12 +117,12 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
     end)();
 
     function setGeneralHotkeys()
-        setHotkeys(config[0]);
-        saveHotkeys();
-        config[0] = nil;
-    end
+        if (config[0] ~= nil) then
+            setHotkeys(config[0]);
+            saveHotkeys();
+            config[0] = nil;
+        end
 
-    function setTalentHotkeys()
         local school = GetSpecialization() or 0;
         if school > 0 then
             setHotkeys(config[school]);
@@ -129,41 +130,51 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
         end
     end
 
-    local pendingCommon = nil;
-    local pendingTalent = nil;
+    local enabled = false;
 
-    if InCombatLockdown() then
-        pendingCommon = 1;
-        pendingTalent = 1;
-    else
-        setGeneralHotkeys();
-        setTalentHotkeys();
-    end
+    local pending = nil;
+
+    api.addCmd("thpackBindKey", "/bindKey", function(x)
+        if (x == "on") then
+            enabled = true;
+            if InCombatLockdown() then
+                pending = 1;
+            else
+                pending = nil;
+                setGeneralHotkeys();
+            end
+        elseif (x == "off") then
+            enabled = false;
+        else
+            logi("Usage: /bindKey on | off");
+        end
+    end);
 
     local f = CreateFrame("frame");
     f:RegisterEvent("PLAYER_REGEN_ENABLED");
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 
     f:SetScript("OnEvent", function(self, event, ...)
+        if (not enabled) then
+            return;
+        end
         -- Which event brings talents when login?
         -- 3.3: (PLAYER_TALENT_UPDATE) (PLAYER_LOGIN) PLAYER_ALIVE
         -- 4.1: PLAYER_TALENT_UPDATE
         if (event == "ACTIVE_TALENT_GROUP_CHANGED") then
             if (InCombatLockdown()) then
-                pendingTalent = 1;
+                pending = 1;
             else
-                setTalentHotkeys();
-                pendingTalent = nil;
+                pending = nil;
+                setGeneralHotkeys();
             end
         elseif (event == "PLAYER_REGEN_ENABLED") then
-            if (pendingCommon) then
+            if (pending) then
+                pending = nil;
                 setGeneralHotkeys();
-                pendingCommon = nil;
-            end
-            if (pendingTalent) then
-                setTalentHotkeys();
-                pendingTalent = nil;
             end
         end
     end);
+
+    logi(string.format("bindKey loaded. Type \"%s\" to learn more.", "/bindKey"));
 end);
