@@ -95,12 +95,10 @@ _G["P"] = (function(NAME)
         Timer:create():schedule(function()
             local isLogging = false;
             Timer:create():schedule(function()
-                local blockerSize = 0;
-                for i, v in pairs(blockers) do
-                    blockerSize = blockerSize + 1;
-                end
+                local blockerKeys = table.keys(blockers);
+                local blockerSize = #blockerKeys;
                 if (blockerSize > 0 or isLogging) then
-                    logi("W: [" .. blockerSize .. "] blockers remaining");
+                    logi(string.format("W: [%s] blockers remaining: %s", blockerSize, table.concat(blockerKeys, ", ")));
                 end
                 local readysSize = #readys;
                 if (readysSize > 0 or isLogging) then
