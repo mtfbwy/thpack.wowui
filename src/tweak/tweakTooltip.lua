@@ -1,9 +1,8 @@
-P.ask("res", "api").answer("tweakTooltip", function(res, api)
+P.ask("Env", "Color").answer("tweakTooltip", function(Env, Color)
 
-    local pixel = res.pixel;
-    local Color = api.Color;
+    local pixel = Env.pixel;
 
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = res.texture.SQUARE;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = Env.texture.SQUARE;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = pixel;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tile = false;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tileSize = 0;
@@ -78,10 +77,10 @@ P.ask("res", "api").answer("tweakTooltip", function(res, api)
     end);
 end);
 
-P.ask("res", "api").answer("tweakTooltipStatusBar", function(res, api)
+P.ask("Env").answer("tweakTooltipStatusBar", function(Env)
 
-    local pixel = res.pixel;
-    local dip = res.dip;
+    local pixel = Env.pixel;
+    local dip = Env.dip;
 
     GameTooltipStatusBar:ClearAllPoints();
     GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -pixel);
@@ -97,10 +96,10 @@ P.ask("res", "api").answer("tweakTooltipStatusBar", function(res, api)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = res.texture.SQUARE,
+        edgeFile = Env.texture.SQUARE,
         edgeSize = pixel,
     });
-    GameTooltipStatusBar:SetStatusBarTexture(res.texture.SQUARE);
+    GameTooltipStatusBar:SetStatusBarTexture(Env.texture.SQUARE);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpPercentage:SetWidth(60);

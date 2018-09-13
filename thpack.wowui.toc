@@ -12,9 +12,9 @@ src/adt/Timer.lua
 src/P.lua
 src/init.lua
 
-src/api/api.lua
-src/api/api.notify.lua
-src/api/api.Color.lua
+src/Color.lua
+src/Util.lua
+src/Util.notify.lua
 
 src/tweak/addCommand.lua
 src/tweak/backpack.lua

@@ -1,4 +1,4 @@
-P.ask("api").answer("api.Color", function(api)
+P.ask().answer("Color", function()
 
     local COLOR_NAME = {
         -- RAID_CLASS_COLORS[CLASS]
@@ -47,16 +47,16 @@ P.ask("api").answer("api.Color", function(api)
         ["snow"]        = "#fffafa",
     };
 
-    local function pick(key)
+    function pick(key)
         return COLOR_NAME[key or ""];
     end
 
-    local function fromUnitClass(unit)
+    function fromUnitClass(unit)
         local _, unitClass = UnitClass(unit);
         return pick(string.lower(unitClass or ""));
     end
 
-    local function fromUnitHostile(unit)
+    function fromUnitHostile(unit)
         if UnitIsEnemy("player", unit) then
             return pick("red");
         elseif UnitIsFriend("player", unit) then
@@ -66,7 +66,7 @@ P.ask("api").answer("api.Color", function(api)
         end
     end
 
-    local function fromPowerType(powerType)
+    function fromPowerType(powerType)
         if powerType == 0 then
             return pick("royalblue");
         elseif powerType == 1 then
@@ -82,17 +82,17 @@ P.ask("api").answer("api.Color", function(api)
         end
     end
 
-    local function fromUnitPowerType(unit)
+    function fromUnitPowerType(unit)
         local powerType = UnitPowerType(unit or "player");
         return fromPowerType(powerType);
     end
 
-    local function fromVertex(r, g, b, a)
+    function fromVertex(r, g, b, a)
         a = a or 1;
         return string.format("#%2X%2X%2X%2X", r * 255, g * 255, b * 255, a * 255);
     end
 
-    local function toVertex(color)
+    function toVertex(color)
         local color = pick(color) or color;
         local r = tonumber(strsub(color, 2, 3), 16);
         local g = tonumber(strsub(color, 4, 5), 16);
@@ -105,7 +105,7 @@ P.ask("api").answer("api.Color", function(api)
         return r, g, b, a;
     end
 
-    api.Color = {
+    return {
         fromUnitClass = fromUnitClass,
         fromUnitHostile = fromUnitHostile,
         fromUnitPowerType = fromUnitPowerType,

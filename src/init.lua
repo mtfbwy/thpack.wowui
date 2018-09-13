@@ -11,7 +11,7 @@
     end);
 end)();
 
-P.ask("PLAYER_LOGIN").answer(nil, function()
+P.ask("PLAYER_LOGIN", "VARIABLES_LOADED").answer("Env", function()
 
     SetCVar("screenshotQuality", 10);
 
@@ -40,27 +40,6 @@ P.ask("PLAYER_LOGIN").answer(nil, function()
 
     RegisterCVar("taintLog", 1);
     SetCVar("taintLog", 1);
-end);
-
-P.ask("VARIABLES_LOADED").answer("res", function(_)
-
-    local resPath = "interface/addons/" .. P._name .. "/res";
-
-    local TEXTURE = {
-        SQUARE = resPath .. "/th-square", -- simple white square texture
-        COMBOPOINT1 = resPath .. "/combopoint1",
-        NORM1 = resPath .. "/norm1", -- norm: status bar texture
-        GLOW1 = resPath .. "/glow1", -- glow: status bar shining
-        HP = resPath .. "/th-hp",
-    };
-
-    local FONT = {
-        DEFAULT = [[fonts\arkai_t.ttf]],
-        COMBAT = [[fonts\arkai_c.ttf]],
-        AVQEST = resPath .. "avqest.ttf",
-        HOOGE0557 = resPath .. "hooge0557.ttf",
-        LBRITED = resPath .. "lbrited.ttf",
-    };
 
     local uiScale = 0.85;
     SetCVar("useUiScale", 1);
@@ -129,9 +108,29 @@ P.ask("VARIABLES_LOADED").answer("res", function(_)
         return numDips * 0.75 / uiScale; -- 768 / 1024 = 0.75
     end
 
+    local RES_PATH = "interface/addons/" .. P._name .. "/res";
+
+    local texture = {
+        SQUARE = RES_PATH .. "/th-square", -- simple white square texture
+        COMBOPOINT1 = RES_PATH .. "/combopoint1",
+        NORM1 = RES_PATH .. "/norm1", -- norm: status bar texture
+        GLOW1 = RES_PATH .. "/glow1", -- glow: status bar shining
+        HP = RES_PATH .. "/th-hp",
+
+        BLIZ_BAR = "Interface/TargetingFrame/UI-StatusBar",
+    };
+
+    local font = {
+        DEFAULT = "fonts/arkai_t.ttf",
+        COMBAT = "fonts/arkai_c.ttf",
+        AVQEST = RES_PATH .. "avqest.ttf",
+        HOOGE0557 = RES_PATH .. "hooge0557.ttf",
+        LBRITED = RES_PATH .. "lbrited.ttf",
+    };
+
     return {
-        texture = TEXTURE,
-        font = FONT,
+        texture = texture,
+        font = font,
         dot = 1, -- for anyone parenting to UIParent
         pixel = round6(pixel2dot(1)),
         dip = round6(dip2dot(1)),

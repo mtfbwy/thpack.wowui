@@ -1,7 +1,7 @@
-P.ask("api").answer("tweakTimeManager", function(api)
+P.ask("Util").answer("tweakTimeManager", function(Util)
 
     hooksecurefunc("TimeManagerClockButton_Update", function()
-        TimeManagerClockTicker:SetVertexColor(select(2, api.getLag()));
+        TimeManagerClockTicker:SetVertexColor(select(2, Util.getLag()));
     end)
 
     local lastUpdate = 0;
@@ -31,7 +31,7 @@ P.ask("api").answer("tweakTimeManager", function(api)
             GameTooltip:AddLine(TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF);
         end
 
-        GameTooltip:AddLine(format("%d fps", api.getFps()) .. " / " .. format("%d ms", api.getLag()), 1, 1, 1);
+        GameTooltip:AddLine(format("%d fps", Util.getFps()) .. " / " .. format("%d ms", Util.getLag()), 1, 1, 1);
 
         UpdateAddOnMemoryUsage();
 

@@ -1,7 +1,7 @@
-P.ask("res").answer("reCastingBar", function(res)
+P.ask("Env").answer("reCastingBar", function(Env)
 
-    local pixel = res.pixel;
-    local dip = res.dip;
+    local pixel = Env.pixel;
+    local dip = Env.dip;
 
     local castingBar = CastingBarFrame;
 
@@ -40,11 +40,11 @@ P.ask("res").answer("reCastingBar", function(res)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = res.texture.SQUARE,
+        edgeFile = Env.texture.SQUARE,
         edgeSize = pixel,
     });
     castingBar:SetBackdropBorderColor(1, 1, 1);
-    castingBar:SetStatusBarTexture(res.texture.SQUARE);
+    castingBar:SetStatusBarTexture(Env.texture.SQUARE);
     castingBar:SetStatusBarColor(1, 0.7, 0, 1);
     castingBar:SetMinMaxValues(0, 1);
     castingBar:SetValue(0.7749); -- for test
@@ -76,7 +76,7 @@ P.ask("res").answer("reCastingBar", function(res)
     local iconFrameSize = castingBar:GetHeight() * 1.5 + 4 * dip;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
-        bgFile = res.texture.SQUARE,
+        bgFile = Env.texture.SQUARE,
         insets = {
             left = -pixel,
             right = -pixel,
@@ -85,7 +85,7 @@ P.ask("res").answer("reCastingBar", function(res)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = res.texture.SQUARE,
+        edgeFile = Env.texture.SQUARE,
         edgeSize = pixel,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);

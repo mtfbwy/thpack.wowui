@@ -1,13 +1,13 @@
-P.ask("res").answer("api", function(res)
+P.ask().answer("Util", function()
 
-    local api = {};
+    local op = {};
 
-    function api.addCmd(id, cmd, callback)
+    function op.addCmd(id, cmd, callback)
         _G["SLASH_" .. id .. "1"] = cmd;
         SlashCmdList[id] = callback;
     end
 
-    function api.getFps()
+    function op.getFps()
         local fps = GetFramerate();
         if (fps < 12) then
             return fps, 1, 0, 0;
@@ -18,7 +18,7 @@ P.ask("res").answer("api", function(res)
         end
     end
 
-    function api.getLag()
+    function op.getLag()
         local lag = select(4, GetNetStats());
         if lag < 300 then
             return lag, 0, 1, 0;
@@ -29,5 +29,5 @@ P.ask("res").answer("api", function(res)
         end
     end
 
-    return api;
+    return op;
 end);

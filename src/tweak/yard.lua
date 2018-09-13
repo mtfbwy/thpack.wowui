@@ -1,7 +1,7 @@
 -- 距离显示
-P.ask("PLAYER_LOGIN", "res").answer(nil, function(_, res)
+P.ask("Env").answer(nil, function(Env)
 
-    local dip = res.dip;
+    local dip = Env.dip;
 
     local rawConfig = {
         item = {
@@ -72,7 +72,7 @@ P.ask("PLAYER_LOGIN", "res").answer(nil, function(_, res)
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont(res.font.COMBAT, 32 * dip, "OUTLINE");
+    fs:SetFont(Env.font.COMBAT, 32 * dip, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

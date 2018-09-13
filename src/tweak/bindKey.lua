@@ -1,4 +1,4 @@
-P.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "api").answer("bindKey", function(_, _, api)
+P.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "Util").answer("bindKey", function(_, _, Util)
 
     function clearAllOtherHotkeys(config)
         local modifiers = [[ctrl-:alt-:shift-:ctrl-shift-:]]
@@ -134,7 +134,7 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN", "api").answer("bindKey", function(_, _
 
     local pending = nil;
 
-    api.addCmd("thpackBindKey", "/bindKey", function(x)
+    Util.addCmd("thpackBindKey", "/bindKey", function(x)
         if (x == "on") then
             enabled = true;
             if InCombatLockdown() then

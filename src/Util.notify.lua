@@ -1,8 +1,7 @@
 -- a top-center text to warn something
-P.ask("res", "api", "api.Color").answer("api.notify", function(res, api, _)
+P.ask("Env", "Color", "Util").answer("Util.notify", function(Env, Color, Util)
 
-    local dip = res.dip;
-    local Color = api.Color;
+    local dip = Env.dip;
 
     -- relative to the canvas
     local normalSize = 32 * dip;
@@ -16,7 +15,7 @@ P.ask("res", "api", "api.Color").answer("api.notify", function(res, api, _)
     f:SetPoint("topright", 0, -0.1 * UIParent:GetHeight());
 
     local fs = f:CreateFontString()
-    fs:SetFont(res.font.DEFAULT, normalSize, "outline");
+    fs:SetFont(Env.font.DEFAULT, normalSize, "outline");
     fs:SetJustifyH("center");
     fs:SetAllPoints();
     fs:Show();
@@ -79,9 +78,11 @@ P.ask("res", "api", "api.Color").answer("api.notify", function(res, api, _)
         f:Show();
     end;
 
-    api.addCmd("thpackNotify", "/notify", function(msg)
+    Util.addCmd("thpackNotify", "/notify", function(msg)
         notify(msg, "00FF00", 1);
     end);
 
-    api.notify = notify;
+    Util.notify = notify;
+
+    return notify;
 end);

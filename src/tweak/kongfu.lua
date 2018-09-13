@@ -1,5 +1,5 @@
 -- notify the player when cast succeed
-P.ask("api").answer("kongfu", function(api)
+P.ask("Util", "Util.notify").answer("kongfu", function(Util, _)
 
     local announcements = {
         ["寒冰屏障"]    = "冰箱",
@@ -19,7 +19,7 @@ P.ask("api").answer("kongfu", function(api)
         end
         mode = forcedMode or mode;
         if (mode == "notify") then
-            api.notify(s, nil, true, 0.1, 1.2, 0.2);
+            Util.notify(s, nil, true, 0.1, 1.2, 0.2);
         else
             SendChatMessage(s, mode);
         end
@@ -27,7 +27,7 @@ P.ask("api").answer("kongfu", function(api)
 
     local enabled = false;
 
-    api.addCmd("thpackKongfu", "/kongfu", function(x)
+    Util.addCmd("thpackKongfu", "/kongfu", function(x)
         if (x == "on") then
             enabled = true;
             logi("你已经是武林高手");

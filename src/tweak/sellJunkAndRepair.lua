@@ -25,7 +25,7 @@ P.ask().answer("sellJunkAndRepair", function()
     function repairThem()
         local amount, fixable = GetRepairAllCost();
         if fixable then
-            RepairAllItems(); -- api to repair equiped items
+            RepairAllItems();
             ShowRepairCursor();
             for id = 0, NUM_BAG_FRAMES, 1 do
                 for slot = 1, GetContainerNumSlots(id), 1 do

@@ -1,13 +1,13 @@
-P.ask("api").answer("addCommand", function(api)
+P.ask("Util").answer("addCommand", function(Util)
 
-    api.addCmd("thpackDebug", "/debug", function(x)
+    Util.addCmd("thpackDebug", "/debug", function(x)
         logi("-------- printing: " .. x);
         logd(loadstring("return " .. x)());
     end);
 
-    api.addCmd("thpackReload", "/reload", ReloadUI);
+    Util.addCmd("thpackReload", "/reload", ReloadUI);
 
-    api.addCmd("thpackExp", "/exp", function()
+    Util.addCmd("thpackExp", "/exp", function()
         local curExp = UnitXP("player");
         local maxExp = UnitXPMax("player");
         local bonusExp = GetXPExhaustion();
@@ -18,13 +18,13 @@ P.ask("api").answer("addCommand", function(api)
         end
     end);
 
-    api.addCmd("thpackFps", "/fps", function()
-        local fps, r, g, b = api.getFps();
+    Util.addCmd("thpackFps", "/fps", function()
+        local fps, r, g, b = Util.getFps();
         logi(string.format("fps: %d", fps), r, g, b);
     end);
 
-    api.addCmd("thpackLag", "/lag", function()
-        local lag, r, g, b = api.getLag();
+    Util.addCmd("thpackLag", "/lag", function()
+        local lag, r, g, b = Util.getLag();
         logi(string.format("lag: %d ms", lag), r, g, b);
     end);
 end);
