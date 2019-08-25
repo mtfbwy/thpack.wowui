@@ -63,14 +63,17 @@ P.ask("PLAYER_LOGIN", "VARIABLES_LOADED").answer("Env", function()
         end
     end;
 
+    local screenWidth;
     local screenHeight = 768;
     if SCREEN_HEIGHT ~= nil then
         screenHeight = SCREEN_HEIGHT;
         logi(string.format("Screen height [%s] loaded.", screenHeight));
     else
-        local resolution = ({GetScreenResolutions()})[GetCurrentResolution()];
-        screenHeight = string.match(resolution, "%d+x(%d+)");
-        logi(string.format("Screen height [%s] detected.", screenHeight));
+        --local resolution = ({GetScreenResolutions()})[GetCurrentResolution()];
+        local resolution = GetScreenResolutions();
+
+        screenWidth, screenHeight = string.match(resolution, "(%d+)x(%d+)");
+        logi(string.format("Screen resolution [%s]x[%s] detected.", screenWidth, screenHeight));
     end
     logi(string.format("Type \"%s\" to learn more.", "/screenHeight"));
 
