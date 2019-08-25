@@ -1,5 +1,8 @@
-Timer = newClass(nil, function(self)
-    self._f = CreateFrame("frame");
+Timer = newClass(nil, function(self, f)
+    if (not f) then
+        f = CreateFrame("frame");
+    end
+    self._f = f;
 end);
 
 function Timer:_setInterval()
