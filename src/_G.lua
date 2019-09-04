@@ -1,6 +1,3 @@
----------------------
--- facility
-
 function table.keys(o)
     local keys = {};
     for k, v in pairs(o) do
@@ -25,8 +22,11 @@ function table.merge(o, ...)
     return o;
 end
 
-function dummy()
-    -- dummy
+----------------
+-- log
+
+function logi(...)
+    (DEFAULT_CHAT_FRAME or ChatFrame1):AddMessage(...);
 end
 
 function logd(...)
@@ -43,45 +43,4 @@ function logd(...)
             logi(string.format("-- %d - %s", i, (tostring(v) or "N/A")));
         end
     end
-end
-
-function logi(...)
-    (DEFAULT_CHAT_FRAME or ChatFrame1):AddMessage(...);
-end
-
-function newClass(superClass, ctor)
-    if (type(superClass) ~= "nil" and type(superClass) ~= "table") then
-        error(string.format("E: invalid argument: table expected"));
-        return;
-    end
-    if (ctor == nil) then
-        ctor = dummy;
-    elseif (type(ctor) ~= "function") then
-        error(string.format("E: invalid argument: function expected"));
-        return;
-    end
-
-    local Class = {};
-
-    Class.ctor = ctor;
-
-    Class.create = function(self, ...)
-        local o = {};
-        local stack = { Class };
-        while (superClass ~= nil) do
-            table.insert(stack, superClass);
-            superClass = getmetatable(superClass).__index;
-        end
-        local args = { ... };
-        while (#stack > 0) do
-            local C = table.remove(stack);
-            if (type(C.ctor) == "function") then
-                C.ctor(o, ...);
-            end
-        end
-        setmetatable(o, { __index = Class });
-        return o;
-    end;
-
-    return Class;
 end

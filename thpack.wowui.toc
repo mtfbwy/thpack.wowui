@@ -1,14 +1,17 @@
 ## Interface: 80200
 ## Title: thpack
 ## DefaultState: Enabled
-## Version: 80200.874
+## Version: 80200.875
 ## Author: tanghao
-## Date: 2018-09-10
+## Date: 2019-09-04
 ## SavedVariables: SCREEN_HEIGHT
 
 src/_G.lua
+src/_G.proto.lua
+
 src/adt/Store.lua
 src/adt/Timer.lua
+
 src/P.lua
 src/init.lua
 

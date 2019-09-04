@@ -3,7 +3,11 @@
 
 _G["P"] = (function(NAME)
 
-    local VERSION = 873;
+    local VERSION = 875;
+
+    local dummy = function()
+        -- dummy
+    end;
 
     local genName = (function()
         local i = -1;
