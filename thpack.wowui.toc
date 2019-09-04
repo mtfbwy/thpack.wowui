@@ -8,7 +8,6 @@
 
 src/_G.lua
 src/_G.proto.lua
-
 src/adt/Store.lua
 src/adt/Timer.lua
 
@@ -21,7 +20,7 @@ src/Util.notify.lua
 
 src/tweak/addCommand.lua
 src/tweak/backpack.lua
-src/tweak/bindKey.lua
+#src/tweak/bindKey.lua
 src/tweak/kongfu.lua
 src/tweak/sellJunkAndRepair.lua
 src/tweak/yard.lua
