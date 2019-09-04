@@ -111,7 +111,7 @@ P.ask("PLAYER_LOGIN", "VARIABLES_LOADED").answer("Env", function()
         return numDips * 0.75 / uiScale; -- 768 / 1024 = 0.75
     end
 
-    local RES_PATH = "interface/addons/" .. P._name .. "/res";
+    local RES_PATH = "interface/addons/" .. P._addon .. "/res";
 
     local texture = {
         SQUARE = RES_PATH .. "/th-square", -- simple white square texture

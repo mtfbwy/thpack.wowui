@@ -44,11 +44,13 @@ _G["P"] = (function(ADDON)
                 isExecuting = false;
                 return;
             end
-            blockerModResults[i] = blockerMod.result;
+            table.insert(blockerModResults, blockerMod.result);
         end
 
         if (type(mod.fn) == "function") then
-            mod.result = mod.fn(unpack(blockerModResults));
+            mod.result = mod.fn(unpack(blockerModResults)) or true;
+        else
+            mod.result = true;
         end
         mod.statusCode = 200;
 
@@ -70,7 +72,7 @@ _G["P"] = (function(ADDON)
             end, 4000, 1)
         :stop();
 
-    local mayReady = function(mod)
+    function mayReady(mod)
         table.insert(mayReadyQueue, mod);
         if (not workThrottler:isRunning()) then
             workTrigger:reschedule();
@@ -78,11 +80,11 @@ _G["P"] = (function(ADDON)
         else
             workThrottler:reschedule();
         end
-    end;
+    end
 
     function accept(modName, modFn, upstreamModNames)
-        if (modStore:contains(name)) then
-            error(string.format("E: name conflict: [%s]", name));
+        if (modStore:contains(modName)) then
+            error(string.format("E: name conflict: [%s]", modName));
             return;
         end
 
@@ -94,7 +96,7 @@ _G["P"] = (function(ADDON)
             result = nil
         });
 
-        local mod = modStore:get(name);
+        local mod = modStore:get(modName);
 
         for i = 1, #mod.upstreamModNames do
             local blockerModName = mod.upstreamModNames[i];
@@ -133,9 +135,10 @@ _G["P"] = (function(ADDON)
             local blockedModNames = {};
             local modNames = table.keys(dependencyMap);
             for i = 1, #modNames do
-                local mod = modStore:get(modNames[i]);
-                if (mod.statusCode ~= 200) then
-                    table.insert(blockedModNames, mod.name);
+                local modName = modNames[i];
+                local mod = modStore:get(modName);
+                if (mod == nil or mod.statusCode ~= 200) then
+                    table.insert(blockedModNames, modName);
                 end
             end
             if (#blockedModNames > 0) then
