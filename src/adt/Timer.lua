@@ -1,4 +1,4 @@
-Timer = newClass(nil, function(self, f)
+Timer = newProto(nil, function(self, f)
     if (not f) then
         f = CreateFrame("frame");
     end

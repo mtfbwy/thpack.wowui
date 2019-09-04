@@ -1,34 +1,36 @@
-function newClass(superClass, ctor)
-    if (superClass ~= nil and type(superClass) ~= "table") then
-        error(string.format("E: invalid argument: table expected"));
-        return;
-    end
-    if (ctor ~= nil and type(ctor) ~= "function") then
-        error(string.format("E: invalid argument: function expected"));
-        return;
-    end
+function getProto(self)
+    return getmetatable(self).__index;
+end
 
-    local Class = {};
+function setProto(self, super)
+    return setmetatable(self, { __index = super });
+end
 
-    Class.ctor = ctor;
+function newProto(super, ctor)
+    local proto = {};
+    setProto(proto, super);
 
-    Class.create = function(self, ...)
+    proto.__ctor = ctor;
+
+    proto.create = function()
         local o = {};
-        local stack = { Class };
-        while (superClass ~= nil) do
-            table.insert(stack, superClass);
-            superClass = getmetatable(superClass).__index;
+        setProto(o, proto);
+
+        local q = {};
+        local p = getProto(o);
+        while (p ~= nil) do
+            table.insert(q, p);
+            p = getProto(p);
         end
-        local args = { ... };
-        while (#stack > 0) do
-            local C = table.remove(stack);
-            if (type(C.ctor) == "function") then
-                C.ctor(o, ...);
+        while (#q > 0) do
+            p = table.remove(q);
+            if (type(rawget(p, "__ctor")) == "function") then
+                p.__ctor(o);
             end
         end
-        setmetatable(o, { __index = Class });
+
         return o;
     end;
 
-    return Class;
+    return proto;
 end

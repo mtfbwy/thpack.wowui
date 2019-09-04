@@ -1,4 +1,4 @@
-Store = newClass(nil, function(self)
+Store = newProto(nil, function(self)
     self._store = {};
 end);
 
