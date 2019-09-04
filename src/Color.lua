@@ -1,4 +1,4 @@
-P.ask().answer("Color", function()
+_G.Color = (function()
 
     local COLOR_NAME = {
         -- RAID_CLASS_COLORS[CLASS]
@@ -113,4 +113,10 @@ P.ask().answer("Color", function()
         fromVertex = fromVertex,
         toVertex = toVertex,
     };
-end);
+end)();
+
+if (P ~= nil) then
+    P.ask().answer("Color", function()
+        return Color;
+    end);
+end

@@ -1,5 +1,5 @@
 -- add buff caster name to game tooltip
-P.ask().answer("addBuffCaster", function()
+(function()
     local addCasterName = function(self, unit, index, filter)
         local src = select(7, UnitAura(unit, index, filter));
         if src then
@@ -22,4 +22,4 @@ P.ask().answer("addBuffCaster", function()
     end
     hooksecurefunc(GameTooltip, "SetUnitAura", addCasterName)
     hooksecurefunc(GameTooltip, "SetUnitBuff", addCasterName)
-end);
+end)();

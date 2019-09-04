@@ -16,20 +16,20 @@ src/init.lua
 
 src/Color.lua
 src/Util.lua
-src/Util.notify.lua
 
-src/tweak/addCommand.lua
-src/tweak/backpack.lua
+src/classic/backpack.lua
+src/classic/addBuffCaster.lua
+src/classic/addTargetClassIcon.lua
+src/classic/autoRepair.lua
+src/classic/autoSelectMostExpensiveReward.lua
+src/classic/autoSell.lua
+src/classic/tabSwitchChannel.lua
+
 #src/tweak/bindKey.lua
 src/tweak/kongfu.lua
-src/tweak/sellJunkAndRepair.lua
 src/tweak/yard.lua
 
-src/tweak/addBuffCaster.lua
-src/tweak/addTargetClassIcon.lua
-src/tweak/chooseExpensiveReward.lua
 src/tweak/reCastingBar.lua
-src/tweak/tweakChat.lua
 src/tweak/tweakErrorsFrame.lua
 src/tweak/tweakTimeManager.lua
 src/tweak/tweakTooltip.lua

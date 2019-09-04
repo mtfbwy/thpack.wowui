@@ -2,7 +2,7 @@
 -- 不改变以下两个变量，避免产生taint
 --CHAT_WHISPER_GET = "%s→\32"
 --CHAT_WHISPER_INFORM_GET = "→%s\32"
-P.ask().answer(nil, function()
+(function()
     local nextChatType = {
         ["SAY"] = "PARTY",
         ["PARTY"] = "RAID",
@@ -34,4 +34,4 @@ P.ask().answer(nil, function()
 
     ChatTypeInfo["WHISPER"].sticky = 0;
     ChatFrame1EditBox:SetAltArrowKeyMode(nil);
-end);
+end)();

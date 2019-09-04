@@ -1,20 +1,20 @@
-P.ask().answer(nil, function()
+(function()
 
-    function createBlizButton(sideDots, parent, template)
+    function createBlizButton(dots, parent, template)
         local button = CreateFrame("button", nil, parent, template);
-        button:SetSize(sideDots, sideDots);
+        button:SetSize(dots, dots);
 
         local highlightTexture = button:CreateTexture(nil, "highlight");
         highlightTexture:SetTexture([[Interface\Minimap\UI-Minimap-ZoomButton-Highlight]]);
-        highlightTexture:SetPoint("topleft", sideDots * -1/64, sideDots * 1/64);
-        highlightTexture:SetPoint("bottomright", sideDots * -1/64, sideDots * 1/64);
+        highlightTexture:SetPoint("topleft", dots * -1/64, dots * 1/64);
+        highlightTexture:SetPoint("bottomright", dots * -1/64, dots * 1/64);
         button:SetHighlightTexture(highlightTexture);
 
         local backgroundTexture = button:CreateTexture(nil, "background");
         backgroundTexture:SetTexture([[Interface\Minimap\UI-Minimap-Background]]);
         backgroundTexture:SetVertexColor(0, 0, 0, 0.6);
-        backgroundTexture:SetPoint("topleft", sideDots * 4/64, "topleft", sideDots * -4/64);
-        backgroundTexture:SetPoint("bottomright", sideDots * -4/64, "topleft", sideDots * 4/64);
+        backgroundTexture:SetPoint("topleft", dots * 4/64, "topleft", dots * -4/64);
+        backgroundTexture:SetPoint("bottomright", dots * -4/64, "topleft", dots * 4/64);
 
         local borderTexture = button:CreateTexture(nil, "overlay");
         borderTexture:SetTexture([[Interface\Minimap\MiniMap-TrackingBorder]]);
@@ -22,8 +22,8 @@ P.ask().answer(nil, function()
         borderTexture:SetAllPoints();
 
         local artworkTexture = button:CreateTexture(nil, "artwork");
-        artworkTexture:SetPoint("topleft", sideDots * 12/64, sideDots * -10/64);
-        artworkTexture:SetPoint("bottomright", sideDots * -12/64, sideDots * 14/64);
+        artworkTexture:SetPoint("topleft", dots * 12/64, dots * -10/64);
+        artworkTexture:SetPoint("bottomright", dots * -12/64, dots * 14/64);
         button.artworkTexture = artworkTexture;
 
         return button;
@@ -63,4 +63,4 @@ P.ask().answer(nil, function()
     classIcon:SetScript("OnEvent", classIcon.onChangeTarget);
 
     classIcon:onChangeTarget();
-end);
+end)();

@@ -1,5 +1,5 @@
 -- 自动选择最贵的任务奖励
-P.ask().answer("chooseExpensiveReward", function()
+(function()
     local f = CreateFrame("frame");
     f:RegisterEvent("QUEST_COMPLETE");
     f:SetScript("OnEvent", function()
@@ -17,4 +17,4 @@ P.ask().answer("chooseExpensiveReward", function()
             _G["QuestInfoRewardsFrameQuestInfoItem" .. indexOfMaxPrice]:Click();
         end
     end);
-end);
+end)();

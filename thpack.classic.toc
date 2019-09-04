@@ -6,3 +6,10 @@
 ## Date: 2019-09-04
 ## SavedVariables: CONFIG
 
+src/classic/backpack.lua
+src/classic/addBuffCaster.lua
+src/classic/addTargetClassIcon.lua
+src/classic/autoRepair.lua
+src/classic/autoSelectMostExpensiveReward.lua
+src/classic/autoSell.lua
+src/classic/tabSwitchChannel.lua

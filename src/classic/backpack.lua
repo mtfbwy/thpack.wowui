@@ -1,6 +1,6 @@
 -- 使打开/关闭背包的行为映射成打开/关闭所有包
 -- 在交易时打开所有包
-P.ask().answer("backpack", function()
+(function()
 
     function getContainerFrame(id)
         if (id < 0) then
@@ -97,4 +97,4 @@ P.ask().answer("backpack", function()
             toggleAll("SHOW");
         end
     end);
-end);
+end)();
