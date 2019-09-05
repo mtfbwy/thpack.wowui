@@ -6,6 +6,9 @@
 ## Date: 2019-09-04
 ## SavedVariables: CONFIG
 
+src/_G.lua
+src/_G.proto.lua
+
 src/classic/backpack.lua
 src/classic/addBuffCaster.lua
 src/classic/addTargetClassIcon.lua
