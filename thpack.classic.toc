@@ -1,10 +1,10 @@
 ## Interface: 11302
 ## Title: thpack
 ## DefaultState: Enabled
-## Version: 80200.875
+## Version: 80200.876
 ## Author: tanghao
-## Date: 2019-09-04
-## SavedVariables: CONFIG
+## Date: 2019-09-05
+## SavedVariables: Config
 
 src/_G.lua
 src/_G.proto.lua

@@ -1,4 +1,4 @@
-P.ask("Env").answer("tweakErrorsFrame", function(Env)
+P.ask("pp").answer("tweakErrorsFrame", function(pp)
     UIErrorsFrame:ClearAllPoints();
-    UIErrorsFrame:SetPoint("TOP", 0, -40 * Env.dip);
+    UIErrorsFrame:SetPoint("TOP", 0, -40 * pp.dp);
 end);

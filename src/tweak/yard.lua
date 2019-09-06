@@ -1,7 +1,8 @@
 -- 距离显示
-P.ask("Env").answer(nil, function(Env)
+P.ask("res", "pp").answer("yard", function(res, pp)
 
-    local dip = Env.dip;
+    local font = res.font;
+    local dp = pp.dp;
 
     local rawConfig = {
         item = {
@@ -66,13 +67,13 @@ P.ask("Env").answer(nil, function(Env)
     local pendingUpdate = nil;
 
     local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(160 * dip, 32 * dip)
+    f:SetSize(160 * dp, 32 * dp)
     f:SetFrameStrata("BACKGROUND")
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * dip)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * dp)
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont(Env.font.COMBAT, 32 * dip, "OUTLINE");
+    fs:SetFont(font.COMBAT, 32 * dp, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

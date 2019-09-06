@@ -1,7 +1,8 @@
-P.ask("Env").answer("reCastingBar", function(Env)
+P.ask("res", "pp").answer("reCastingBar", function(res, pp)
 
-    local pixel = Env.pixel;
-    local dip = Env.dip;
+    local texture = res.texture;
+    local pixel = pp.px;
+    local dp = pp.dp;
 
     local castingBar = CastingBarFrame;
 
@@ -29,7 +30,7 @@ P.ask("Env").answer("reCastingBar", function(Env)
 
     -- complete it
 
-    castingBar:SetSize(240 * dip, 24 * dip);
+    castingBar:SetSize(240 * dp, 24 * dp);
     castingBar:SetBackdrop({
         bgFile = nil,
         insets = {
@@ -40,11 +41,11 @@ P.ask("Env").answer("reCastingBar", function(Env)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = Env.texture.SQUARE,
+        edgeFile = texture.SQUARE,
         edgeSize = pixel,
     });
     castingBar:SetBackdropBorderColor(1, 1, 1);
-    castingBar:SetStatusBarTexture(Env.texture.SQUARE);
+    castingBar:SetStatusBarTexture(texture.SQUARE);
     castingBar:SetStatusBarColor(1, 0.7, 0, 1);
     castingBar:SetMinMaxValues(0, 1);
     castingBar:SetValue(0.7749); -- for test
@@ -73,10 +74,10 @@ P.ask("Env").answer("reCastingBar", function(Env)
     local iconFrame = castingBar.iconFrame;
     iconFrame:SetFrameStrata(castingBar:GetFrameStrata());
     iconFrame:SetFrameLevel(castingBar:GetFrameLevel());
-    local iconFrameSize = castingBar:GetHeight() * 1.5 + 4 * dip;
+    local iconFrameSize = castingBar:GetHeight() * 1.5 + 4 * dp;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
-        bgFile = Env.texture.SQUARE,
+        bgFile = texture.SQUARE,
         insets = {
             left = -pixel,
             right = -pixel,
@@ -85,11 +86,11 @@ P.ask("Env").answer("reCastingBar", function(Env)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = Env.texture.SQUARE,
+        edgeFile = texture.SQUARE,
         edgeSize = pixel,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);
-    iconFrame:SetPoint("RIGHT", castingBar, "LEFT", -8 * dip, 0);
+    iconFrame:SetPoint("RIGHT", castingBar, "LEFT", -8 * dp, 0);
 
     if not castingBar.icon then
         castingBar.icon = castingBar:CreateTexture(nil, "ARTWORK", nil, 1);

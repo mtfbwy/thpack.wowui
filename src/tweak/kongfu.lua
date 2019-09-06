@@ -1,10 +1,11 @@
 -- a top-center text to warn something
-P.ask("Env", "Color", "Util").answer("Notify", function(Env, Color, Util)
+P.ask("Color", "Util", "res", "pp").answer("Notify", function(Color, Util, res, pp)
 
-    local dip = Env.dip;
+    local font = res.font;
+    local dp = pp.dp;
 
     -- relative to the canvas
-    local normalSize = 32 * dip;
+    local normalSize = 32 * dp;
     local variableSize = 0.25 * normalSize;
 
     local f = CreateFrame("frame", nil, UIParent);
@@ -15,7 +16,7 @@ P.ask("Env", "Color", "Util").answer("Notify", function(Env, Color, Util)
     f:SetPoint("topright", 0, -0.1 * UIParent:GetHeight());
 
     local fs = f:CreateFontString()
-    fs:SetFont(Env.font.DEFAULT, normalSize, "outline");
+    fs:SetFont(font.DEFAULT, normalSize, "outline");
     fs:SetJustifyH("center");
     fs:SetAllPoints();
     fs:Show();
