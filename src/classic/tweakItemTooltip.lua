@@ -15,13 +15,17 @@
 
             local name, link, quality, level, _, _, _, _, _, _, sellPrice = GetItemInfo(itemLink);
 
+            local levelString = nil;
             if level then
-                self:AddLine("Level: " .. level, 0, 1, 1);
+                levelString = "Level: " .. level;
             end
 
-            if sellPrice then
-                self:AddLine("Sell: " .. sellPrice, 0, 1, 1);
+            local sellPriceString = nil;
+            if sellPrice and sellPrice > 0 then
+                sellPriceString = GetCoinTextureString(sellPrice);
             end
+
+            self:AddDoubleLine(levelString, sellPriceString, 0, 1, 1, 1, 1, 1);
 
             if quality then
                 self:SetBackdropBorderColor(GetItemQualityColor(quality));

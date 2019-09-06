@@ -9,6 +9,8 @@
 src/_G.lua
 src/_G.proto.lua
 
+src/Util.lua
+
 src/classic/backpack.lua
 src/classic/addBuffCaster.lua
 src/classic/addTargetClassIcon.lua
