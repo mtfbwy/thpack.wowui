@@ -15,6 +15,7 @@ src/classic/addTargetClassIcon.lua
 src/classic/autoRepair.lua
 src/classic/autoSelectMostExpensiveReward.lua
 src/classic/autoSell.lua
+src/classic/moveUpErrorsFrame.lua
 src/classic/tabSwitchChannel.lua
 src/classic/tweakItemTooltip.lua
 src/classic/tweakUnitTooltip.lua
