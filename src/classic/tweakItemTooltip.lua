@@ -21,7 +21,7 @@
             end
 
             local sellPriceString = nil;
-            if sellPrice and sellPrice > 0 then
+            if sellPrice and sellPrice > 0 and not MerchantFrame:IsShown() then
                 sellPriceString = GetCoinTextureString(sellPrice);
             end
 
