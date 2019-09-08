@@ -56,7 +56,7 @@ P.ask("cvar").answer("pp", function()
     end
     logi(string.format("Type \"%s\" to learn more.", "/screenResolution"));
 
-    local screenHeight = string.match(screenResolution, "%d+x(%d+)");
+    local screenHeight = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (screenHeight < 768) then
         logi(string.format("Screen height has min value 768. Screen resolution [%s] ignored.", screenResolution));
         screenHeight = 768;
