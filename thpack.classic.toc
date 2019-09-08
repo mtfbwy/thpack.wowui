@@ -9,6 +9,7 @@
 src/_G.lua
 src/_G.proto.lua
 
+src/Color.lua
 src/Util.lua
 
 src/classic/backpack.lua
