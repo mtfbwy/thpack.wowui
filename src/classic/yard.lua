@@ -1,17 +1,12 @@
 -- 距离显示
-P.ask("res", "pp").answer("yard", function(res, pp)
-
-    local font = res.font;
-    local dp = pp.dp;
+(function()
 
     local rawConfig = {
         item = {
             ["霜纹投网"] = 25,
         },
         skill = {
-        },
-        skills = {
-            "射击",
+            "射击", "投掷",
             "致盲", "暗影步", "致命投掷",
             "火球术", "寒冰箭", "冰枪术", "奥术冲击", "变形术",
             "惩击", "暗言术：痛",
@@ -22,12 +17,11 @@ P.ask("res", "pp").answer("yard", function(res, pp)
     };
 
     local function recalc()
-        for i, skillName in pairs(rawConfig.skills) do
+        rawConfig._skills = {};
+        for i, skillName in pairs(rawConfig.skill) do
             local r = select(6, GetSpellInfo(skillName))
             if r and r > 0 then
-                rawConfig.skill[skillName] = r
-            else
-                rawConfig.skill[skillName] = nil
+                rawConfig._skills[skillName] = r
             end
         end
     end
@@ -42,7 +36,7 @@ P.ask("res", "pp").answer("yard", function(res, pp)
                 r = range;
             end
         end
-        for name, range in pairs(rawConfig.skill) do
+        for name, range in pairs(rawConfig._skills) do
             if IsSpellInRange(name, "target") == 1 and r > range then
                 r = range;
             end
@@ -67,13 +61,13 @@ P.ask("res", "pp").answer("yard", function(res, pp)
     local pendingUpdate = nil;
 
     local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(160 * dp, 32 * dp)
+    f:SetSize(120, 24)
     f:SetFrameStrata("BACKGROUND")
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * dp)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, -40)
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont(font.COMBAT, 32 * dp, "OUTLINE");
+    fs:SetFont("fonts/SKURRI.ttf", 24, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");
@@ -109,4 +103,4 @@ P.ask("res", "pp").answer("yard", function(res, pp)
             self.fs:SetTextColor(1, 0, 0);
         end
     end);
-end);
+end)();
