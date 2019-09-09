@@ -37,7 +37,7 @@ _G.Color = (function()
         ["gray"]        = "#808080",
         ["hotpink"]     = "#ff69b4",     -- paladin
         ["maroon"]      = "#800000",
-        ["mediumpurple"]    = "9370d8",
+        ["mediumpurple"]    = "#9370d8",
         ["orangered"]   = "#ff4500",
         ["royalblue"]   = "#4169e1",     -- shaman
         ["skyblue"]     = "#87ceeb",     -- mage
@@ -92,6 +92,13 @@ _G.Color = (function()
         return string.format("#%2X%2X%2X%2X", r * 255, g * 255, b * 255, a * 255);
     end
 
+    function toInt(color)
+        if (color == nil) then
+            return nil;
+        end
+        return string.sub(color, 2);
+    end
+
     function toVertex(color)
         local color = pick(color) or color;
         local r = tonumber(strsub(color, 2, 3), 16);
@@ -111,6 +118,7 @@ _G.Color = (function()
         fromUnitPowerType = fromUnitPowerType,
         fromPowerType = fromPowerType,
         fromVertex = fromVertex,
+        toInt = toInt,
         toVertex = toVertex,
     };
 end)();

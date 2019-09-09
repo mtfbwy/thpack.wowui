@@ -1,27 +1,39 @@
 (function()
 
+    function getUnitNameText(unit)
+        if (not unit or not UnitExists(unit)) then
+            return "";
+        end
+
+        local classText = "";
+        if (UnitIsPlayer(unit)) then
+            local classColor = Color.fromUnitClass(unit);
+            classText "|cff" .. Color.toInt(classColor) .. "◼|r"
+        end
+
+        local name = UnitName(unit);
+        local hostileColor = Color.fromUnitHostile(unit);
+        local nameText = "|cff" .. Color.toInt(hostileColor) .. name .. "|r"
+
+        return classText .. nameText;
+    end
+
     GameTooltip:HookScript("OnTooltipSetUnit", function(self)
         local _, unit = self:GetUnit();
-        if unit then
-            if UnitIsPlayer(unit) then
-                self:SetBackdropBorderColor(Color.toVertex(Color.fromUnitClass(unit)));
-            else
-                self:SetBackdropBorderColor(UnitSelectionColor(unit));
-            end
-            local unitTarget = unit .. "target"
-            if UnitExists(unitTarget) then
-                local t = UnitName(unitTarget)
-                if UnitIsPlayer(unitTarget) then
-                    if UnitIsUnit(unitTarget, "player") then
-                        t = "|cffff0000!!!|r"
-                    elseif UnitIsFriend(unitTarget, "player") then
-                        t = "|cff00ff00" .. t .. "|r"
-                    else
-                        t = "|cffff0000" .. t .. "|r"
-                    end
-                end
-                self:AddLine("→ " .. t, 1, 1, 1)
-            end
+        if not unit then
+            return;
         end
+
+        local unitText = getUnitNameText(unit);
+
+        local unitTargetText;
+        local unitTarget = unit .. "target";
+        if (UnitIsUnit(unitTarget, "player")) then
+            unitTargetText = "|cffff0000!!!|r";
+        else
+            unitTargetText = getUnitNameText(unitTarget);
+        end
+
+        self:AddDoubleLine(unitText .. " → ", unitTargetText, 1, 1, 1);
     end);
 end)();
