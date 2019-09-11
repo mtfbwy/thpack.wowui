@@ -12,7 +12,7 @@ end)();
 
         local a = {};
         local totalMemory = 0;
-        for i = 1, GetNumAddons(); do
+        for i = 1, GetNumAddons() do
             local addonName, _, _, enabled = GetAddOnInfo(i);
             if (enabled) then
                 local addonMemory = GetAddOnMemoryUsage(i);

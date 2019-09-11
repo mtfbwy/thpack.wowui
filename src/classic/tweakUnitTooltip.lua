@@ -8,7 +8,7 @@
         local classText = "";
         if (UnitIsPlayer(unit)) then
             local classColor = Color.fromUnitClass(unit);
-            classText "|cff" .. Color.toInt(classColor) .. "◼|r"
+            classText = "|cff" .. Color.toInt(classColor) .. "@|r"
         end
 
         local name = UnitName(unit);
