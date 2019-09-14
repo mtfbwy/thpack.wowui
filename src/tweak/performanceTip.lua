@@ -1,11 +1,10 @@
-(function()
-    hooksecurefunc("TimeManagerClockButton_Update", function()
-        TimeManagerClockTicker:SetVertexColor(select(2, Addon.getLag()));
-    end);
-end)();
-
 -- addon memory and gc
 (function()
+
+    local hostButton = MainMenuBarPerformanceBarFrameButton;
+    if (hostButton == nil) then
+        return;
+    end
 
     function calculateAddonMemory()
         UpdateAddOnMemoryUsage();
@@ -30,7 +29,10 @@ end)();
     -- avoid seeing fast growing memory
     local lastUpdate = 0;
 
-    function TimeManagerClockButton_UpdateTooltip()
+    hostButton:SetScript("OnEnter", nil);
+    hostButton:SetScript("OnLeave", nil);
+
+    hostButton:SetScript("OnUpdate", function()
         if GetSessionTime() <= lastUpdate + 2 then
             return;
         end
@@ -40,18 +42,6 @@ end)();
         lastUpdate = GetSessionTime();
 
         GameTooltip:ClearLines();
-
-        if TimeManagerClockTicker.alarmFiring then
-            if gsub(Settings.alarmMessage, "%s", "") ~= "" then
-                GameTooltip:AddLine(
-                        Settings.alarmMessage,
-                        HIGHLIGHT_FONT_COLOR.r,
-                        HIGHLIGHT_FONT_COLOR.g,
-                        HIGHLIGHT_FONT_COLOR.b,
-                        1);
-            end
-            GameTooltip:AddLine(TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF);
-        end
 
         GameTooltip:AddLine(format("%d fps / %d ms", Addon.getFps(), Addon.getLag()), 1, 1, 1);
 
@@ -64,15 +54,13 @@ end)();
             GameTooltip:AddDoubleLine(v.addonName, string.format("|cff00ff00%.1f KB|r", v.addonMemory));
         end
 
-        GameTooltip:AddLine("(right click to gc)");
+        GameTooltip:AddLine("(click to gc)");
 
         GameTooltip:Show();
-    end
+    end);
 
-    TimeManagerClockButton:HookScript("OnClick", function(self, button)
-        if (button == "RightButton") then
-            collectgarbage("collect");
-            lastUpdate = 0;
-        end
+    hostButton:SetScript("OnClick", function(self, button)
+       collectgarbage("collect");
+       lastUpdate = 0;
     end);
 end)();

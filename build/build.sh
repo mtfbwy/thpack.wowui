@@ -6,12 +6,9 @@ if test ! -d "$WOW"; then
     exit
 fi
 
-ADDON="$WOW/_retail_/Interface/AddOns/thpack.wowui"
-rm -rf "$ADDON"
-mkdir -p "$ADDON"
-cp *.toc *.xml -r res src "$ADDON"
-
-ADDON="$WOW/_classic_/Interface/AddOns/thpack.classic"
-rm -rf "$ADDON"
-mkdir -p "$ADDON"
-cp *.toc *.xml -r res src "$ADDON"
+for i in "_retail_" "_classic_"; do
+    ADDON="$WOW/$i/Interface/AddOns/thpack.wowui"
+    rm -rf "$ADDON"
+    mkdir -p "$ADDON"
+    cp *.toc *.xml -r res src "$ADDON"
+done

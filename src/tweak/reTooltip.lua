@@ -1,4 +1,4 @@
-P.ask("pp").answer("tweakTooltip", function(pp)
+P.ask("pp").answer("reTooltip", function(pp)
 
     local texSquare = Addon.Res.texSquare;
     local pixel = pp.px;
@@ -19,7 +19,7 @@ P.ask("pp").answer("tweakTooltip", function(pp)
             TOOLTIP_DEFAULT_BACKGROUND_COLOR.g,
             TOOLTIP_DEFAULT_BACKGROUND_COLOR.b)
 
-    -- status bar
+    -- tooltip status bar
 
     GameTooltipStatusBar:ClearAllPoints();
     GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -pixel);
@@ -50,13 +50,13 @@ P.ask("pp").answer("tweakTooltip", function(pp)
     hpValue:SetPoint("RIGHT", -2 * pixel, 0);
 
     function updateStatusBarText(self)
-        local curhp = self:GetValue();
-        local _, maxhp = self:GetMinMaxValues();
-        hpPercentage:SetFormattedText("%.1f%%", curhp / maxhp * 100);
-        if curhp <= 1 and maxhp == 1 then
+        local currentValue = self:GetValue();
+        local _, maxValue = self:GetMinMaxValues();
+        hpPercentage:SetFormattedText("%.1f%%", currentValue / maxValue * 100);
+        if currentValue <= 1 and maxValue == 1 then
             hpValue:SetText("");
         else
-            hpValue:SetFormattedText("%d", curhp);
+            hpValue:SetFormattedText("%d", currentValue);
         end
     end
 

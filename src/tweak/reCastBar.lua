@@ -1,13 +1,13 @@
-P.ask("pp").answer("reCastingBar", function(pp)
+P.ask("pp").answer("reCastBar", function(pp)
 
     local texSquare = Addon.Res.texSquare;
     local pixel = pp.px;
     local dp = pp.dp;
 
-    local castingBar = CastingBarFrame;
+    local castBar = CastingBarFrame;
 
     -- layerLevel:BACKGROUND
-    local regions = { castingBar:GetRegions() };
+    local regions = { castBar:GetRegions() };
     for i = 1, #regions do
         local region = regions[i];
         if region:GetObjectType() == "Texture" and not region:GetName() then
@@ -19,19 +19,19 @@ P.ask("pp").answer("reCastingBar", function(pp)
     end
 
     -- layerLevel:ARTWORK
-    castingBar.Border:SetTexture(nil);
-    castingBar.BorderShield:SetTexture(nil);
-    castingBar.nameText = castingBar.Text;
-    castingBar.icon = castingBar.Icon;
+    castBar.Border:SetTexture(nil);
+    castBar.BorderShield:SetTexture(nil);
+    castBar.nameText = castBar.Text;
+    castBar.icon = castBar.Icon;
 
     -- layerLevel:OVERLAY, alphaMode:ADD
-    castingBar.Spark:SetTexture(nil);
-    castingBar.Flash:SetTexture(nil);
+    castBar.Spark:SetTexture(nil);
+    castBar.Flash:SetTexture(nil);
 
     -- complete it
 
-    castingBar:SetSize(240 * dp, 24 * dp);
-    castingBar:SetBackdrop({
+    castBar:SetSize(240 * dp, 24 * dp);
+    castBar:SetBackdrop({
         bgFile = nil,
         insets = {
             left = 0,
@@ -44,37 +44,37 @@ P.ask("pp").answer("reCastingBar", function(pp)
         edgeFile = texSquare,
         edgeSize = pixel,
     });
-    castingBar:SetBackdropBorderColor(1, 1, 1);
-    castingBar:SetStatusBarTexture(texSquare);
-    castingBar:SetStatusBarColor(1, 0.7, 0, 1);
-    castingBar:SetMinMaxValues(0, 1);
-    castingBar:SetValue(0.7749); -- for test
+    castBar:SetBackdropBorderColor(1, 1, 1);
+    castBar:SetStatusBarTexture(texSquare);
+    castBar:SetStatusBarColor(1, 0.7, 0, 1);
+    castBar:SetMinMaxValues(0, 1);
+    castBar:SetValue(0.7749); -- for test
 
-    if not castingBar.nameText then
-        castingBar.nameText = castingBar:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Small");
+    if not castBar.nameText then
+        castBar.nameText = castBar:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Small");
     end
-    local nameText = castingBar.nameText;
+    local nameText = castBar.nameText;
     nameText:SetJustifyH("LEFT");
     nameText:ClearAllPoints();
     nameText:SetPoint("LEFT", 2 * pixel, 0);
     nameText:SetPoint("RIGHT");
 
-    if not castingBar.numberText then
-        castingBar.numberText = castingBar:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Small");
+    if not castBar.numberText then
+        castBar.numberText = castBar:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Small");
     end
-    local numberText = castingBar.numberText;
+    local numberText = castBar.numberText;
     numberText:SetJustifyH("RIGHT");
     numberText:ClearAllPoints();
     numberText:SetPoint("LEFT");
     numberText:SetPoint("RIGHT", -2 * pixel, 0);
 
-    if not castingBar.iconFrame then
-        castingBar.iconFrame = CreateFrame("frame", nil, castingBar);
+    if not castBar.iconFrame then
+        castBar.iconFrame = CreateFrame("frame", nil, castBar);
     end
-    local iconFrame = castingBar.iconFrame;
-    iconFrame:SetFrameStrata(castingBar:GetFrameStrata());
-    iconFrame:SetFrameLevel(castingBar:GetFrameLevel());
-    local iconFrameSize = castingBar:GetHeight() * 1.5 + 4 * dp;
+    local iconFrame = castBar.iconFrame;
+    iconFrame:SetFrameStrata(castBar:GetFrameStrata());
+    iconFrame:SetFrameLevel(castBar:GetFrameLevel());
+    local iconFrameSize = castBar:GetHeight() * 1.5 + 4 * dp;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
         bgFile = texSquare,
@@ -90,12 +90,12 @@ P.ask("pp").answer("reCastingBar", function(pp)
         edgeSize = pixel,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);
-    iconFrame:SetPoint("RIGHT", castingBar, "LEFT", -8 * dp, 0);
+    iconFrame:SetPoint("RIGHT", castBar, "LEFT", -8 * dp, 0);
 
-    if not castingBar.icon then
-        castingBar.icon = castingBar:CreateTexture(nil, "ARTWORK", nil, 1);
+    if not castBar.icon then
+        castBar.icon = castBar:CreateTexture(nil, "ARTWORK", nil, 1);
     end
-    local icon = castingBar.icon;
+    local icon = castBar.icon;
     icon:SetTexCoord(5/64, 59/64, 5/64, 59/64); -- get rid of border
     icon:SetParent(iconFrame);
     icon:ClearAllPoints();
@@ -103,7 +103,7 @@ P.ask("pp").answer("reCastingBar", function(pp)
     icon:SetPoint("BOTTOMRIGHT", -2 * pixel, 2 * pixel);
     icon:Show();
 
-    castingBar:HookScript("OnUpdate", function(self, elapsed)
+    castBar:HookScript("OnUpdate", function(self, elapsed)
         local eta = 0;
         if self.casting then
             eta = self.maxValue - self.value;

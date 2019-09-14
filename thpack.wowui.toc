@@ -1,9 +1,9 @@
 ## Interface: 80200
 ## Title: thpack
 ## DefaultState: Enabled
-## Version: 80200.876
+## Version: 80200.877
 ## Author: tanghao
-## Date: 2019-09-05
+## Date: 2019-09-14
 ## SavedVariables: Config
 
 src/_G.lua
@@ -15,25 +15,25 @@ src/Addon.lua
 src/Addon.Color.lua
 src/Addon.Res.lua
 
+src/tweak/backpack.lua
+src/tweak/addBuffCaster.lua
+src/tweak/addTargetClassIcon.lua
+src/tweak/autoRepair.lua
+src/tweak/autoSelectMostExpensiveReward.lua
+src/tweak/autoSell.lua
+src/tweak/moveUpErrorsFrame.lua
+src/tweak/performanceTip.lua
+src/tweak/tabSwitchChannel.lua
+src/tweak/tweakItemTooltip.lua
+src/tweak/tweakUnitTooltip.lua
+
 src/P.lua
 src/P.event.lua
 src/P.pp.lua
 
-src/classic/backpack.lua
-src/classic/addBuffCaster.lua
-src/classic/addTargetClassIcon.lua
-src/classic/autoRepair.lua
-src/classic/autoSelectMostExpensiveReward.lua
-src/classic/autoSell.lua
-#src/classic/dashboard.lua
-src/classic/moveUpErrorsFrame.lua
-src/classic/tabSwitchChannel.lua
-src/classic/tweakItemTooltip.lua
-src/classic/tweakUnitTooltip.lua
-src/classic/yard.lua
+src/tweak/reCastBar.lua
+src/tweak/reTooltip.lua
 
-#src/tweak/bindKey.lua
-src/tweak/kongfu.lua
-
-src/tweak/reCastingBar.lua
-src/tweak/tweakTooltip.lua
+#src/newly/bindKey.lua
+src/newly/kongfu.lua
+src/newly/yard.lua

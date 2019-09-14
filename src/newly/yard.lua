@@ -1,5 +1,7 @@
 -- 距离显示
-(function()
+P.ask("pp").answer("yard", function(pp)
+
+    local dp = pp.dp;
 
     local fontCombat = Addon.Res.fontCombat;
 
@@ -18,28 +20,33 @@
         }
     };
 
-    local function recalc()
+    local function reckon()
         rawConfig._skills = {};
         for i, skillName in pairs(rawConfig.skill) do
-            local r = select(6, GetSpellInfo(skillName))
-            if r and r > 0 then
-                rawConfig._skills[skillName] = r
+            local maxRange = select(6, GetSpellInfo(skillName));
+            if maxRange and maxRange > 0 then
+                rawConfig._skills[skillName] = maxRange;
             end
         end
     end
 
     local function lookup()
-        if (UnitIsUnit("target", "player")) then
-            return "."
+        if (not UnitExists("target")) then
+            return "";
         end
-        local r = 99
+
+        if (UnitIsUnit("target", "player")) then
+            return ".";
+        end
+
+        local r = 99;
         for name, range in pairs(rawConfig.item) do
-            if IsItemInRange(name, "target") == 1 and r > range then
+            if IsItemInRange(name, "target") and r > range then
                 r = range;
             end
         end
         for name, range in pairs(rawConfig._skills) do
-            if IsSpellInRange(name, "target") == 1 and r > range then
+            if IsSpellInRange(name, "target") and r > range then
                 r = range;
             end
         end
@@ -49,27 +56,16 @@
         return r;
     end
 
-    local totalElapsed = 0;
-    function update(self, elapsed)
-        totalElapsed = totalElapsed + elapsed;
-        if totalElapsed >= 0.1 then
-            self.fs:SetText(lookup());
-            totalElapsed = 0;
-        end
-    end
-
-    recalc();
-
-    local pendingUpdate = nil;
-
     local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(120, 24)
+    f:SetSize(160 * dp, 32 * dp);
     f:SetFrameStrata("BACKGROUND")
     f:SetPoint("CENTER", UIParent, "CENTER", 0, -40)
     f.unit = "target"
+    f.accumulatedElapsed = 0;
+    f.pendingReckon = 1;
 
     local fs = f:CreateFontString();
-    fs:SetFont(fontCombat, 24, "OUTLINE");
+    fs:SetFont(fontCombat, 32 * dp, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");
@@ -83,26 +79,28 @@
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
     f:SetScript("OnEvent", function(self, event, ...)
         if event == "PLAYER_TALENT_UPDATE" or event == "ACTIVE_TALENT_GROUP_CHANGED" then
-            pendingUpdate = 1;
-        elseif event == "PLAYER_TARGET_CHANGED" then
-            if pendingUpdate then
-                recalc();
-                pendingUpdate = nil;
-            end
-            if UnitExists("target") then
-                self:SetScript("OnUpdate", update);
+            if (InCombatLockdown()) then
+                self.pendingReckon = 1;
             else
-                self:SetScript("OnUpdate", nil);
-                if InCombatLockdown() then
-                    self.fs:SetText(".");
-                else
-                    self.fs:SetText("");
-                end
+                self.pendingReckon = nil;
+                reckon();
             end
+        elseif event == "PLAYER_TARGET_CHANGED" then
+            self:SetScript("OnUpdate", function(self, elapsed)
+                self.accumulatedElapsed = self.accumulatedElapsed + elapsed;
+                if self.accumulatedElapsed >= 0.1 then
+                    self.fs:SetText(lookup());
+                    self.accumulatedElapsed = 0;
+                end
+            end);
         elseif event == "PLAYER_REGEN_ENABLED" then
             self.fs:SetTextColor(0, 1, 0);
+            if self.pendingReckon then
+                self.pendingReckon = nil;
+                reckon();
+            end
         elseif event == "PLAYER_REGEN_DISABLED" then
             self.fs:SetTextColor(1, 0, 0);
         end
     end);
-end)();
+end);
