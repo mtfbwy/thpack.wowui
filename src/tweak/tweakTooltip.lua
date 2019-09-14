@@ -1,9 +1,9 @@
-P.ask("res", "pp").answer("tweakTooltip", function(res, pp)
+P.ask("pp").answer("tweakTooltip", function(pp)
 
-    local texture = res.texture;
+    local texSquare = Addon.Res.texSquare;
     local pixel = pp.px;
 
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texture.SQUARE;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texSquare;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = pixel;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tile = false;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tileSize = 0;
@@ -35,10 +35,10 @@ P.ask("res", "pp").answer("tweakTooltip", function(res, pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texture.SQUARE,
+        edgeFile = texSquare,
         edgeSize = pixel,
     });
-    GameTooltipStatusBar:SetStatusBarTexture(texture.SQUARE);
+    GameTooltipStatusBar:SetStatusBarTexture(texSquare);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpPercentage:SetWidth(60);

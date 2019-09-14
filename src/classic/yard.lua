@@ -1,6 +1,8 @@
 -- 距离显示
 (function()
 
+    local fontCombat = Addon.Res.fontCombat;
+
     local rawConfig = {
         item = {
             ["霜纹投网"] = 25,
@@ -67,7 +69,7 @@
     f.unit = "target"
 
     local fs = f:CreateFontString();
-    fs:SetFont("fonts/SKURRI.ttf", 24, "OUTLINE");
+    fs:SetFont(fontCombat, 24, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

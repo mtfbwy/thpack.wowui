@@ -1,6 +1,6 @@
-_G.Color = (function()
+Addon.Color = (function()
 
-    local COLOR_NAME = {
+    local colorHex = {
         -- RAID_CLASS_COLORS[CLASS]
         ["deathknight"] = "#cc0033",
         ["demonhunter"] = "#9933cc",
@@ -48,7 +48,7 @@ _G.Color = (function()
     };
 
     function pick(key)
-        return COLOR_NAME[key or ""];
+        return colorHex[key or ""];
     end
 
     function fromUnitClass(unit)
@@ -121,10 +121,4 @@ _G.Color = (function()
         toInt = toInt,
         toVertex = toVertex,
     };
-end)();
-
-if (P ~= nil) then
-    P.ask().answer("Color", function()
-        return Color;
-    end);
-end
+end)(...);

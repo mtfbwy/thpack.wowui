@@ -21,26 +21,3 @@ function table.merge(o, ...)
     end
     return o;
 end
-
-----------------
--- log
-
-function logi(...)
-    (DEFAULT_CHAT_FRAME or ChatFrame1):AddMessage(...);
-end
-
-function logd(...)
-    local a = { ... };
-    if (#a == 0) then
-        logi("-- 1 - nil: nil");
-        return;
-    end
-    for i, v in pairs(a) do
-        local vType = type(v);
-        if (vType == "string" or vType == "number") then
-            logi(string.format("-- %d - %s: %s", i, vType, tostring(v)));
-        else
-            logi(string.format("-- %d - %s", i, (tostring(v) or "N/A")));
-        end
-    end
-end

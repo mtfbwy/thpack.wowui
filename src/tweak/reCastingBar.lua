@@ -1,6 +1,6 @@
-P.ask("res", "pp").answer("reCastingBar", function(res, pp)
+P.ask("pp").answer("reCastingBar", function(pp)
 
-    local texture = res.texture;
+    local texSquare = Addon.Res.texSquare;
     local pixel = pp.px;
     local dp = pp.dp;
 
@@ -41,11 +41,11 @@ P.ask("res", "pp").answer("reCastingBar", function(res, pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texture.SQUARE,
+        edgeFile = texSquare,
         edgeSize = pixel,
     });
     castingBar:SetBackdropBorderColor(1, 1, 1);
-    castingBar:SetStatusBarTexture(texture.SQUARE);
+    castingBar:SetStatusBarTexture(texSquare);
     castingBar:SetStatusBarColor(1, 0.7, 0, 1);
     castingBar:SetMinMaxValues(0, 1);
     castingBar:SetValue(0.7749); -- for test
@@ -77,7 +77,7 @@ P.ask("res", "pp").answer("reCastingBar", function(res, pp)
     local iconFrameSize = castingBar:GetHeight() * 1.5 + 4 * dp;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
-        bgFile = texture.SQUARE,
+        bgFile = texSquare,
         insets = {
             left = -pixel,
             right = -pixel,
@@ -86,7 +86,7 @@ P.ask("res", "pp").answer("reCastingBar", function(res, pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texture.SQUARE,
+        edgeFile = texSquare,
         edgeSize = pixel,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);

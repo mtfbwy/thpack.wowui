@@ -1,4 +1,4 @@
-_G["P"] = (function(ADDON)
+_G.P = (function()
 
     local generateModName = (function()
         local nameIndex = -1;
@@ -148,8 +148,7 @@ _G["P"] = (function(ADDON)
     end, 4000, 1);
 
     return {
-        _addon = ADDON,
-        _version = 875,
+        _version = 877,
         ask = ask
     };
 end)(...);

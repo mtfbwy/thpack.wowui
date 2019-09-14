@@ -7,13 +7,13 @@
 
         local classText = "";
         if (UnitIsPlayer(unit)) then
-            local classColor = Color.fromUnitClass(unit);
-            classText = "|cff" .. Color.toInt(classColor) .. "@|r"
+            local classColor = Addon.Color.fromUnitClass(unit);
+            classText = "|cff" .. Addon.Color.toInt(classColor) .. "@|r"
         end
 
         local name = UnitName(unit);
-        local hostileColor = Color.fromUnitHostile(unit);
-        local nameText = "|cff" .. Color.toInt(hostileColor) .. name .. "|r"
+        local hostileColor = Addon.Color.fromUnitHostile(unit);
+        local nameText = "|cff" .. Addon.Color.toInt(hostileColor) .. name .. "|r"
 
         return classText .. nameText;
     end

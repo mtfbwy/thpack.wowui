@@ -1,6 +1,6 @@
 (function()
     hooksecurefunc("TimeManagerClockButton_Update", function()
-        TimeManagerClockTicker:SetVertexColor(select(2, Util.getLag()));
+        TimeManagerClockTicker:SetVertexColor(select(2, Addon.getLag()));
     end);
 end)();
 
@@ -53,7 +53,7 @@ end)();
             GameTooltip:AddLine(TIMEMANAGER_ALARM_TOOLTIP_TURN_OFF);
         end
 
-        GameTooltip:AddLine(format("%d fps / %d ms", Util.getFps(), Util.getLag()), 1, 1, 1);
+        GameTooltip:AddLine(format("%d fps / %d ms", Addon.getFps(), Addon.getLag()), 1, 1, 1);
 
         if (totalMemory > 0) then
             GameTooltip:AddDoubleLine("Total Memory", string.format("|cff00ff00%.1f KB|r", totalMemory));

@@ -1,7 +1,7 @@
 -- a top-center text to warn something
-P.ask("Color", "Util", "res", "pp").answer("Notify", function(Color, Util, res, pp)
+P.ask("pp").answer("Duang", function(pp)
 
-    local font = res.font;
+    local fontDefault = Addon.Res.fontDefault;
     local dp = pp.dp;
 
     -- relative to the canvas
@@ -16,7 +16,7 @@ P.ask("Color", "Util", "res", "pp").answer("Notify", function(Color, Util, res, 
     f:SetPoint("topright", 0, -0.1 * UIParent:GetHeight());
 
     local fs = f:CreateFontString()
-    fs:SetFont(font.DEFAULT, normalSize, "outline");
+    fs:SetFont(fontDefault, normalSize, "outline");
     fs:SetJustifyH("center");
     fs:SetAllPoints();
     fs:Show();
@@ -36,7 +36,7 @@ P.ask("Color", "Util", "res", "pp").answer("Notify", function(Color, Util, res, 
         t3 = t2 + t3;
 
         fs:SetText(text);
-        fs:SetTextColor(Color.toVertex(color));
+        fs:SetTextColor(Addon.Color.toVertex(color));
         fs.startTime = GetTime();
         fs:SetAlpha(0);
         fs.time1, fs.time2, fs.time3 = t1, t2, t3;
@@ -79,15 +79,17 @@ P.ask("Color", "Util", "res", "pp").answer("Notify", function(Color, Util, res, 
         f:Show();
     end;
 
-    Util.addCmd("thpackNotify", "/notify", function(msg)
+    Addon.addSlashCommand("thpackNotify", "/notify", function(msg)
         notify(msg, "00FF00", 1);
     end);
 
-    return notify;
+    return {
+        notify = notify
+    };
 end);
 
 -- notify the player when cast succeed
-P.ask("Util", "Notify").answer("kongfu", function(Util, Notify)
+P.ask("Duang").answer("kongfu", function(Duang)
 
     local announcements = {
         ["寒冰屏障"]    = "冰箱",
@@ -107,7 +109,7 @@ P.ask("Util", "Notify").answer("kongfu", function(Util, Notify)
         end
         mode = forcedMode or mode;
         if (mode == "notify") then
-            Notify(s, nil, true, 0.1, 1.2, 0.2);
+            Duang.notify(s, nil, true, 0.1, 1.2, 0.2);
         else
             SendChatMessage(s, mode);
         end
@@ -115,7 +117,7 @@ P.ask("Util", "Notify").answer("kongfu", function(Util, Notify)
 
     local enabled = false;
 
-    Util.addCmd("thpackKongfu", "/kongfu", function(x)
+    Addon.addSlashCommand("thpackKongfu", "/kongfu", function(x)
         if (x == "on") then
             enabled = true;
             logi("你已经是武林高手");

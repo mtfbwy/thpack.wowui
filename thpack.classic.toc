@@ -9,8 +9,9 @@
 src/_G.lua
 src/_G.proto.lua
 
-src/Color.lua
-src/Util.lua
+src/Addon.lua
+src/Addon.Color.lua
+src/Addon.Res.lua
 
 src/classic/backpack.lua
 src/classic/addBuffCaster.lua

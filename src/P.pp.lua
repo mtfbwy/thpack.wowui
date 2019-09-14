@@ -93,7 +93,7 @@ P.ask("cvar").answer("pp", function()
 
     -- extra command for user to force his screen resolution
     -- although it might be too late - every frame has been settled when UI accepts user's typing
-    Util.addCmd("thpackScreenResolution", "screenResolution", function(x)
+    Addon.addSlashCommand("thpackScreenResolution", "screenResolution", function(x)
         if (x == nil or x == "") then
             logi("Pixel-perfect art depends on screen resolution.");
             logi("Usage: /screenResolution reset | <width>x<height>");

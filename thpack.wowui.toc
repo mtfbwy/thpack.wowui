@@ -11,13 +11,13 @@ src/_G.proto.lua
 src/adt/Store.lua
 src/adt/Timer.lua
 
+src/Addon.lua
+src/Addon.Color.lua
+src/Addon.Res.lua
+
 src/P.lua
-src/P.res.lua
 src/P.event.lua
 src/P.pp.lua
-
-src/Color.lua
-src/Util.lua
 
 src/classic/backpack.lua
 src/classic/addBuffCaster.lua
