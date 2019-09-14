@@ -1,21 +1,22 @@
 (function()
 
-    function getUnitNameText(unit)
+    function getUnitString(unit)
         if (not unit or not UnitExists(unit)) then
             return "";
         end
 
-        local classText = "";
+        local unitName = UnitName(unit);
+        local hostileColor = Addon.Color.fromUnitHostile(unit);
+
         if (UnitIsPlayer(unit)) then
             local classColor = Addon.Color.fromUnitClass(unit);
-            classText = "|cff" .. Addon.Color.toInt(classColor) .. "@|r"
+            return string.format("|cff%06x%s|r|cff%06x%s|r",
+                    Addon.Color.toInt24(hostileColor), "@",
+                    Addon.Color.toInt24(classColor), unitName);
+        else
+            return string.format("|cff%06x%s|r",
+                    Addon.Color.toInt24(hostileColor), unitName);
         end
-
-        local name = UnitName(unit);
-        local hostileColor = Addon.Color.fromUnitHostile(unit);
-        local nameText = "|cff" .. Addon.Color.toInt(hostileColor) .. name .. "|r"
-
-        return classText .. nameText;
     end
 
     GameTooltip:HookScript("OnTooltipSetUnit", function(self)
@@ -24,16 +25,16 @@
             return;
         end
 
-        local unitText = getUnitNameText(unit);
+        local unitString = getUnitString(unit);
 
-        local unitTargetText;
+        local unitTargetString;
         local unitTarget = unit .. "target";
         if (UnitIsUnit(unitTarget, "player")) then
-            unitTargetText = "|cffff0000!!!|r";
+            unitTargetString = "|cffff0000!!!|r";
         else
-            unitTargetText = getUnitNameText(unitTarget);
+            unitTargetString = getUnitString(unitTarget);
         end
 
-        self:AddDoubleLine(unitText .. " → ", unitTargetText, 1, 1, 1);
+        self:AddDoubleLine(unitString, "→ " .. unitTargetString, 1, 1, 1);
     end);
 end)();

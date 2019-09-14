@@ -89,14 +89,14 @@ Addon.Color = (function()
 
     function fromVertex(r, g, b, a)
         a = a or 1;
-        return string.format("#%2X%2X%2X%2X", r * 255, g * 255, b * 255, a * 255);
+        return string.format("#%2x%2x%2x%2x", r * 255, g * 255, b * 255, a * 255);
     end
 
-    function toInt(color)
+    function toInt24(color)
         if (color == nil) then
             return nil;
         end
-        return string.sub(color, 2);
+        return tonumber(string.sub(color, 2, 7));
     end
 
     function toVertex(color)
@@ -118,7 +118,7 @@ Addon.Color = (function()
         fromUnitPowerType = fromUnitPowerType,
         fromPowerType = fromPowerType,
         fromVertex = fromVertex,
-        toInt = toInt,
+        toInt24 = toInt24,
         toVertex = toVertex,
     };
 end)(...);
