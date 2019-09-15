@@ -28,7 +28,7 @@ P.ask("VARIABLES_LOADED").answer("cvar", function()
     RegisterCVar("taintLog", 1);
     SetCVar("taintLog", 1);
 
-    local uiScale = 0.85;
+    local uiScale = 1.0;
     SetCVar("useUiScale", 1);
     SetCVar("uiScale", uiScale);
 end);
