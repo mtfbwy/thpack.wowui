@@ -1,4 +1,5 @@
 ## Interface: 80200
+## X-Interface: 11302
 ## Title: thpack
 ## DefaultState: Enabled
 ## Version: 80200.877
@@ -21,6 +22,7 @@ src/tweak/addTargetClassIcon.lua
 src/tweak/autoRepair.lua
 src/tweak/autoSelectMostExpensiveReward.lua
 src/tweak/autoSell.lua
+src/tweak/backpackRemaining.lua
 src/tweak/moveUpErrorsFrame.lua
 src/tweak/performanceTip.lua
 src/tweak/tabSwitchChannel.lua
