@@ -25,6 +25,8 @@ P.ask("VARIABLES_LOADED").answer("cvar", function()
     RegisterCVar("CombatLogRangeHostilePlayers", 50);
     SetCVar("CombatLogRangeHostilePlayers", 50);
 
+    SetCVar("scriptErrors", 1);
+
     RegisterCVar("taintLog", 1);
     SetCVar("taintLog", 1);
 

@@ -83,11 +83,14 @@
         ToggleAllBags   = toggleAll;
     end)();
 
+    local uiVersion = select(4, GetBuildInfo());
     local f = CreateFrame("frame")
     f:RegisterEvent("BANKFRAME_OPENED")
     f:RegisterEvent("BANKFRAME_CLOSED")
-    f:RegisterEvent("GUILDBANKFRAME_OPENED")
-    f:RegisterEvent("GUILDBANKFRAME_CLOSED")
+    if (uiVersion >= 20300) then
+        f:RegisterEvent("GUILDBANKFRAME_OPENED")
+        f:RegisterEvent("GUILDBANKFRAME_CLOSED")
+    end
     f:RegisterEvent("TRADE_SHOW")
     f:RegisterEvent("TRADE_CLOSED")
     f:SetScript("OnEvent", function(self, event, ...)

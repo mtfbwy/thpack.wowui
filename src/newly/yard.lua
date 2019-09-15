@@ -74,8 +74,11 @@ P.ask("pp").answer("yard", function(pp)
     fs:SetAllPoints();
     f.fs = fs;
 
-    f:RegisterEvent("PLAYER_TALENT_UPDATE")
-    f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+    local uiVersion = select(4, GetBuildInfo());
+    if (uiVersion >= 20000) then
+        f:RegisterEvent("PLAYER_TALENT_UPDATE")
+        f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+    end
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
     f:RegisterEvent("PLAYER_REGEN_ENABLED")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
