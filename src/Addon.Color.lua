@@ -96,7 +96,7 @@ Addon.Color = (function()
         if (color == nil) then
             return nil;
         end
-        return tonumber(string.sub(color, 2, 7));
+        return tonumber(string.sub(color, 2, 7), 16);
     end
 
     function toVertex(color)
