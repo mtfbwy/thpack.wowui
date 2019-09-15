@@ -1,39 +1,4 @@
-P.ask("VARIABLES_LOADED").answer("cvar", function()
 
-    SetCVar("screenshotQuality", 10);
-
-    RegisterCVar("profanityFilter", 0);
-    SetCVar("profanityFilter", 0);
-
-    SetCVar("lootUnderMouse", 0);
-    SetCVar("autoLootDefault", 1);
-    SetCVar("autoOpenLootHistory", 0);
-
-    SetCVar("alwaysShowActionBars", 1);
-
-    SetCVar("nameplateMaxDistance", 50);
-    SetCVar("nameplateOtherTopInset", GetCVarDefault("nameplateOtherTopInset"));
-    SetCVar("nameplateOtherBottomInset", GetCVarDefault("nameplateOtherBottomInset"));
-
-    RegisterCVar("targetNearestDistance", 50);
-    SetCVar("targetNearestDistance", 50);
-    RegisterCVar("targetNearestDistanceRadius", 50);
-    SetCVar("targetNearestDistanceRadius", 50);
-
-    RegisterCVar("CombatLogRangeCreature", 50);
-    SetCVar("CombatLogRangeCreature", 50);
-    RegisterCVar("CombatLogRangeHostilePlayers", 50);
-    SetCVar("CombatLogRangeHostilePlayers", 50);
-
-    SetCVar("scriptErrors", 1);
-
-    RegisterCVar("taintLog", 1);
-    SetCVar("taintLog", 1);
-
-    local uiScale = 1.0;
-    SetCVar("useUiScale", 1);
-    SetCVar("uiScale", uiScale);
-end);
 
 -- I am easily pleased with pixel-perfect art
 P.ask("cvar").answer("pp", function()
@@ -45,7 +10,7 @@ P.ask("cvar").answer("pp", function()
     local screenResolution;
     if (Config.screenResolution ~= nil) then
         screenResolution = Config.screenResolution;
-        logi(string.format("Screen resolution [%s] loaded.", screenResolution));
+        logi(string.format("Pixel perfect: Screen resolution [%s] loaded.", screenResolution));
     else
         -- once upon a time screenResolution is GetCVar("gxResolution")
         local possibleResolutions = { GetScreenResolutions() };
@@ -54,13 +19,13 @@ P.ask("cvar").answer("pp", function()
             resolutionIndex = 1;
         end
         screenResolution = possibleResolutions[resolutionIndex];
-        logi(string.format("Screen resolution [%s] detected.", screenResolution));
+        logi(string.format("Pixel perfect: Screen resolution [%s] detected.", screenResolution));
     end
-    logi(string.format("Type \"%s\" to learn more.", "/screenResolution"));
+    logi(string.format("  Type \"%s\" to learn more.", "/screenResolution"));
 
     local screenHeight = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (screenHeight < 768) then
-        logi(string.format("Screen height has min value 768. Screen resolution [%s] ignored.", screenResolution));
+        logi(string.format("  Screen height has min value 768. Screen resolution [%s] ignored.", screenResolution));
         screenHeight = 768;
     end
 
@@ -73,12 +38,12 @@ P.ask("cvar").answer("pp", function()
     --      =>  1 pixel/point = 768 / uiScale / screenHeight
     -- to let the value be 1, simply set uiScale = 768 / screenHeight
 
-    -- more percisely, uiScale would be:
-    -- self:GetScale() * self:GetParent():GetScale() * ... * UIParent():GetEffectiveScale()
-    local uiScale = 1;
-    if (GetCVar("useUiScale")) then
-        uiScale = GetCVar("uiScale");
-    end
+    -- but because of the system error from float to int, the drawer cannot always get perfect int pixels.
+    -- as long as 1 pixel != 1 point, there must be pixel miss at somewhere.
+    -- to make pixel perfect, i have to force uiScale:
+    local uiScale = 768 / screenHeight;
+    SetCVar("useUiScale", 1);
+    SetCVar("uiScale", uiScale);
 
     -- Bliz UI always accept numbers in unit of points
     -- 1 (pixel) = 768 / uiScale / screenHeight (point)
@@ -95,10 +60,10 @@ P.ask("cvar").answer("pp", function()
 
     -- extra command for user to force his screen resolution
     -- although it might be too late - every frame has been settled when UI accepts user's typing
-    Addon.addSlashCommand("thpackScreenResolution", "screenResolution", function(x)
+    Addon.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
         if (x == nil or x == "") then
             logi("Pixel-perfect art depends on screen resolution.");
-            logi("Usage: /screenResolution reset | <width>x<height>");
+            logi("  e.g. /screenResolution reset");
             logi("  e.g. /screenResolution 1024x768");
         elseif (x == "unset" or x == "reset" or x == "clear" or x == "nil") then
             Config.screenResolution = nil;

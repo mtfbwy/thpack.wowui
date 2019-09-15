@@ -29,6 +29,7 @@ src/tweak/tweakUnitTooltip.lua
 
 src/P.lua
 src/P.event.lua
+src/P.cvar.lua
 src/P.pp.lua
 
 src/tweak/reCastBar.lua
