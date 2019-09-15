@@ -11,12 +11,13 @@ P.ask("pp").answer("yard", function(pp)
         },
         skill = {
             "射击", "投掷",
-            "致盲", "暗影步", "致命投掷",
+            "飞镖投掷", "暗影步", "致盲", "闷棍", "背刺",
             "火球术", "寒冰箭", "冰枪术", "奥术冲击", "变形术",
             "惩击", "暗言术：痛",
             "审判", "制裁之锤", "圣光术", "驱邪术",
             "闪电箭", "大地震击", "治疗波", "治疗之涌", "先祖之魂", "风剪",
             "冲锋", "英勇投掷",
+            "碎玉闪电", "嚎镇八方", "分筋错骨", "怒雷破",
         }
     };
 
@@ -24,7 +25,10 @@ P.ask("pp").answer("yard", function(pp)
         rawConfig._skills = {};
         for i, skillName in pairs(rawConfig.skill) do
             local maxRange = select(6, GetSpellInfo(skillName));
-            if maxRange and maxRange > 0 then
+            if maxRange then
+                if (maxRange == 0) then
+                    maxRange = 5; -- 近战范围
+                end
                 rawConfig._skills[skillName] = maxRange;
             end
         end
@@ -41,12 +45,12 @@ P.ask("pp").answer("yard", function(pp)
 
         local r = 99;
         for name, range in pairs(rawConfig.item) do
-            if IsItemInRange(name, "target") and r > range then
+            if IsItemInRange(name, "target") == 1 and r > range then
                 r = range;
             end
         end
         for name, range in pairs(rawConfig._skills) do
-            if IsSpellInRange(name, "target") and r > range then
+            if IsSpellInRange(name, "target") == 1 and r > range then
                 r = range;
             end
         end
@@ -60,9 +64,7 @@ P.ask("pp").answer("yard", function(pp)
     f:SetSize(160 * dp, 32 * dp);
     f:SetFrameStrata("BACKGROUND")
     f:SetPoint("CENTER", UIParent, "CENTER", 0, -40)
-    f.unit = "target"
-    f.accumulatedElapsed = 0;
-    f.pendingReckon = 1;
+    f.elapsed = 0;
 
     local fs = f:CreateFontString();
     fs:SetFont(fontCombat, 32 * dp, "OUTLINE");
@@ -87,11 +89,12 @@ P.ask("pp").answer("yard", function(pp)
             end
         elseif event == "PLAYER_TARGET_CHANGED" then
             self:SetScript("OnUpdate", function(self, elapsed)
-                self.accumulatedElapsed = self.accumulatedElapsed + elapsed;
-                if self.accumulatedElapsed >= 0.1 then
-                    self.fs:SetText(lookup());
-                    self.accumulatedElapsed = 0;
+                self.elapsed = self.elapsed + elapsed;
+                if self.elapsed < 0.1 then
+                    return;
                 end
+                self.elapsed = 0;
+                self.fs:SetText(lookup());
             end);
         elseif event == "PLAYER_REGEN_ENABLED" then
             self.fs:SetTextColor(0, 1, 0);
@@ -103,4 +106,11 @@ P.ask("pp").answer("yard", function(pp)
             self.fs:SetTextColor(1, 0, 0);
         end
     end);
+
+    if (InCombatLockdown()) then
+        f.pendingReckon = 1;
+    else
+        f.pendingReckon = nil;
+        reckon();
+    end
 end);
