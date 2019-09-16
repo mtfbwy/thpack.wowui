@@ -1,3 +1,7 @@
+if P then
+    return;
+end
+
 _G.P = (function()
 
     local generateModName = (function()
@@ -63,7 +67,7 @@ _G.P = (function()
     end;
 
     local workTrigger = Timer:create()
-        :schedule(execute, 25, 1000)
+        :schedule(execute, 60, 1000)
         :stop();
 
     local workThrottler = Timer:create()
