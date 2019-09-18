@@ -1,3 +1,7 @@
+if Addon then
+    return;
+end
+
 _G.Addon = (function()
 
     _G.logi = function(...)

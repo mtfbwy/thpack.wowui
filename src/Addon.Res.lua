@@ -1,3 +1,7 @@
+if Addon and Addon.Res then
+    return;
+end
+
 Addon.Res = (function(addonName)
 
     local resBase = "interface/addons/" .. addonName .. "/res";

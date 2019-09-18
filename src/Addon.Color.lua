@@ -1,3 +1,7 @@
+if Addon and Addon.Color then
+    return;
+end
+
 Addon.Color = (function()
 
     local colorHex = {
