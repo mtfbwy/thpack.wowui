@@ -27,7 +27,7 @@
         if CanMerchantRepair() then
             local amount = repairThem();
             if amount > 0 then
-                logi("autoRepair: -" .. GetCoinTextureString(amount));
+                logi("Auto repair for " .. GetCoinTextureString(amount));
             end
         end
     end);

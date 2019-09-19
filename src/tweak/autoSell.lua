@@ -27,7 +27,7 @@
     f:SetScript("OnEvent", function(self, event, ...)
         local amount = sellThem();
         if amount > 0 then
-            logi("autoSell: +" .. GetCoinTextureString(amount));
+            logi("Auto sell for " .. GetCoinTextureString(amount));
         end
     end);
 end)();

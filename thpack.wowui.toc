@@ -1,6 +1,6 @@
 ## Interface: 80200
 ## X-Interface: 11302
-## Title: thpack
+## Title: thpack.wowui
 ## DefaultState: Enabled
 ## Version: 80200.877
 ## Author: tanghao
