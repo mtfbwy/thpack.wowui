@@ -7,28 +7,27 @@
 ## Date: 2019-09-14
 ## SavedVariables: Config
 
-src/_G.lua
-src/_G.proto.lua
-src/adt/Store.lua
-src/adt/Timer.lua
-
 src/Addon.lua
 src/Addon.Color.lua
 src/Addon.Res.lua
 
-src/tweak/backpack.lua
-src/tweak/addBuffCaster.lua
-src/tweak/addTargetClassIcon.lua
 src/tweak/autoRepair.lua
-src/tweak/autoSelectMostExpensiveReward.lua
 src/tweak/autoSell.lua
+src/tweak/backpack.lua
 src/tweak/backpackRemaining.lua
+src/tweak/buffCaster.lua
+src/tweak/classicTargetClassIcon.lua
+src/tweak/highlightMostExpensiveReward.lua
 src/tweak/moveUpErrorsFrame.lua
 src/tweak/performanceTip.lua
 src/tweak/tabSwitchChannel.lua
 src/tweak/tweakItemTooltip.lua
 src/tweak/tweakUnitTooltip.lua
 
+src/_G.lua
+src/_G.proto.lua
+src/adt/Store.lua
+src/adt/Timer.lua
 src/P.lua
 src/P.event.lua
 src/P.cvar.lua
