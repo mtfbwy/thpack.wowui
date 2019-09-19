@@ -7,9 +7,7 @@
 ## Date: 2019-09-14
 ## SavedVariables: Config
 
-src/Addon.lua
-src/Addon.Color.lua
-src/Addon.Res.lua
+src/A.lua
 
 src/tweak/autoRepair.lua
 src/tweak/autoSell.lua
@@ -25,13 +23,9 @@ src/tweak/tweakItemTooltip.lua
 src/tweak/tweakUnitTooltip.lua
 
 src/_G.lua
-src/_G.proto.lua
 src/adt/Store.lua
 src/adt/Timer.lua
 src/P.lua
-src/P.event.lua
-src/P.cvar.lua
-src/P.pp.lua
 
 src/tweak/reCastBar.lua
 src/tweak/reTooltip.lua

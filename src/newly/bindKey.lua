@@ -134,7 +134,7 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
 
     local pending = nil;
 
-    Addon.addSlashCommand("thpackBindKey", "/bindKey", function(x)
+    A.addSlashCommand("thpackBindKey", "/bindKey", function(x)
         if (x == "on") then
             enabled = true;
             if InCombatLockdown() then

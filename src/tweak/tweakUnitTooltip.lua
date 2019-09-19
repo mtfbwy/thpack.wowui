@@ -7,9 +7,9 @@
 
         local unitString = "";
         if (UnitIsPlayer(unit)) then
-            local classColor = Addon.Color.fromUnitClass(unit);
+            local classColor = A.Color.fromUnitClass(unit);
             unitString = string.format("|cff%06x%s|r",
-                    Addon.Color.toInt24(classColor), UnitClass(unit));
+                    A.Color.toInt24(classColor), UnitClass(unit));
         end
 
         local unitTargetString = nil;
@@ -18,9 +18,9 @@
             if (UnitIsUnit(unitTarget, "player")) then
                 unitTargetString = "|cffff0000!!!|r";
             elseif (UnitIsPlayer(unitTarget)) then
-                local hostileColor = Addon.Color.fromUnitHostile(unitTarget);
+                local hostileColor = A.Color.fromUnitHostile(unitTarget);
                 unitTargetString = string.format("|cff%06x%s|r",
-                        Addon.Color.toInt24(hostileColor),
+                        A.Color.toInt24(hostileColor),
                         UnitName(unitTarget));
             end
         end

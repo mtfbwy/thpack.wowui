@@ -1,7 +1,7 @@
 -- a top-center text to warn something
 P.ask("pp").answer("Duang", function(pp)
 
-    local fontDefault = Addon.Res.fontDefault;
+    local fontDefault = A.Res.fontDefault;
     local dp = pp.dp;
 
     -- relative to the canvas
@@ -36,7 +36,7 @@ P.ask("pp").answer("Duang", function(pp)
         t3 = t2 + t3;
 
         fs:SetText(text);
-        fs:SetTextColor(Addon.Color.toVertex(color));
+        fs:SetTextColor(A.Color.toVertex(color));
         fs.startTime = GetTime();
         fs:SetAlpha(0);
         fs.time1, fs.time2, fs.time3 = t1, t2, t3;
@@ -79,7 +79,7 @@ P.ask("pp").answer("Duang", function(pp)
         f:Show();
     end;
 
-    Addon.addSlashCommand("thpackNotify", "/notify", function(msg)
+    A.addSlashCommand("thpackNotify", "/notify", function(msg)
         notify(msg, "00FF00", 1);
     end);
 
@@ -117,7 +117,7 @@ P.ask("Duang").answer("kongfu", function(Duang)
 
     local enabled = false;
 
-    Addon.addSlashCommand("thpackKongfu", "/kongfu", function(x)
+    A.addSlashCommand("thpackKongfu", "/kongfu", function(x)
         if (x == "on") then
             enabled = true;
             logi("你已经是武林高手");

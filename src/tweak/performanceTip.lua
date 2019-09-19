@@ -30,7 +30,7 @@
         local totalMemory, detail = calculateAddonMemory();
 
         GameTooltip:ClearLines();
-        GameTooltip:AddLine(format("%d fps / %d ms", Addon.getFps(), Addon.getLag()), 1, 1, 1);
+        GameTooltip:AddLine(format("%d fps / %d ms", A.getFps(), A.getLag()), 1, 1, 1);
         if (totalMemory > 0) then
             GameTooltip:AddDoubleLine("Total Memory", string.format("|cff00ff00%.1f KB|r", totalMemory));
             GameTooltip:AddLine("------------------------");

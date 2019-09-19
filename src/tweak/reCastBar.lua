@@ -1,6 +1,6 @@
 P.ask("pp").answer("reCastBar", function(pp)
 
-    local texSquare = Addon.Res.texSquare;
+    local texSquare = A.Res.texSquare;
     local pixel = pp.px;
     local dp = pp.dp;
 

@@ -1,6 +1,6 @@
 P.ask("pp").answer("reTooltip", function(pp)
 
-    local texSquare = Addon.Res.texSquare;
+    local texSquare = A.Res.texSquare;
     local pixel = pp.px;
 
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texSquare;

@@ -3,7 +3,7 @@ P.ask("pp").answer("yard", function(pp)
 
     local dp = pp.dp;
 
-    local fontCombat = Addon.Res.fontCombat;
+    local fontCombat = A.Res.fontCombat;
 
     local rawConfig = {
         item = {
