@@ -1,5 +1,55 @@
 A.Frame = (function()
 
+    function safeInvoke(callback, f)
+        if (not InCombatLockdown()) then
+            callback();
+            return;
+        end
+        if (f == nil) then
+            f = CreateFrame("Frame");
+        end
+        f:RegisterEvent("PLAYER_REGEN_ENABLED");
+        f:SetScript("OnEvent", function(self, event)
+            self:UnregisterAllEvents();
+            self:SetScript("OnEvent", nil);
+            callback();
+        end);
+    end
+
+    function attachEvents(frame, events)
+        frame.events = frame.events or {};
+        table.merge(frame.events, events);
+        for event, handler in pairs(events) do
+            frame:RegisterEvent(event)
+        end
+        frame:SetScript("OnEvent", function(self, event, ...)
+            local handler = self.events[event];
+            if (type(handler) == "function") then
+                handler(self, ...);
+            end
+        end);
+    end
+
+    -- frame strata > frame level
+    local FrameStratas = {
+        "BACKGROUND",
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "DIALOG",
+        "FULLSCREEN",
+        "FULLSCREEN_DIALOG",
+        "TOOLTIP",
+    };
+
+    local TextureLayers = {
+        "BACKGROUND",
+        "BORDER",
+        "ARTWORK",
+        "OVERLAY",
+        "HIGHLIGHT",
+    };
+
     -- border is usually frame backdrop
     -- that makes frame a "border-box"
     -- for pixel style,
@@ -8,12 +58,46 @@ A.Frame = (function()
     --  border: 1px white;
     --  padding: 1px;
 
-    -- border-box
-    function createFrame(parentFrame)
+    function createFrame(parentFrame, major, minor)
+        major = major or 1; -- default to "BACKGROUND"
+        minor = minor or 1;
         local f = CreateFrame("Frame", nil, parentFrame, nil);
-        f:SetFrameStrata("BACKGROUND");
-        f:SetFrameLevel(1);
+        f:SetFrameStrata(FrameStratas[major]);
+        f:SetFrameLevel(minor);
         return f;
+    end
+
+    function createDragAnchorFrame(parentFrame)
+        local anchorFrame = createFrame(parentFrame);
+        anchorFrame:SetSize(40, 10);
+        anchorFrame:SetBackdrop({
+            bgFile = A.Res.tile32
+        });
+        anchorFrame:SetBackdropColor(0, 0, 0, 0);
+
+        anchorFrame:SetMovable(true);
+        anchorFrame:RegisterForDrag("LeftButton");
+        anchorFrame:SetScript("OnMouseDown", function(self, button)
+            if (IsLeftControlKeyDown() and button == "LeftButton") then
+                self:StartMoving();
+            end
+        end);
+        anchorFrame:SetScript("OnMouseUp", function(self, button)
+            self:StopMovingOrSizing();
+        end);
+
+        anchorFrame:SetScript("OnEnter", function(self)
+            self:SetBackdropColor(0.2, 0.2, 0.2);
+            GameTooltip:SetOwner(self);
+            GameTooltip:AddLine("hold <Ctrl> to drag");
+            GameTooltip:Show();
+        end);
+        anchorFrame:SetScript("OnLeave", function(self)
+            self:SetBackdropColor(0, 0, 0, 0);
+            GameTooltip:Hide();
+        end);
+
+        return anchorFrame;
     end
 
     -- content-box
@@ -74,10 +158,13 @@ A.Frame = (function()
         end
     end
 
-    -- no size, position
-    function createProgressBar(parentFrame)
+    -- no size or position
+    function createProgressBar(parentFrame, major, minor)
+        major = major or 1;
+        minor = minor or 1;
+
         local f = CreateFrame("StatusBar", nil, parentFrame, nil);
-        f:SetFrameStrata("BACKGROUND");
+        f:SetFrameStrata(FrameStratas[major]);
         f:SetFrameLevel(1);
         f:SetStatusBarTexture(A.Res.hpbar32);
         f:SetMinMaxValues(0, 1);
@@ -89,10 +176,16 @@ A.Frame = (function()
         return parentFrame:CreateFontString(nil, "ARTWORK", "TextStatusBarText");
     end
 
-    function createIconRegion(parentFrame)
-        local icon = parentFrame:CreateTexture(nil, "ARTWORK", nil, 0);
-        icon:SetTexCoord(5/64, 59/64, 5/64, 59/64); -- cut off border
-        return icon;
+    function createTextureRegion(parentFrame, major, minor)
+        major = major or 3;  -- default to "ARTWORK"
+        minor = minor or 1;
+        return parentFrame:CreateTexture(nil, TextureLayers[major], nil, minor);
+    end
+
+    -- cut off texture border
+    function cropTextureRegion(textureRegion)
+        textureRegion:SetTexCoord(5/64, 59/64, 5/64, 59/64);
+        return textureRegion;
     end
 
     return {
@@ -102,6 +195,7 @@ A.Frame = (function()
         setFrameDefaultBorder = setFrameDefaultBorder,
         createProgressBar = createProgressBar,
         createTextRegion = createTextRegion,
-        createIconRegion = createIconRegion,
+        createTextureRegion = createTextureRegion,
+        cropTextureRegion = cropTextureRegion,
     };
 end)();

@@ -1,3 +1,9 @@
+function table.clear(o)
+    for k in next, o do
+        rawset(o, k, nil);
+    end
+end
+
 function table.containsKey(o, key)
     return o[key] ~= nil;
 end
