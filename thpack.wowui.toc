@@ -31,5 +31,6 @@ src/tweak/reCastBar.lua
 src/tweak/reTooltip.lua
 
 #src/newly/bindKey.lua
+src/newly/energyTick.lua
 src/newly/kongfu.lua
 src/newly/yard.lua
