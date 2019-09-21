@@ -69,23 +69,24 @@ end)(...);
 
 A.Res = (function(addonName)
 
-    local resBase = "interface/addons/" .. addonName .. "/res";
+    local resRoot = "interface/addons/" .. addonName .. "/res";
 
     return {
-        resBase = resBase,
-
-        texSquare = resBase .. "/th-square", -- simple white square texture
-        texComboPoint1 = resBase .. "/combopoint1",
-        texNorm1 = resBase .. "/norm1", -- norm: status bar texture
-        texGlow1 = resBase .. "/glow1", -- glow: status bar shining
-        texHp = resBase .. "/th-hp",
         texBlizBar = "Interface/TargetingFrame/UI-StatusBar",
+        texBlizBarSpark = "Interface/CastingBar/UI-CastingBar-Spark",
+
+        texBackground = resRoot .. "/background", -- simple white square texture
+        texProgressbar = resRoot .. "/progressbar",
+
+        texComboPoint1 = resRoot .. "/combopoint1",
+        texNorm1 = resRoot .. "/norm1", -- norm: status bar texture
+        texGlow1 = resRoot .. "/glow1", -- glow: status bar shining
 
         fontDefault = "fonts/arkai_t.ttf",
         fontCombat = "fonts/arkai_c.ttf",
-        fontAvqest = resBase .. "avqest.ttf",
-        fontHooge0557 = resBase .. "hooge0557.ttf",
-        fontLbrited = resBase .. "lbrited.ttf",
+        fontAvqest = resRoot .. "avqest.ttf",
+        fontHooge0557 = resRoot .. "hooge0557.ttf",
+        fontLbrited = resRoot .. "lbrited.ttf",
     };
 end)(...);
 

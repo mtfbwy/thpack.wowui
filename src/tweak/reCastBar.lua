@@ -1,6 +1,6 @@
 P.ask("pp").answer("reCastBar", function(pp)
 
-    local texSquare = A.Res.texSquare;
+    local texBackground = A.Res.texBackground;
     local pixel = pp.px;
     local dp = pp.dp;
 
@@ -41,11 +41,11 @@ P.ask("pp").answer("reCastBar", function(pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texSquare,
+        edgeFile = texBackground,
         edgeSize = pixel,
     });
     castBar:SetBackdropBorderColor(1, 1, 1);
-    castBar:SetStatusBarTexture(texSquare);
+    castBar:SetStatusBarTexture(texBackground);
     castBar:SetStatusBarColor(1, 0.7, 0, 1);
     castBar:SetMinMaxValues(0, 1);
     castBar:SetValue(0.7749); -- for test
@@ -77,7 +77,7 @@ P.ask("pp").answer("reCastBar", function(pp)
     local iconFrameSize = castBar:GetHeight() * 1.5 + 4 * dp;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
-        bgFile = texSquare,
+        bgFile = texBackground,
         insets = {
             left = -pixel,
             right = -pixel,
@@ -86,7 +86,7 @@ P.ask("pp").answer("reCastBar", function(pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texSquare,
+        edgeFile = texBackground,
         edgeSize = pixel,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);

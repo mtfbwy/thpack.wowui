@@ -1,9 +1,9 @@
 P.ask("pp").answer("reTooltip", function(pp)
 
-    local texSquare = A.Res.texSquare;
+    local texBackground = A.Res.texBackground;
     local pixel = pp.px;
 
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texSquare;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texBackground;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = pixel;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tile = false;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tileSize = 0;
@@ -35,10 +35,10 @@ P.ask("pp").answer("reTooltip", function(pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texSquare,
+        edgeFile = texBackground,
         edgeSize = pixel,
     });
-    GameTooltipStatusBar:SetStatusBarTexture(texSquare);
+    GameTooltipStatusBar:SetStatusBarTexture(texBackground);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpPercentage:SetWidth(60);
