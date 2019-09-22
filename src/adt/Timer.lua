@@ -1,71 +1,74 @@
-Timer = newProto(nil, function(self, f)
-    if (not f) then
-        f = CreateFrame("frame");
+Timer = newProto(nil, function(Timer)
+
+    function Timer:_setInterval()
+        self._count = 0;
+        self:_setIntervalInternal(function()
+            if (self._count < self._times) then
+                self._callback();
+            else
+                self:stop();
+            end
+            self._count = self._count + 1;
+        end, self._delay);
     end
-    self._f = f;
-end);
 
-function Timer:_setInterval()
-    self._count = 0;
-    self:_setIntervalInternal(function()
-        if (self._count < self._times) then
-            self._callback();
-        else
-            self:stop();
-        end
-        self._count = self._count + 1;
-    end, self._delay);
-end
+    function Timer:_setIntervalInternal(callback, delay)
+        delay = delay / 1000;
+        local accumulated = 0;
+        self._f:SetScript("OnUpdate", function(self, elapsed)
+            accumulated = accumulated + elapsed;
+            if (accumulated < delay) then
+                return;
+            end
+            accumulated = 0; -- not to catch up
+            callback();
+        end);
+    end
 
-function Timer:_setIntervalInternal(callback, delay)
-    delay = delay / 1000;
-    local accumulated = 0;
-    self._f:SetScript("OnUpdate", function(self, elapsed)
-        accumulated = accumulated + elapsed;
-        if (accumulated < delay) then
+    function Timer:_clearInterval()
+        self._f:SetScript("OnUpdate", nil);
+    end
+
+    function Timer:isRunning()
+        return self._f:GetScript("OnUpdate") ~= nil;
+    end
+
+    function Timer:schedule(callback, delay, times)
+        if (self:isRunning()) then
+            error(string.format("E: timer is running"));
             return;
         end
-        accumulated = 0; -- not to catch up
-        callback();
-    end);
-end
 
-function Timer:_clearInterval()
-    self._f:SetScript("OnUpdate", nil);
-end
+        self._callback = callback;
+        self._delay = delay;
+        self._times = times;
 
-function Timer:isRunning()
-    return self._f:GetScript("OnUpdate") ~= nil;
-end
+        self:_setInterval();
 
-function Timer:schedule(callback, delay, times)
-    if (self:isRunning()) then
-        error(string.format("E: timer is running"));
-        return;
+        return self;
     end
 
-    self._callback = callback;
-    self._delay = delay;
-    self._times = times;
-
-    self:_setInterval();
-
-    return self;
-end
-
-function Timer:stop()
-    if (self:isRunning()) then
-        self:_clearInterval();
+    function Timer:stop()
+        if (self:isRunning()) then
+            self:_clearInterval();
+        end
+        return self;
     end
-    return self;
-end
 
-function Timer:reschedule()
-    if (self._callback == nil or self._delay == nil or self._times == nil) then
-        error(string.format("E: timer is not configured"));
-        return;
+    function Timer:reschedule()
+        if (self._callback == nil or self._delay == nil or self._times == nil) then
+            error(string.format("E: timer is not configured"));
+            return;
+        end
+        self:stop();
+        self:_setInterval();
+        return self;
     end
-    self:stop();
-    self:_setInterval();
-    return self;
-end
+
+    Timer.__new = function(o, f)
+        if (not f) then
+            f = CreateFrame("frame");
+        end
+        o._f = f;
+    end;
+end);

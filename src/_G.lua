@@ -32,15 +32,15 @@ function setProto(self, super)
     return setmetatable(self, { __index = super });
 end
 
-function newProto(super, ctor)
+function newProto(super, fn)
     local proto = {};
     setProto(proto, super);
 
-    proto.__ctor = ctor;
+    fn(proto);
 
-    proto.create = function()
+    function proto:create()
         local o = {};
-        setProto(o, proto);
+        setProto(o, self);
 
         local q = {};
         local p = getProto(o);
@@ -50,13 +50,13 @@ function newProto(super, ctor)
         end
         while (#q > 0) do
             p = table.remove(q);
-            if (type(rawget(p, "__ctor")) == "function") then
-                p.__ctor(o);
+            if (type(rawget(p, "__new")) == "function") then
+                p.__new(o);
             end
         end
 
         return o;
-    end;
+    end
 
     return proto;
 end
