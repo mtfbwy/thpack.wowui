@@ -60,10 +60,10 @@ P.ask("pp").answer("yard", function(pp)
         return r;
     end
 
-    local f = CreateFrame("frame", nil, UIParent)
-    f:SetSize(160 * dp, 32 * dp);
+    local f = CreateFrame("FRAME", nil, UIParent)
+    f:SetSize(60 * dp, 32 * dp);
     f:SetFrameStrata("BACKGROUND")
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, -40)
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, -40 * dp)
     f.elapsed = 0;
 
     local fs = f:CreateFontString();
