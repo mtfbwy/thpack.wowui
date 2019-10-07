@@ -78,15 +78,15 @@ A.Res = (function(addonName)
         texBackground = resRoot .. "/background", -- simple white square texture
         texProgressbar = resRoot .. "/progressbar",
 
-        texComboPoint1 = resRoot .. "/combopoint1",
-        texNorm1 = resRoot .. "/norm1", -- norm: status bar texture
-        texGlow1 = resRoot .. "/glow1", -- glow: status bar shining
+        texCombopoint1 = resRoot .. "/combopoint1",
+        texBarNorm1 = resRoot .. "/barNorm1",
+        texBarGlow1 = resRoot .. "/barGlow1",
 
         fontDefault = "fonts/arkai_t.ttf",
         fontCombat = "fonts/arkai_c.ttf",
-        fontAvqest = resRoot .. "avqest.ttf",
-        fontHooge0557 = resRoot .. "hooge0557.ttf",
-        fontLbrited = resRoot .. "lbrited.ttf",
+        fontAvqest = resRoot .. "font/avqest.ttf",
+        fontHooge0557 = resRoot .. "font/hooge0557.ttf",
+        fontLbrited = resRoot .. "font/lbrited.ttf",
     };
 end)(...);
 
