@@ -5,7 +5,7 @@
             return;
         end
 
-        local unitString = "";
+        local unitString = " "; -- a space to fix Tooltip.AddDoubleLine
         if (UnitIsPlayer(unit)) then
             local classColor = A.Color.fromUnitClass(unit);
             unitString = string.format("|cff%06x%s|r",
