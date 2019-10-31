@@ -1,5 +1,5 @@
 (function()
-    local f = CreateFrame("frame");
+    local f = CreateFrame("Frame");
     f:RegisterEvent("BAG_UPDATE");
     f:SetScript("OnEvent", function(self, event, ...)
         local bagId = (...);

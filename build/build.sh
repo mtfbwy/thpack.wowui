@@ -72,6 +72,8 @@ function deployAll() {
     done
 }
 
+########################################
+
 WOW_ROOT="/mnt/d/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11302
@@ -80,10 +82,10 @@ DATE=$(date +%Y-%m-%d)
 BACKPACK=thpack.backpack
 BACKPACK_FILES="
 src/A.lua
-src/tweak/backpack.lua
-src/tweak/backpackRemaining.lua
-src/tweak/autoRepair.lua
-src/tweak/autoSell.lua
+src/backpack/backpack.lua
+src/backpack/backpackRemaining.lua
+src/backpack/autoRepair.lua
+src/backpack/autoSell.lua
 "
 BACKPACK_ZIP=$BACKPACK.$UI_VERSION_CLASSIC.$DATE.zip
 

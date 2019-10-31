@@ -1,6 +1,6 @@
 (function()
 
-    local tooltip = CreateFrame("gametooltip");
+    local tooltip = CreateFrame("GameTooltip");
 
     function repairThem()
         local amount, fixable = GetRepairAllCost();
@@ -21,7 +21,7 @@
         return amount;
     end
 
-    local f = CreateFrame("frame");
+    local f = CreateFrame("Frame");
     f:RegisterEvent("MERCHANT_SHOW");
     f:SetScript("OnEvent", function(self, event, ...)
         if CanMerchantRepair() then

@@ -1,7 +1,7 @@
 (function()
 
     local tooltipAmount = 0;
-    local tooltip = CreateFrame("gametooltip");
+    local tooltip = CreateFrame("GameTooltip");
     tooltip:SetScript("OnTooltipAddMoney", function(self, amount)
         tooltipAmount = amount;
     end)
@@ -22,7 +22,7 @@
         return amount;
     end
 
-    local f = CreateFrame("frame");
+    local f = CreateFrame("Frame");
     f:RegisterEvent("MERCHANT_SHOW");
     f:SetScript("OnEvent", function(self, event, ...)
         local amount = sellThem();

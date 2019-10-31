@@ -1,5 +1,6 @@
 -- 使打开/关闭背包的行为映射成打开/关闭所有包
--- 在交易时打开所有包
+-- 交易/银行打开时打开所有包
+-- 商人/邮箱/银行关闭时不关包
 (function()
 
     function getContainerFrame(id)
@@ -23,7 +24,7 @@
                     if UnitIsDead("PLAYER") then
                         NotWithDeadError();
                     end
-                    return;
+                    return 0;
                 end
                 ContainerFrame_GenerateFrame(container, size, id)
                 if id == KEYRING_CONTAINER then
@@ -35,6 +36,7 @@
                 return 1
             end
         end
+        return 0;
     end
 
     function toggleAll(cmd)
@@ -46,7 +48,7 @@
             if GetContainerNumSlots(i) > 0 then
                 m = m + 1;
             end
-            n = n + (toggleOne(i, "HIDE") or 0);
+            n = n + toggleOne(i, "HIDE");
         end
         if cmd == "SHOW" or (cmd == "TOGGLE" and n ~= m) then
             if not CanOpenPanels() or IsOptionFrameOpen() then
@@ -65,7 +67,10 @@
         toggleAll("SHOW");
     end
 
-    function clozAll()
+    function closeAll(frame)
+        if (frame ~= nil) then
+            return;
+        end
         toggleAll("HIDE");
     end
 
@@ -76,28 +81,28 @@
         ToggleBag   = toggleOne;
         ToggleKeyRing   = function() toggleOne(KEYRING_CONTAINER); end;
         OpenBackpack    = openAll;
-        CloseBackpack   = clozAll;
+        CloseBackpack   = closeAll;
         ToggleBackpack  = toggleAll;
         OpenAllBags     = openAll;
-        CloseAllBags    = clozAll;
+        CloseAllBags    = closeAll;
         ToggleAllBags   = toggleAll;
     end)();
 
-    local uiVersion = select(4, GetBuildInfo());
-    local f = CreateFrame("frame")
+    local tocVersion = select(4, GetBuildInfo());
+    local f = CreateFrame("Frame")
     f:RegisterEvent("BANKFRAME_OPENED")
-    f:RegisterEvent("BANKFRAME_CLOSED")
-    if (uiVersion >= 20300) then
+    --f:RegisterEvent("BANKFRAME_CLOSED")
+    if (tocVersion >= 20300) then
         f:RegisterEvent("GUILDBANKFRAME_OPENED")
-        f:RegisterEvent("GUILDBANKFRAME_CLOSED")
+        --f:RegisterEvent("GUILDBANKFRAME_CLOSED")
     end
     f:RegisterEvent("TRADE_SHOW")
     f:RegisterEvent("TRADE_CLOSED")
     f:SetScript("OnEvent", function(self, event, ...)
-        if string.match(event, "_CLOSED") then
-            toggleAll("HIDE");
-        else
+        --if string.match(event, "_CLOSED") then
+            --toggleAll("HIDE");
+        --else
             toggleAll("SHOW");
-        end
+        --end
     end);
 end)();
