@@ -9,26 +9,21 @@
     end);
 
     GameTooltip:HookScript("OnTooltipSetItem", function(self)
-        local itemName, itemLink = self:GetItem()
-        if itemLink then
-            local itemId = itemLink:match("item:(%d+)")
+        local _, itemLink = self:GetItem();
+        if (itemLink) then
+            local itemId = itemLink:match("item:(%d+)");
+            local _, _, itemQuality, itemLevel, _, _, _, _, _, _, itemSellPrice, _, _, _, _, _, _ = GetItemInfo(itemLink);
 
-            local name, link, quality, level, _, _, _, _, _, _, sellPrice = GetItemInfo(itemLink);
-
-            local levelString = nil;
-            if level then
-                levelString = "Level: " .. level;
+            if (itemLevel) then
+                self:AddLine("Level " .. itemLevel, 0, 1, 1);
             end
 
-            local sellPriceString = nil;
-            if sellPrice and sellPrice > 0 and not MerchantFrame:IsShown() then
-                sellPriceString = GetCoinTextureString(sellPrice);
+            if (itemSellPrice and itemSellPrice > 0 and not MerchantFrame:IsShown()) then
+                self:AddLine("Sell for " .. GetCoinTextureString(itemSellPrice), 1, 1, 1);
             end
 
-            self:AddDoubleLine(levelString, sellPriceString, 0, 1, 1, 1, 1, 1);
-
-            if quality then
-                self:SetBackdropBorderColor(GetItemQualityColor(quality));
+            if (itemQuality) then
+                self:SetBackdropBorderColor(GetItemQualityColor(itemQuality));
             end
         end
     end);

@@ -9,10 +9,10 @@
 
 src/A.lua
 
-src/tweak/autoRepair.lua
-src/tweak/autoSell.lua
-src/tweak/backpack.lua
-src/tweak/backpackRemaining.lua
+src/backpack/autoRepair.lua
+src/backpack/autoSell.lua
+src/backpack/backpack.lua
+src/backpack/backpackRemaining.lua
 src/tweak/buffCaster.lua
 src/tweak/energyTick.lua
 src/tweak/classicTargetClassIcon.lua

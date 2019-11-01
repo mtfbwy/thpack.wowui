@@ -142,7 +142,7 @@ A.Color = (function()
     };
 
     function pick(key)
-        return colorHex[key or ""];
+        return colorHex[string.lower(key or "")];
     end
 
     function fromUnitClass(unit)
@@ -190,7 +190,7 @@ A.Color = (function()
         if (color == nil) then
             return nil;
         end
-        return tonumber(string.sub(color, 2, 7), 16);
+        return tonumber(string.sub(pick(color) or color, 2, 7), 16);
     end
 
     function toVertex(color)
