@@ -162,7 +162,6 @@ end)(...);
 
 (function()
     local f = CreateFrame("frame");
-    f:RegisterEvent("VARIABLES_LOADED");
     f:RegisterEvent("PLAYER_LOGIN");
     f:SetScript("OnEvent", function(self, eventName, ...)
         self:UnregisterEvent(eventName);
@@ -172,7 +171,7 @@ end)();
 
 ----------------
 
-P.ask("VARIABLES_LOADED").answer("cvar", function()
+P.ask("PLAYER_LOGIN").answer("cvar", function()
 
     SetCVar("screenshotQuality", 10);
 
