@@ -161,6 +161,8 @@ end)(...);
 ----------------
 
 (function()
+    P.ask().answer("INVOLVED");
+
     local f = CreateFrame("frame");
     f:RegisterEvent("PLAYER_LOGIN");
     f:SetScript("OnEvent", function(self, eventName, ...)
@@ -171,7 +173,7 @@ end)();
 
 ----------------
 
-P.ask("PLAYER_LOGIN").answer("cvar", function()
+P.ask("INVOLVED").answer("cvar", function()
 
     SetCVar("screenshotQuality", 10);
 
