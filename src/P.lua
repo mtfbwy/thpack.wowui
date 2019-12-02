@@ -218,7 +218,7 @@ P.ask("cvar").answer("pp", function()
     local screenResolution;
     if (Config.screenResolution ~= nil) then
         screenResolution = Config.screenResolution;
-        logi(string.format("Pixel perfect: Screen resolution [%s] loaded.", screenResolution));
+        logi(string.format("[%s] loaded. (see %s)", screenResolution, "/screenResolution"));
     else
         -- once upon a time screenResolution is GetCVar("gxResolution")
         local possibleResolutions = { GetScreenResolutions() };
@@ -227,13 +227,12 @@ P.ask("cvar").answer("pp", function()
             resolutionIndex = 1;
         end
         screenResolution = possibleResolutions[resolutionIndex];
-        logi(string.format("Pixel perfect: Screen resolution [%s] detected.", screenResolution));
+        logi(string.format("[%s] detected. (see %s)", screenResolution, "/screenResolution"));
     end
-    logi(string.format("  Type \"%s\" to learn more.", "/screenResolution"));
 
     local screenHeight = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (screenHeight < 768) then
-        logi(string.format("  Screen height has min value 768. Screen resolution [%s] ignored.", screenResolution));
+        logi(string.format("Screen height has min value 768. [%s] ignored.", screenResolution));
         screenHeight = 768;
     end
 
