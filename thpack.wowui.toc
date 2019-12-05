@@ -14,14 +14,13 @@ src/backpack/autoSell.lua
 src/backpack/backpack.lua
 src/backpack/backpackRemaining.lua
 
-src/tweak/buffCaster.lua
-src/tweak/energyTick.lua
-src/tweak/classicTargetClassIcon.lua
-src/tweak/highlightMostExpensiveReward.lua
-src/tweak/moveUpErrorsFrame.lua
-src/tweak/performanceTip.lua
-src/tweak/tabSwitchChannel.lua
-
+src/misc/buffCaster.lua
+src/misc/energyTick.lua
+src/misc/expensiveReward.lua
+src/misc/moveUpErrorsFrame.lua
+src/misc/performanceTip.lua
+src/misc/tabSwitchChannel.lua
+src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipUnitTarget.lua
 
