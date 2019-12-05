@@ -1,5 +1,5 @@
-## Interface: 80200
-## X-Interface: 11302
+## Interface: 11302
+## X-Interface: 80200
 ## Title: thpack.wowui
 ## DefaultState: Enabled
 ## Version: 80200.877
@@ -13,6 +13,7 @@ src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
 src/backpack/backpack.lua
 src/backpack/backpackRemaining.lua
+
 src/tweak/buffCaster.lua
 src/tweak/energyTick.lua
 src/tweak/classicTargetClassIcon.lua
@@ -20,8 +21,9 @@ src/tweak/highlightMostExpensiveReward.lua
 src/tweak/moveUpErrorsFrame.lua
 src/tweak/performanceTip.lua
 src/tweak/tabSwitchChannel.lua
-src/tweak/tweakItemTooltip.lua
-src/tweak/tweakUnitTooltip.lua
+
+src/misc/tooltipItemQuality.lua
+src/misc/tooltipUnitTarget.lua
 
 src/_G.lua
 src/adt/Store.lua

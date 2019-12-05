@@ -150,13 +150,38 @@ A.Color = (function()
         return pick(string.lower(unitClass or ""));
     end
 
-    function fromUnitHostile(unit)
-        if UnitIsEnemy("player", unit) then
-            return pick("red");
-        elseif UnitIsFriend("player", unit) then
-            return pick("green");
+    function getUnitOffensiveColor(unit)
+        if (UnitIsTapped(unit) and (not UnitIsTappedByPlayer(unit))) then
+            -- tapped by another player
+            return pick("gray");
+        end
+        if (UnitPlayerControlled(unit)) then
+            if (UnitCanAttack(unit, "player")) then
+                if (UnitCanAttack("player", unit)) then
+                    -- normal hostile
+                    return pick("red");
+                else
+                    -- only he can attack
+                    return pick("orange");
+                end
+            elseif (UnitCanAttack("player", unit)) then
+                return pick("yellow");
+            else
+                -- friendly
+                if (UnitIsPVP(unit)) then
+                    return pick("green");
+                else
+                    return pick("blue");
+                end
+            end
         else
-            return pick("yellow");
+            if UnitIsEnemy("player", unit) then
+                return pick("red");
+            elseif UnitIsFriend("player", unit) then
+                return pick("green");
+            else
+                return pick("yellow");
+            end
         end
     end
 
@@ -208,7 +233,7 @@ A.Color = (function()
 
     return {
         fromUnitClass = fromUnitClass,
-        fromUnitHostile = fromUnitHostile,
+        getUnitOffensiveColor = getUnitOffensiveColor,
         fromUnitPowerType = fromUnitPowerType,
         fromPowerType = fromPowerType,
         fromVertex = fromVertex,
