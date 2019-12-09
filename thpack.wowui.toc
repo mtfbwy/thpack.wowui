@@ -20,6 +20,7 @@ src/misc/expensiveReward.lua
 src/misc/fastLoot.lua
 src/misc/moveUpErrorsFrame.lua
 src/misc/performanceTip.lua
+src/misc/swingCrit.lua
 src/misc/tabSwitchChannel.lua
 src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua

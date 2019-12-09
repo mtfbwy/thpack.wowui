@@ -82,6 +82,8 @@ A.Res = (function(addonName)
         texBarNorm1 = resRoot .. "/barNorm1",
         texBarGlow1 = resRoot .. "/barGlow1",
 
+        audioFight = resRoot .. "/Fight.ogg",
+
         fontDefault = "fonts/arkai_t.ttf",
         fontCombat = "fonts/arkai_c.ttf",
         fontAvqest = resRoot .. "font/avqest.ttf",
