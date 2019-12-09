@@ -163,7 +163,7 @@ end)(...);
 (function()
     P.ask().answer("INVOLVED");
 
-    local f = CreateFrame("frame");
+    local f = CreateFrame("Frame");
     f:RegisterEvent("PLAYER_LOGIN");
     f:SetScript("OnEvent", function(self, eventName, ...)
         self:UnregisterEvent(eventName);
@@ -208,16 +208,16 @@ end);
 
 ----------------
 
--- I am easily pleased with pixel-perfect art
+-- pixel perfect
 P.ask("cvar").answer("pp", function()
 
-    if (Config == nil) then
-        Config = {};
+    if (CONFIG == nil) then
+        CONFIG = {};
     end
 
     local screenResolution;
-    if (Config.screenResolution ~= nil) then
-        screenResolution = Config.screenResolution;
+    if (CONFIG.screenResolution ~= nil) then
+        screenResolution = CONFIG.screenResolution;
         logi(string.format("[%s] loaded. (see %s)", screenResolution, "/screenResolution"));
     else
         -- once upon a time screenResolution is GetCVar("gxResolution")
@@ -230,53 +230,52 @@ P.ask("cvar").answer("pp", function()
         logi(string.format("[%s] detected. (see %s)", screenResolution, "/screenResolution"));
     end
 
-    local screenHeight = tonumber(string.match(screenResolution, "%d+x(%d+)"));
-    if (screenHeight < 768) then
-        logi(string.format("Screen height has min value 768. [%s] ignored.", screenResolution));
-        screenHeight = 768;
+    local yResolution = tonumber(string.match(screenResolution, "%d+x(%d+)"));
+    if (yResolution < 768) then
+        logi(string.format("Y-Resolution has min value 768. [%s] ignored.", screenResolution));
+        yResolution = 768;
     end
 
-    -- UIParent is a canvas just fitting the screen; its aspect ratio always matches the screen's aspect ratio.
-    -- effective scale affects the height value; when set to 1, the height value is 768
-    -- and the width value is around 1366 in 16:9 screen.
-    -- the formula:
-    --      canvasHeight in point = screenHeight in pixel
-    --      canvasHeight = 768 / uiScale
-    --      =>  1 pixel/point = 768 / uiScale / screenHeight
-    -- to let the value be 1, simply set uiScale = 768 / screenHeight
+    -- canvas has default height 768 and forced to keep aspect ratio
+    --      canvasHeight = 768 (point) / scale
+    --      screenHeight = yResolution (pixel)
+    --      =>  1 (pixel/point) = 768 / scale / yResolution
+    -- scale can be uiScale or UIParent:GetEffectiveScale()
+    -- uiScale must in [0.64, 1]
+    -- effectiveScale has no limit but will not saved in config
 
-    -- but because of the system error from float to int, the drawer cannot always get perfect int pixels.
-    -- as long as 1 pixel != 1 point, there must be pixel miss at somewhere.
-    -- to make pixel perfect, i have to force uiScale:
-    local uiScale = 768 / screenHeight;
-    SetCVar("useUiScale", 1);
-    SetCVar("uiScale", uiScale);
+    -- because of the system error from float to int, as long as 1 (pixel) != 1 (point), there must be pixel miss at somewhere
+    -- and, too small a point is not friendly; 1/2/3/... (pixel/point) is acceptable
+    --      => n (pixel/point) = n * 768 / scale / yResolution
 
-    -- Bliz UI always accept numbers in unit of points
-    -- 1 (pixel) = 768 / uiScale / screenHeight (point)
-    local pointPerPixel = 768 / uiScale / screenHeight;
+    SetCVar("useUiScale", 0);
 
-    -- sometimes I need percentage, but always remember:
-    -- 100percent x 100percent rectangle probably won't fill the whole screen
-    local pointPerPercent = 768 / uiScale / 100;
+    local scale = math.floor(yResolution / 768) * 768 / yResolution;
 
-    -- thus introduce dp.
-    -- the screen height is fixed to 1024dp,
-    -- independent of uiScale and won't connect to percentage.
-    local pointPerDp =  768 / uiScale / 1024;
+    local f = CreateFrame("Frame");
+    f:RegisterEvent("PLAYER_ENTERING_WORLD");
+    f:SetScript("OnEvent", function(self, event)
+        UIParent:SetScale(scale);
+        self:UnregisterAllEvents();
+    end);
+
+    local pointPerPixel = 768 / scale / yResolution;
+
+    -- no "percentage" due to 100% x 100% is likely a square
+    -- thus introduce dp: the screen height is forced 1024dp
+    local pointPerDp =  yResolution / 1024;
 
     -- extra command for user to force his screen resolution
-    -- although it might be too late - every frame has been settled when UI accepts user's typing
     A.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
         if (x == nil or x == "") then
-            logi("Pixel-perfect art depends on screen resolution.");
+            logi("Pixel-perfect depends on screen resolution.");
             logi("  e.g. /screenResolution reset");
             logi("  e.g. /screenResolution 1024x768");
         elseif (x == "unset" or x == "reset" or x == "clear" or x == "nil") then
-            Config.screenResolution = nil;
+            CONFIG.screenResolution = nil;
             logi("Screen resolution is reset. The change will take effect after reload.");
         else
-            Config.screenResolution = x;
+            CONFIG.screenResolution = x;
             logi(string.format("Screen resolution [%s] saved. The change will take effect after reload.", x));
         end
     end);

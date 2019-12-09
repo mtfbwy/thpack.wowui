@@ -4,8 +4,8 @@
 ## DefaultState: Enabled
 ## Version: 80200.877
 ## Author: tanghao
-## Date: 2019-09-14
-## SavedVariables: Config
+## Date: 2019-12-09
+## SavedVariables: CONFIG
 
 src/A.lua
 
