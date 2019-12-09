@@ -17,6 +17,7 @@ src/backpack/backpackRemaining.lua
 src/misc/buffCaster.lua
 src/misc/energyTick.lua
 src/misc/expensiveReward.lua
+src/misc/fastLoot.lua
 src/misc/moveUpErrorsFrame.lua
 src/misc/performanceTip.lua
 src/misc/tabSwitchChannel.lua
