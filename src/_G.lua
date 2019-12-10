@@ -22,6 +22,17 @@ function table.merge(o, ...)
     return o;
 end
 
+array = array or {};
+
+function array.contains(a, value)
+    for i, v in pairs(a) do
+        if (v == value) then
+            return true;
+        end
+    end
+    return false;
+end
+
 ----------------
 
 function getProto(self)
