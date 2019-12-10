@@ -18,7 +18,7 @@ src/misc/buffCaster.lua
 src/misc/energyTick.lua
 src/misc/expensiveReward.lua
 src/misc/fastLoot.lua
-src/misc/moveUpErrorsFrame.lua
+src/misc/filterErrorMessage.lua
 src/misc/performanceTip.lua
 src/misc/swingCrit.lua
 src/misc/tabSwitchChannel.lua
