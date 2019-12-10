@@ -182,6 +182,7 @@ P.ask("INVOLVED").answer("cvar", function()
 
     SetCVar("lootUnderMouse", 0);
     SetCVar("autoLootDefault", 1);
+    SetCVar("autoLootRate", 0);
     SetCVar("autoOpenLootHistory", 0);
 
     SetCVar("alwaysShowActionBars", 1);
