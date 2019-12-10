@@ -22,10 +22,8 @@ function table.merge(o, ...)
     return o;
 end
 
-array = array or {};
-
-function array.contains(a, value)
-    for i, v in pairs(a) do
+function table.containsValue(o, value)
+    for i, v in pairs(o) do
         if (v == value) then
             return true;
         end
