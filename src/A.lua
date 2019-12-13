@@ -72,17 +72,13 @@ A.Res = (function(addonName)
     local resRoot = "interface/addons/" .. addonName .. "/res";
 
     return {
-        texBlizBar = "Interface/TargetingFrame/UI-StatusBar",
-        texBlizBarSpark = "Interface/CastingBar/UI-CastingBar-Spark",
+        hpbar32 = resRoot .. "/hpbar32.tga",
+        tile32 = resRoot .. "/tile32.tga", -- simple white square texture
 
-        texBackground = resRoot .. "/background", -- simple white square texture
-        texProgressbar = resRoot .. "/progressbar",
+        tgaCombopoint1 = resRoot .. "/combopoint1.tga",
+        tgaGlow1 = resRoot .. "/glow1.tga",
 
-        texCombopoint1 = resRoot .. "/combopoint1",
-        texBarNorm1 = resRoot .. "/barNorm1",
-        glow1 = resRoot .. "/glow1.tga",
-
-        audioFight = resRoot .. "/Fight.ogg",
+        oggFight = resRoot .. "/Fight.ogg",
 
         fontDefault = "fonts/arkai_t.ttf",
         fontCombat = "fonts/arkai_c.ttf",

@@ -26,7 +26,7 @@
         local r, g, b, a = A.Color.toVertex(color);
         return string.format(
                 "|T%s:%s:%s:0:0:100:100:0:100:0:100:%s:%s:%s|t",
-                A.Res.texBackground,
+                A.Res.tile32,
                 height, width,
                 0, 100, 0, 100,
                 math.floor(r * 255), math.floor(g * 255), math.floor(b * 255));

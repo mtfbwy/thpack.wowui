@@ -32,7 +32,7 @@ P.ask("pp").answer("A.Frame", function(pp)
         end
 
         locla frame = createBorderFrame(parentFrame, {
-            edgeFile = A.Res.glow1,
+            edgeFile = A.Res.tgaGlow1,
             edgeSize = 5 * px,
         });
         frame:SetBackdropBorderColor(0, 0, 0, 0.85);
@@ -46,7 +46,7 @@ P.ask("pp").answer("A.Frame", function(pp)
         end
 
         local pixelBackdrop = {
-            edgeFile = A.Res.texBackground,
+            edgeFile = A.Res.tile32,
             edgeSize = 1 * px,
             bgFile = "Interface/Tooltips/UI-Tooltip-Background",
             tile = false,

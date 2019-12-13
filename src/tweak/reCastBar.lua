@@ -1,7 +1,6 @@
 P.ask("pp").answer("reCastBar", function(pp)
 
-    local texBackground = A.Res.texBackground;
-    local pixel = pp.px;
+    local px = pp.px;
     local dp = pp.dp;
 
     local castBar = CastingBarFrame;
@@ -41,11 +40,11 @@ P.ask("pp").answer("reCastBar", function(pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texBackground,
-        edgeSize = pixel,
+        edgeFile = A.Res.tile32,
+        edgeSize = px,
     });
     castBar:SetBackdropBorderColor(1, 1, 1);
-    castBar:SetStatusBarTexture(texBackground);
+    castBar:SetStatusBarTexture(A.Res.tile32);
     castBar:SetStatusBarColor(1, 0.7, 0, 1);
     castBar:SetMinMaxValues(0, 1);
     castBar:SetValue(0.7749); -- for test
@@ -56,7 +55,7 @@ P.ask("pp").answer("reCastBar", function(pp)
     local nameText = castBar.nameText;
     nameText:SetJustifyH("LEFT");
     nameText:ClearAllPoints();
-    nameText:SetPoint("LEFT", 2 * pixel, 0);
+    nameText:SetPoint("LEFT", 2 * px, 0);
     nameText:SetPoint("RIGHT");
 
     if not castBar.numberText then
@@ -66,7 +65,7 @@ P.ask("pp").answer("reCastBar", function(pp)
     numberText:SetJustifyH("RIGHT");
     numberText:ClearAllPoints();
     numberText:SetPoint("LEFT");
-    numberText:SetPoint("RIGHT", -2 * pixel, 0);
+    numberText:SetPoint("RIGHT", -2 * px, 0);
 
     if not castBar.iconFrame then
         castBar.iconFrame = CreateFrame("frame", nil, castBar);
@@ -77,17 +76,17 @@ P.ask("pp").answer("reCastBar", function(pp)
     local iconFrameSize = castBar:GetHeight() * 1.5 + 4 * dp;
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
-        bgFile = texBackground,
+        bgFile = A.Res.tile32,
         insets = {
-            left = -pixel,
-            right = -pixel,
-            top = -pixel,
-            bottom = -pixel,
+            left = -px,
+            right = -px,
+            top = -px,
+            bottom = -px,
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texBackground,
-        edgeSize = pixel,
+        edgeFile = A.Res.tile32,
+        edgeSize = px,
     });
     iconFrame:SetBackdropColor(0, 0, 0, 0.15);
     iconFrame:SetPoint("RIGHT", castBar, "LEFT", -8 * dp, 0);
@@ -99,8 +98,8 @@ P.ask("pp").answer("reCastBar", function(pp)
     icon:SetTexCoord(5/64, 59/64, 5/64, 59/64); -- get rid of border
     icon:SetParent(iconFrame);
     icon:ClearAllPoints();
-    icon:SetPoint("TOPLEFT", 2 * pixel, -2 * pixel);
-    icon:SetPoint("BOTTOMRIGHT", -2 * pixel, 2 * pixel);
+    icon:SetPoint("TOPLEFT", 2 * px, -2 * px);
+    icon:SetPoint("BOTTOMRIGHT", -2 * px, 2 * px);
     icon:Show();
 
     castBar:HookScript("OnUpdate", function(self, elapsed)

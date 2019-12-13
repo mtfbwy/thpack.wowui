@@ -1,17 +1,16 @@
 P.ask("pp").answer("reTooltip", function(pp)
 
-    local texBackground = A.Res.texBackground;
-    local pixel = pp.px;
+    local px = pp.px;
 
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = texBackground;
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = pixel;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = A.Res.tile32;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = px;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tile = false;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tileSize = 0;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.insets = {
-        left = -pixel,
-        right = -pixel,
-        top = -pixel,
-        bottom = -pixel,
+        left = -px,
+        right = -px,
+        top = -px,
+        bottom = -px,
     };
 
     GameTooltip:SetBackdropColor(
@@ -22,8 +21,8 @@ P.ask("pp").answer("reTooltip", function(pp)
     -- tooltip status bar
 
     GameTooltipStatusBar:ClearAllPoints();
-    GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -pixel);
-    GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", 0, -pixel);
+    GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -px);
+    GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", 0, -px);
 
     GameTooltipStatusBar:SetBackdrop({
         bgFile = nil,
@@ -35,10 +34,10 @@ P.ask("pp").answer("reTooltip", function(pp)
         },
         tile = false,
         tileSize = 0,
-        edgeFile = texBackground,
-        edgeSize = pixel,
+        edgeFile = A.Res.tile32,
+        edgeSize = px,
     });
-    GameTooltipStatusBar:SetStatusBarTexture(texBackground);
+    GameTooltipStatusBar:SetStatusBarTexture(A.Res.tile32);
 
     local hpPercentage = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpPercentage:SetWidth(60);
@@ -47,7 +46,7 @@ P.ask("pp").answer("reTooltip", function(pp)
 
     local hpValue = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpValue:SetJustifyH("RIGHT");
-    hpValue:SetPoint("RIGHT", -2 * pixel, 0);
+    hpValue:SetPoint("RIGHT", -2 * px, 0);
 
     function updateStatusBarText(self)
         local currentValue = self:GetValue();

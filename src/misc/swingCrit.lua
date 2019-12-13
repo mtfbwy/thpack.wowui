@@ -1,7 +1,7 @@
 (function()
 
     function playCritSoundEffect()
-        PlaySoundFile(A.Res.audioFight);
+        PlaySoundFile(A.Res.oggFight);
     end
 
     local playerGuid = UnitGUID("player");
