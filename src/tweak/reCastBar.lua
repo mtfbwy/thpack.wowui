@@ -29,21 +29,17 @@ P.ask("pp").answer("reCastBar", function(pp)
 
     -- complete it
 
-    castBar:SetSize(240 * dp, 24 * dp);
-    castBar:SetBackdrop({
-        bgFile = nil,
-        insets = {
-            left = 0,
-            right = 0,
-            top = 0,
-            bottom = 0,
-        },
-        tile = false,
-        tileSize = 0,
+    local castBarBorderFrame = CreateFrame("Frame", nil, castBar, nil);
+    castBarBorderFrame:SetBackdrop({
+        bgFile = A.Res.tile32,
         edgeFile = A.Res.tile32,
         edgeSize = px,
     });
-    castBar:SetBackdropBorderColor(1, 1, 1);
+    castBarBorderFrame:SetBackdropColor(0, 0, 0, 0.85);
+    castBarBorderFrame:SetPoint("TOPLEFT", castBar, "TOPLEFT", -px, px);
+    castBarBorderFrame:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", px, -px);
+
+    castBar:SetSize(240 * dp, 24 * dp);
     castBar:SetStatusBarTexture(A.Res.tile32);
     castBar:SetStatusBarColor(1, 0.7, 0, 1);
     castBar:SetMinMaxValues(0, 1);
