@@ -65,10 +65,7 @@ Timer = newProto(nil, function(Timer)
         return self;
     end
 
-    Timer.__new = function(o, f)
-        if (not f) then
-            f = CreateFrame("frame");
-        end
-        o._f = f;
+    Timer.__onCreate = function(o)
+        o._f = CreateFrame("Frame");
     end;
 end);

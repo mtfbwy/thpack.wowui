@@ -68,11 +68,11 @@ _G.P = (function()
         isExecuting = false;
     end;
 
-    local workTrigger = Timer:create()
+    local workTrigger = Timer:malloc()
         :schedule(execute, 60, 1000)
         :stop();
 
-    local workThrottler = Timer:create()
+    local workThrottler = Timer:malloc()
         :schedule(function()
                 workTrigger:stop();
             end, 4000, 1)
@@ -136,8 +136,8 @@ _G.P = (function()
     end;
 
     -- tracking
-    Timer:create():schedule(function()
-        Timer:create():schedule(function()
+    Timer:malloc():schedule(function()
+        Timer:malloc():schedule(function()
             local blockedModNames = {};
             local modNames = table.keys(dependencyModNameTable);
             for i = 1, #modNames do

@@ -27,8 +27,8 @@ src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipUnitTarget.lua
 
-src/_G.lua
-src/adt/Store.lua
+src/lang/table.lua
+src/lang/proto.lua
 src/adt/Timer.lua
 src/P.lua
 
