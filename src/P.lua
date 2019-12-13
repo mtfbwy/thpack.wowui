@@ -14,12 +14,12 @@ _G.P = (function()
         end;
     end)();
 
-    local modStore = Store:create();
+    local mods = {};
 
-    local mayReadyQueue = {};
+    local mayReadyModsQueue = {};
 
-    local dependencyMap = {
-        -- blockerName = [ name, name, ... ]
+    local dependencyModNameTable = {
+        -- upstreamModName = [ modName, modName, ... ]
     };
 
     local isExecuting = false;
@@ -31,12 +31,12 @@ _G.P = (function()
 
         isExecuting = true;
 
-        if (#mayReadyQueue == 0) then
+        if (#mayReadyModsQueue == 0) then
             isExecuting = false;
             return;
         end
 
-        local mod = table.remove(mayReadyQueue, 1);
+        local mod = table.remove(mayReadyModsQueue, 1);
         if (mod.statusCode == 200) then
             isExecuting = false;
             return;
@@ -45,7 +45,7 @@ _G.P = (function()
         -- verify upstream mods all executed and prepare args
         local blockerModResults = {};
         for i = 1, #mod.upstreamModNames do
-            local blockerMod = modStore:get(mod.upstreamModNames[i]);
+            local blockerMod = mods[mod.upstreamModNames[i]];
             if (blockerMod == nil or blockerMod.statusCode ~= 200) then
                 isExecuting = false;
                 return;
@@ -61,8 +61,8 @@ _G.P = (function()
         mod.statusCode = 200;
 
         -- notify downstream mods
-        for i, blockedModName in pairs(dependencyMap[mod.name] or {}) do
-            mayReady(modStore:get(blockedModName));
+        for i, blockedModName in pairs(dependencyModNameTable[mod.name] or {}) do
+            mayReady(mods[blockedModName]);
         end
 
         isExecuting = false;
@@ -79,7 +79,7 @@ _G.P = (function()
         :stop();
 
     function mayReady(mod)
-        table.insert(mayReadyQueue, mod);
+        table.insert(mayReadyModsQueue, mod);
         if (not workThrottler:isRunning()) then
             workTrigger:reschedule();
             workThrottler:reschedule();
@@ -89,27 +89,27 @@ _G.P = (function()
     end
 
     function accept(modName, modFn, upstreamModNames)
-        if (modStore:contains(modName)) then
+        if (table.containsKey(mods, modName)) then
             error(string.format("E: name conflict: [%s]", modName));
             return;
         end
 
-        modStore:put(modName, {
+        mods[modName] = {
             upstreamModNames = upstreamModNames or {},
             name = modName,
             fn = modFn,
             statusCode = 0, -- 0:created,200:OK,400:error
             result = nil
-        });
+        };
 
-        local mod = modStore:get(modName);
+        local mod = mods[modName];
 
         for i = 1, #mod.upstreamModNames do
             local blockerModName = mod.upstreamModNames[i];
-            if (dependencyMap[blockerModName] == nil) then
-                dependencyMap[blockerModName] = {};
+            if (dependencyModNameTable[blockerModName] == nil) then
+                dependencyModNameTable[blockerModName] = {};
             end
-            table.insert(dependencyMap[blockerModName], mod.name);
+            table.insert(dependencyModNameTable[blockerModName], mod.name);
         end
         mayReady(mod);
     end
@@ -139,10 +139,10 @@ _G.P = (function()
     Timer:create():schedule(function()
         Timer:create():schedule(function()
             local blockedModNames = {};
-            local modNames = table.keys(dependencyMap);
+            local modNames = table.keys(dependencyModNameTable);
             for i = 1, #modNames do
                 local modName = modNames[i];
-                local mod = modStore:get(modName);
+                local mod = mods[modName];
                 if (mod == nil or mod.statusCode ~= 200) then
                     table.insert(blockedModNames, modName);
                 end
