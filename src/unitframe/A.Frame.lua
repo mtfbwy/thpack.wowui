@@ -3,6 +3,14 @@ P.ask("pp").answer("A.Frame", function(pp)
     local px = pp.px;
     local dp = pp.dp;
 
+    -- border is usually frame backdrop
+    -- that makes frame a "border-box"
+    -- for pixel stype,
+    --  background: rgba(0, 0, 0, 0.7);
+    --  margin: 1px;
+    --  border: 1px white;
+    --  padding: 1px;
+
     -- border-box
     function createFrame(parentFrame)
         local f = CreateFrame("Frame", nil, parentFrame, nil);
@@ -12,16 +20,18 @@ P.ask("pp").answer("A.Frame", function(pp)
     end
 
     -- border is usually frame backdrop
-    function createBorderFrame(parentFrame, backdrop)
+    -- content-box
+    function createBorderFrame(parentFrame, backdrop, borderOffset)
         if (parentFrame == nil) then
             error("NullPointerException");
             return;
         end
 
+        borderOffset = borderOffset or backdrop.edgeSize;
         local frame = createFrame(parentFrame);
         frame:SetBackdrop(backdrop);
-        frame:SetPoint("TOPLEFT", -backdrop.edgeSize, backdrop.edgeSize);
-        frame:SetPoint("BOTTOMRIGHT", backdrop.edgeSize, -backdrop.edgeSize);
+        frame:SetPoint("TOPLEFT", -borderOffset, borderOffset);
+        frame:SetPoint("BOTTOMRIGHT", borderOffset, -borderOffset);
         return frame;
     end
 
@@ -48,7 +58,7 @@ P.ask("pp").answer("A.Frame", function(pp)
         local pixelBackdrop = {
             edgeFile = A.Res.tile32,
             edgeSize = 1 * px,
-            bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+            bgFile = A.Res.tile32,
             tile = false,
             tileSize = 0,
             insets = {
@@ -60,9 +70,11 @@ P.ask("pp").answer("A.Frame", function(pp)
         };
 
         if (frame:GetObjectType() == "StatusBar") then
-            createBorderFrame(frame, pixelBackdrop);
+            local borderFrame = createBorderFrame(frame, pixelBackdrop, 2 * px);
+            borderFrame:SetBackdropColor(0, 0, 0, 0.15);
         else
             frame:SetBackdrop(pixelBackdrop);
+            frame:SetBackdropColor(0, 0, 0, 0.15);
         end
     end
 
@@ -71,7 +83,7 @@ P.ask("pp").answer("A.Frame", function(pp)
         local f = CreateFrame("StatusBar", nil, parentFrame, nil);
         f:SetFrameStrata("BACKGROUND");
         f:SetFrameLevel(1);
-        f:SetStatusBarTexture(A.Res.texBar);
+        f:SetStatusBarTexture(A.Res.hpbar32);
         f:SetMinMaxValues(0, 1);
         f:SetValue(0.7749);
         return f;
