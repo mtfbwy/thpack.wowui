@@ -80,7 +80,7 @@ A.Res = (function(addonName)
 
         texCombopoint1 = resRoot .. "/combopoint1",
         texBarNorm1 = resRoot .. "/barNorm1",
-        texBarGlow1 = resRoot .. "/barGlow1",
+        glow1 = resRoot .. "/glow1.tga",
 
         audioFight = resRoot .. "/Fight.ogg",
 
