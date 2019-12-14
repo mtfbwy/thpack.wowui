@@ -31,11 +31,9 @@ P.ask("pp").answer("reCastBar", function(pp)
 
     local castBarBorderFrame = CreateFrame("Frame", nil, castBar, nil);
     castBarBorderFrame:SetBackdrop({
-        bgFile = A.Res.tile32,
         edgeFile = A.Res.tile32,
         edgeSize = px,
     });
-    castBarBorderFrame:SetBackdropColor(0, 0, 0, 0.85);
     castBarBorderFrame:SetPoint("TOPLEFT", castBar, "TOPLEFT", -px, px);
     castBarBorderFrame:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", px, -px);
 
@@ -73,18 +71,10 @@ P.ask("pp").answer("reCastBar", function(pp)
     iconFrame:SetSize(iconFrameSize, iconFrameSize);
     iconFrame:SetBackdrop({
         bgFile = A.Res.tile32,
-        insets = {
-            left = -px,
-            right = -px,
-            top = -px,
-            bottom = -px,
-        },
-        tile = false,
-        tileSize = 0,
         edgeFile = A.Res.tile32,
         edgeSize = px,
     });
-    iconFrame:SetBackdropColor(0, 0, 0, 0.15);
+    iconFrame:SetBackdropColor(0, 0, 0, 0.85);
     iconFrame:SetPoint("RIGHT", castBar, "LEFT", -8 * dp, 0);
 
     if not castBar.icon then
@@ -94,8 +84,8 @@ P.ask("pp").answer("reCastBar", function(pp)
     icon:SetTexCoord(5/64, 59/64, 5/64, 59/64); -- get rid of border
     icon:SetParent(iconFrame);
     icon:ClearAllPoints();
-    icon:SetPoint("TOPLEFT", 2 * px, -2 * px);
-    icon:SetPoint("BOTTOMRIGHT", -2 * px, 2 * px);
+    icon:SetPoint("TOPLEFT", px, -px);
+    icon:SetPoint("BOTTOMRIGHT", -px, px);
     icon:Show();
 
     castBar:HookScript("OnUpdate", function(self, elapsed)
