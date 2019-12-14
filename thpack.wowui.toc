@@ -32,9 +32,10 @@ src/lang/proto.lua
 src/adt/Timer.lua
 src/P.lua
 
+src/hud/yard.lua
+
 src/tweak/reCastBar.lua
 src/tweak/reTooltip.lua
 
 #src/newly/bindKey.lua
 src/newly/kongfu.lua
-src/newly/yard.lua
