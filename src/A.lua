@@ -149,10 +149,10 @@ A.Color = (function()
     end
 
     function getUnitOffensiveColor(unit)
-        if (UnitIsTapped(unit) and (not UnitIsTappedByPlayer(unit))) then
-            -- tapped by another player
-            return pick("gray");
-        end
+        --if (UnitIsTapped(unit) and (not UnitIsTappedByPlayer(unit))) then
+        --    -- tapped by another player
+        --    return pick("gray");
+        --end
         if (UnitPlayerControlled(unit)) then
             if (UnitCanAttack(unit, "player")) then
                 if (UnitCanAttack("player", unit)) then
