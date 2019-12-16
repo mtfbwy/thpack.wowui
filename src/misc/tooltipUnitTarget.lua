@@ -22,18 +22,18 @@
             return "";
         end
 
-        local color = A.Color.fromUnitClass(unit);
-        local r, g, b, a = A.Color.toVertex(color);
+        local color = A.Color.getUnitClassColorByUnit(unit);
+        local r, g, b = color:toRgba();
         return string.format(
                 "|T%s:%s:%s:0:0:100:100:0:100:0:100:%s:%s:%s|t",
                 A.Res.tile32,
                 height, width,
                 0, 100, 0, 100,
-                math.floor(r * 255), math.floor(g * 255), math.floor(b * 255));
+                r, g, b);
     end
 
     function getColoredString(color, s)
-        return string.format("|cff%06x%s|r", A.Color.toInt24(color), s);
+        return string.format("|cff%06x%s|r", color:toInt24(), s);
     end
 
     GameTooltip:HookScript("OnTooltipSetUnit", function(self)
@@ -59,9 +59,9 @@
         if (UnitExists(unitTarget)) then
             local prefix = "=> ";
             if (UnitIsUnit(unitTarget, "player")) then
-                self:AddLine(prefix .. getColoredString("red", "!!!"), 1, 1, 1);
+                self:AddLine(prefix .. getColoredString(A.Color.pick("red"), "!!!"), 1, 1, 1);
             else
-                local offensiveColor = A.Color.getUnitOffensiveColor(unitTarget);
+                local offensiveColor = A.Color.getUnitOffensiveColorByUnit(unitTarget);
                 self:AddLine(
                         string.format("%s%s%s",
                                 prefix,

@@ -7,6 +7,11 @@
 ## Date: 2019-12-09
 ## SavedVariables: CONFIG
 
+src/lang/table.lua
+src/lang/proto.lua
+src/adt/Color.lua
+src/adt/Color.Ext.lua
+
 src/A.lua
 
 src/backpack/autoRepair.lua
@@ -27,8 +32,6 @@ src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipUnitTarget.lua
 
-src/lang/table.lua
-src/lang/proto.lua
 src/adt/Timer.lua
 src/P.lua
 

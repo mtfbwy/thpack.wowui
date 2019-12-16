@@ -21,9 +21,9 @@ P.ask("pp").answer("Duang", function(pp)
     fs:SetAllPoints();
     fs:Show();
 
-    local function notify(text, color, withSound, t1, t2, t3)
+    local function notify(text, colorString, withSound, t1, t2, t3)
         text = text or "nil";
-        color = color or "FFFFFFFF";
+        local color = A.Color.pick(colorString or "#ffffffff");
         t1 = t1 or 0.1;
         t2 = t2 or 1.5;
         t3 = t3 or 0.4;
@@ -36,7 +36,7 @@ P.ask("pp").answer("Duang", function(pp)
         t3 = t2 + t3;
 
         fs:SetText(text);
-        fs:SetTextColor(A.Color.toVertex(color));
+        fs:SetTextColor(color:toVertex());
         fs.startTime = GetTime();
         fs:SetAlpha(0);
         fs.time1, fs.time2, fs.time3 = t1, t2, t3;
