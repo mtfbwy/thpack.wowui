@@ -6,13 +6,12 @@ function setProto(self, super)
     return setmetatable(self, { __index = super });
 end
 
--- client would define __onCreate for customized constructor
+-- ctor(o) as user-defined constructor
 -- client would call malloc() to create instance
-function newProto(super, fn)
+function newProto(super, ctor)
     local proto = {};
     setProto(proto, super);
-
-    fn(proto);
+    proto.__malloc = ctor;
 
     function proto:malloc()
         local o = {};
@@ -26,8 +25,9 @@ function newProto(super, fn)
         end
         while (#q > 0) do
             p = table.remove(q);
-            if (type(rawget(p, "__onCreate")) == "function") then
-                p.__onCreate(o);
+            local fn = rawget(p, "__malloc");
+            if (type(fn) == "function") then
+                fn(o);
             end
         end
 
