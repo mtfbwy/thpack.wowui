@@ -1,5 +1,5 @@
 (function()
-    function getUnitClassTextureString(unit, height, width)
+    function getUnitClassTextureString(unit, fontSize)
         if (not unit or not UnitIsPlayer(unit)) then
             return "";
         end
@@ -10,14 +10,13 @@
         if (coords) then
             return string.format(
                     "|T%s:%s:%s:0:0:100:100:%s:%s:%s:%s|t",
-                    classTexture,
-                    height, width,
+                    classTexture, fontSize, fontSize,
                     coords[1] * 100, coords[2] * 100, coords[3] * 100, coords[4] * 100);
         end
         return "";
     end
 
-    function getUnitClassColorTextureString(unit, height, width)
+    function getUnitClassColorTextureString(unit, fontSize)
         if (not unit or not UnitIsPlayer(unit)) then
             return "";
         end
@@ -26,9 +25,7 @@
         local r, g, b = color:toRgba();
         return string.format(
                 "|T%s:%s:%s:0:0:100:100:0:100:0:100:%s:%s:%s|t",
-                A.Res.tile32,
-                height, width,
-                0, 100, 0, 100,
+                A.Res.tile32, fontSize, fontSize,
                 r, g, b);
     end
 
@@ -48,7 +45,7 @@
             local _, fontSize = GameTooltipTextLeft1:GetFont();
             local replaced, numTimes = GameTooltipTextLeft1:GetText():gsub(
                     unitName,
-                    getUnitClassTextureString(unit, fontSize, fontSize) .. unitName);
+                    getUnitClassTextureString(unit, fontSize) .. unitName);
             if (numTimes > 0) then
                 GameTooltipTextLeft1:SetText(replaced);
             end
@@ -65,7 +62,7 @@
                 self:AddLine(
                         string.format("%s%s%s",
                                 prefix,
-                                getUnitClassColorTextureString(unitTarget, 8, 8),
+                                getUnitClassColorTextureString(unitTarget, 8),
                                 getColoredString(offensiveColor, UnitName(unitTarget))),
                         1, 1, 1);
             end
