@@ -199,6 +199,9 @@ P.ask().answer("cvar", function()
     RegisterCVar("CombatLogRangeHostilePlayers", 50);
     SetCVar("CombatLogRangeHostilePlayers", 50);
 
+    -- enable name colored by class in chat frame
+    SetCVar("chatClassColorOverride", 0);
+
     SetCVar("scriptErrors", 1);
 
     RegisterCVar("taintLog", 1);
