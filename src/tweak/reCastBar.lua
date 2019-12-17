@@ -74,7 +74,7 @@ P.ask("pp").answer("reCastBar", function(pp)
         edgeFile = A.Res.tile32,
         edgeSize = px,
     });
-    iconFrame:SetBackdropColor(0, 0, 0, 0.85);
+    iconFrame:SetBackdropColor(0, 0, 0, 0.40);
     iconFrame:SetPoint("RIGHT", castBar, "LEFT", -8 * dp, 0);
 
     if not castBar.icon then
