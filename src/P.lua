@@ -225,7 +225,7 @@ P.ask("cvar").answer("pp", function()
         -- once upon a time screenResolution is GetCVar("gxResolution")
         local possibleResolutions = { GetScreenResolutions() };
         local resolutionIndex = GetCurrentResolution();
-        if (resolutionIndex <= 0) then
+        if (resolutionIndex == nil or resolutionIndex < 1) then
             resolutionIndex = 1;
         end
         screenResolution = possibleResolutions[resolutionIndex];
@@ -234,11 +234,12 @@ P.ask("cvar").answer("pp", function()
 
     local yResolution = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (yResolution < 768) then
-        A.logi(string.format("Y-Resolution has min value 768. [%s] ignored.", screenResolution));
+        A.logi(string.format("  Y-Resolution has min value 768. [%s] ignored.", screenResolution));
         yResolution = 768;
     end
 
-    -- canvas has default height 768 and forced to keep aspect ratio
+    -- point is the unit used by Blizzard UI
+    -- canvas has default height 768 (point) and forced to keep aspect ratio
     --      canvasHeight = 768 (point) / scale
     --      screenHeight = yResolution (pixel)
     --      =>  1 (pixel/point) = 768 / scale / yResolution
@@ -246,26 +247,24 @@ P.ask("cvar").answer("pp", function()
     -- uiScale must in [0.64, 1]
     -- effectiveScale has no limit but will not saved in config
 
-    -- because of the system error from float to int, as long as 1 (pixel) != 1 (point), there must be pixel miss at somewhere
-    -- and, too small a point is not friendly; 1/2/3/... (pixel/point) is acceptable
-    --      => n (pixel/point) = n * 768 / scale / yResolution
-
+    -- prefer effectiveScale to uiScale
     SetCVar("useUiScale", 0);
 
-    local scale = math.floor(yResolution / 768) * 768 / yResolution;
+    -- keep a point integer multiple of pixel
+    local numPixelsPerPoint = math.floor(yResolution / 768);
+
+    A.logi(string.format("  1 (point) => %d (pixel)", numPixelsPerPoint);
 
     local f = CreateFrame("Frame");
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
     f:SetScript("OnEvent", function(self, event)
-        UIParent:SetScale(scale);
+        UIParent:SetScale(numPixelsPerPoint * 768 / yResolution);
         self:UnregisterAllEvents();
     end);
 
-    local pointPerPixel = 768 / scale / yResolution;
-
-    -- no "percentage" due to 100% x 100% is likely a square
+    -- not use "percentage" because 100% x 100% is likely a square
     -- thus introduce dp: the screen height is forced 1024dp
-    local pointPerDp =  yResolution / 1024;
+    local numPointsPerDp = yResolution / numPixelsPerPoint / 1024;
 
     -- extra command for user to force his screen resolution
     A.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
@@ -288,7 +287,7 @@ P.ask("cvar").answer("pp", function()
     end
 
     return {
-        px = round6(pointPerPixel),
-        dp = round6(pointPerDp),
+        px = round6(1 / numPixelsPerPoint),
+        dp = round6(numPointsPerDp),
     };
 end);
