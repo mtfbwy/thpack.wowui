@@ -5,7 +5,7 @@ local Color = newProto(nil, function(o)
 end);
 
 function Color:toInt24()
-    return o._rgb;
+    return self._rgb;
 end
 
 function Color:toRgba()

@@ -253,7 +253,7 @@ P.ask("cvar").answer("pp", function()
     -- keep a point integer multiple of pixel
     local numPixelsPerPoint = math.floor(yResolution / 768);
 
-    A.logi(string.format("  1 (point) => %d (pixel)", numPixelsPerPoint);
+    A.logi(string.format("  1 (point) => %d (pixel)", numPixelsPerPoint));
 
     local f = CreateFrame("Frame");
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
