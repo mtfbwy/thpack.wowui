@@ -80,7 +80,7 @@ P.ask("pp").answer("Duang", function(pp)
     end;
 
     A.addSlashCommand("thpackNotify", "/notify", function(msg)
-        notify(msg, "00FF00", 1);
+        notify(msg, "#00ff00", 1);
     end);
 
     return {

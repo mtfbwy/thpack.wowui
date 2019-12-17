@@ -10,7 +10,7 @@
 src/lang/table.lua
 src/lang/proto.lua
 src/adt/Color.lua
-src/adt/Color.Ext.lua
+src/adt/ColorExt.lua
 
 src/A.lua
 

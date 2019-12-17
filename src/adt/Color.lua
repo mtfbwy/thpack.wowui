@@ -9,12 +9,12 @@ function Color:toInt24()
 end
 
 function Color:toRgba()
-    local i = self_rgb or 0;
-    local b = i % 0xff;
-    i = i / 0xff;
-    local g = i % 0xff;
-    i = i / 0xff;
-    local r = i % 0xff;
+    local i = self._rgb or 0;
+    local b = i % 0x100;
+    i = math.floor(i / 0x100);
+    local g = i % 0x100;
+    i = math.floor(i / 0x100);
+    local r = i % 0x100;
     return r, g, b, self._a;
 end
 
@@ -33,14 +33,11 @@ function Color.fromString(s)
         return nil;
     end
 
-    if ((#s == 7 or #s == 9) and s[0] == "#") then
-        local r = tonumber(strsub(s, 2, 3), 16);
-        local g = tonumber(strsub(s, 4, 5), 16);
-        local b = tonumber(strsub(s, 6, 7), 16);
-        local a = tonumber(strsub(s, 8, 9) or "ff", 16);
-
+    if ((#s == 7 or #s == 9) and s:sub(1, 1) == "#") then
+        local rgb = tonumber(s:sub(2, 7), 16);
+        local a = tonumber(s:sub(8, 9) or "ff", 16);
         local color = Color:malloc();
-        color._rgb = r * 0x10000 + g * 0x100 + b;
+        color._rgb = rgb;
         color._a = a;
         return color;
     end
@@ -51,10 +48,9 @@ function Color.fromVertex(r, g, b, a)
     g = math.floor(g * 0xff);
     b = math.floor(b * 0xff);
     a = math.floor(a * 0xff);
-
     local color = Color:malloc();
     color._rgb = r * 0x10000 + g * 0x100 + b;
-    color._a = a;
+    color._a = a or 0xff;
     return color;
 end
 

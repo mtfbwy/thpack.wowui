@@ -50,7 +50,7 @@ Color._unitClasses = {
 
 function Color.pick(key)
     key = string.lower(key or "");
-    local colorString = Color._names[key] or Color._classes[key];
+    local colorString = Color._names[key] or Color._unitClasses[key] or key;
     return Color.fromString(colorString);
 end
 
