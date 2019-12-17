@@ -148,7 +148,7 @@ _G.P = (function()
                 end
             end
             if (#blockedModNames > 0) then
-                logi(string.format("W: Not executed: %s", table.concat(blockedModNames, ", ")));
+                A.logi(string.format("W: Not executed: %s", table.concat(blockedModNames, ", ")));
             end
         end, 1000, 12);
     end, 4000, 1);
@@ -220,7 +220,7 @@ P.ask("cvar").answer("pp", function()
     local screenResolution;
     if (CONFIG.screenResolution ~= nil) then
         screenResolution = CONFIG.screenResolution;
-        logi(string.format("[%s] loaded. (see %s)", screenResolution, "/screenResolution"));
+        A.logi(string.format("[%s] loaded. (see %s)", screenResolution, "/screenResolution"));
     else
         -- once upon a time screenResolution is GetCVar("gxResolution")
         local possibleResolutions = { GetScreenResolutions() };
@@ -229,12 +229,12 @@ P.ask("cvar").answer("pp", function()
             resolutionIndex = 1;
         end
         screenResolution = possibleResolutions[resolutionIndex];
-        logi(string.format("[%s] detected. (see %s)", screenResolution, "/screenResolution"));
+        A.logi(string.format("[%s] detected. (see %s)", screenResolution, "/screenResolution"));
     end
 
     local yResolution = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (yResolution < 768) then
-        logi(string.format("Y-Resolution has min value 768. [%s] ignored.", screenResolution));
+        A.logi(string.format("Y-Resolution has min value 768. [%s] ignored.", screenResolution));
         yResolution = 768;
     end
 
@@ -270,15 +270,15 @@ P.ask("cvar").answer("pp", function()
     -- extra command for user to force his screen resolution
     A.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
         if (x == nil or x == "") then
-            logi("Pixel-perfect depends on screen resolution.");
-            logi("  e.g. /screenResolution reset");
-            logi("  e.g. /screenResolution 1024x768");
+            A.logi("Pixel-perfect depends on screen resolution.");
+            A.logi("  e.g. /screenResolution reset");
+            A.logi("  e.g. /screenResolution 1024x768");
         elseif (x == "unset" or x == "reset" or x == "clear" or x == "nil") then
             CONFIG.screenResolution = nil;
-            logi("Screen resolution is reset. The change will take effect after reload.");
+            A.logi("Screen resolution is reset. The change will take effect after reload.");
         else
             CONFIG.screenResolution = x;
-            logi(string.format("Screen resolution [%s] saved. The change will take effect after reload.", x));
+            A.logi(string.format("Screen resolution [%s] saved. The change will take effect after reload.", x));
         end
     end);
 

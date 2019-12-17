@@ -120,13 +120,13 @@ P.ask("Duang").answer("kongfu", function(Duang)
     A.addSlashCommand("thpackKongfu", "/kongfu", function(x)
         if (x == "on") then
             enabled = true;
-            logi("你已经是武林高手");
+            A.logi("你已经是武林高手");
         elseif (x == "off") then
             enabled = false;
-            logi("你不再是武林高手");
+            A.logi("你不再是武林高手");
         else
-            logi("武林高手过招时总会喊出自己的招式。");
-            logi("Usage: /kongfu on | off");
+            A.logi("武林高手过招时总会喊出自己的招式。");
+            A.logi("Usage: /kongfu on | off");
         end
     end);
 
@@ -144,5 +144,5 @@ P.ask("Duang").answer("kongfu", function(Duang)
         end
     end);
 
-    logi(string.format("kongfu loaded. Type \"%s\" to learn more.", "/kongfu"));
+    A.logi(string.format("kongfu loaded. Type \"%s\" to learn more.", "/kongfu"));
 end);

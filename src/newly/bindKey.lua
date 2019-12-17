@@ -146,7 +146,7 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
         elseif (x == "off") then
             enabled = false;
         else
-            logi("Usage: /bindKey on | off");
+            A.logi("Usage: /bindKey on | off");
         end
     end);
 
@@ -176,5 +176,5 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
         end
     end);
 
-    logi(string.format("bindKey loaded. Type \"%s\" to learn more.", "/bindKey"));
+    A.logi(string.format("bindKey loaded. Type \"%s\" to learn more.", "/bindKey"));
 end);

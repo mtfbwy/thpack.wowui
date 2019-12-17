@@ -2,9 +2,6 @@ if A then
     return;
 end
 
--- place holder
-_G.A = {};
-
 ----------------
 
 local A = (function()
@@ -67,6 +64,10 @@ end)(...);
 
 ----------------
 
+A.Color = Color;
+
+----------------
+
 A.Res = (function(addonName)
 
     local resRoot = "interface/addons/" .. addonName .. "/res";
@@ -90,21 +91,15 @@ end)(...);
 
 ----------------
 
-A.Color = Color;
-
-----------------
-
 _G.A = A;
-_G.logd = A.logd;
-_G.logi = A.logi;
 
 ----------------
 
 A.addSlashCommand("thpackReload", "/reload", ReloadUI);
 
 A.addSlashCommand("thpackDebug", "/debug", function(x)
-    logi("-------- printing: " .. x);
-    logd(loadstring("return " .. x)());
+    A.logi("-------- printing: " .. x);
+    A.logd(loadstring("return " .. x)());
 end);
 
 A.addSlashCommand("thpackGetExp", "/exp", function()
@@ -112,18 +107,18 @@ A.addSlashCommand("thpackGetExp", "/exp", function()
     local maxExp = UnitXPMax("player");
     local bonusExp = GetXPExhaustion();
     if (bonusExp) then
-        logi(string.format("exp: %d / %d (%d)", currentExp, maxExp, currentExp + bonusExp));
+        A.logi(string.format("exp: %d / %d (%d)", currentExp, maxExp, currentExp + bonusExp));
     else
-        logi(string.format("exp: %d / %d", currentExp, maxExp));
+        A.logi(string.format("exp: %d / %d", currentExp, maxExp));
     end
 end);
 
 A.addSlashCommand("thpackGetFps", "/fps", function()
     local fps, r, g, b = A.getFps();
-    logi(string.format("fps: %d", fps), r, g, b);
+    A.logi(string.format("fps: %d", fps), r, g, b);
 end);
 
 A.addSlashCommand("thpackGetLag", "/lag", function()
     local lag, r, g, b = A.getLag();
-    logi(string.format("lag: %d ms", lag), r, g, b);
+    A.logi(string.format("lag: %d ms", lag), r, g, b);
 end);
