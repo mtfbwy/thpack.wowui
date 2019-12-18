@@ -12,9 +12,10 @@ src/lang/proto.lua
 src/adt/Color.lua
 src/adt/ColorExt.lua
 
+src/cvar.lua
+
 src/A.lua
 src/A.pixelPerfect.lua
-src/cvar.lua
 
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
@@ -35,8 +36,7 @@ src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
+#src/misc/bindKey.lua
 
+src/hud/kongfu.lua
 src/hud/yard.lua
-
-#src/newly/bindKey.lua
-src/newly/kongfu.lua

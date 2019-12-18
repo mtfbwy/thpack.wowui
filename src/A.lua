@@ -1,10 +1,4 @@
-if A then
-    return;
-end
-
-----------------
-
-_G.A = (function()
+_G.A = _G.A or (function()
 
     local logi = function(...)
         (DEFAULT_CHAT_FRAME or ChatFrame1):AddMessage(...);
@@ -40,6 +34,15 @@ end)(...);
 
 ----------------
 
+A.addSlashCommand("thpackDebug", "/debug", function(x)
+    A.logi("-------- printing: " .. x);
+    A.logd(loadstring("return " .. x)());
+end);
+
+A.addSlashCommand("thpackReload", "/reload", ReloadUI);
+
+----------------
+
 A.Color = Color;
 
 ----------------
@@ -61,23 +64,3 @@ A.Res = (function(addonName)
         fontCombat = "fonts/arkai_c.ttf",
     };
 end)(...);
-
-----------------
-
-A.addSlashCommand("thpackReload", "/reload", ReloadUI);
-
-A.addSlashCommand("thpackDebug", "/debug", function(x)
-    A.logi("-------- printing: " .. x);
-    A.logd(loadstring("return " .. x)());
-end);
-
-A.addSlashCommand("thpackGetExp", "/exp", function()
-    local currentExp = UnitXP("player");
-    local maxExp = UnitXPMax("player");
-    local bonusExp = GetXPExhaustion();
-    if (bonusExp) then
-        A.logi(string.format("exp: %d / %d (%d)", currentExp, maxExp, currentExp + bonusExp));
-    else
-        A.logi(string.format("exp: %d / %d", currentExp, maxExp));
-    end
-end);
