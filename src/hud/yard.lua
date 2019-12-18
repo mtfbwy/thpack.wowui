@@ -1,7 +1,7 @@
--- 距离显示
-P.ask("pp").answer("yard", function(pp)
+-- target distance
+(function()
 
-    local dp = pp.dp;
+    local dp = A.dp;
 
     local fontCombat = A.Res.fontCombat;
 
@@ -116,4 +116,4 @@ P.ask("pp").answer("yard", function(pp)
         f.pendingReckon = nil;
         reckon();
     end
-end);
+end)();

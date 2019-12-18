@@ -1,12 +1,9 @@
-P.ask("pp").answer("A.Frame", function(pp)
-
-    local px = pp.px;
-    local dp = pp.dp;
+A.Frame = (function()
 
     -- border is usually frame backdrop
     -- that makes frame a "border-box"
-    -- for pixel stype,
-    --  background: rgba(0, 0, 0, 0.7);
+    -- for pixel style,
+    --  background: rgba(0, 0, 0, 0.4);
     --  margin: 1px;
     --  border: 1px white;
     --  padding: 1px;
@@ -19,7 +16,6 @@ P.ask("pp").answer("A.Frame", function(pp)
         return f;
     end
 
-    -- border is usually frame backdrop
     -- content-box
     function createBorderFrame(parentFrame, backdrop, borderOffset)
         if (parentFrame == nil) then
@@ -43,7 +39,7 @@ P.ask("pp").answer("A.Frame", function(pp)
 
         locla frame = createBorderFrame(parentFrame, {
             edgeFile = A.Res.tgaGlow1,
-            edgeSize = 5 * px,
+            edgeSize = 5,
         });
         frame:SetBackdropBorderColor(0, 0, 0, 0.85);
         return frame;
@@ -57,20 +53,20 @@ P.ask("pp").answer("A.Frame", function(pp)
 
         local pixelBackdrop = {
             edgeFile = A.Res.tile32,
-            edgeSize = 1 * px,
+            edgeSize = 1,
             bgFile = A.Res.tile32,
             tile = false,
             tileSize = 0,
             insets = {
-                left = -1 * px,
-                right = -1 * px,
-                top = -1 * px,
-                bottom = -1 * px,
+                left = -1,
+                right = -1,
+                top = -1,
+                bottom = -1,
             },
         };
 
         if (frame:GetObjectType() == "StatusBar") then
-            local borderFrame = createBorderFrame(frame, pixelBackdrop, 2 * px);
+            local borderFrame = createBorderFrame(frame, pixelBackdrop, 2);
             borderFrame:SetBackdropColor(0, 0, 0, 0.15);
         else
             frame:SetBackdrop(pixelBackdrop);
@@ -99,7 +95,7 @@ P.ask("pp").answer("A.Frame", function(pp)
         return icon;
     end
 
-    A.Frame = {
+    return {
         createFrame = createFrame,
         createBorderFrame = createBorderFrame,
         createDefaultGlowFrame = createDefaultGlowFrame,
@@ -108,4 +104,4 @@ P.ask("pp").answer("A.Frame", function(pp)
         createTextRegion = createTextRegion,
         createIconRegion = createIconRegion,
     };
-end);
+end)();

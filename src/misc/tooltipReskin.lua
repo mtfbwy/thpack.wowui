@@ -1,16 +1,15 @@
-P.ask("pp").answer("reTooltip", function(pp)
-
-    local px = pp.px;
+-- reskin tooltip
+(function()
 
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeFile = A.Res.tile32;
-    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = px;
+    GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.edgeSize = 1;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tile = false;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.tileSize = 0;
     GAME_TOOLTIP_BACKDROP_STYLE_DEFAULT.insets = {
-        left = -px,
-        right = -px,
-        top = -px,
-        bottom = -px,
+        left = -1,
+        right = -1,
+        top = -1,
+        bottom = -1,
     };
 
     GameTooltip:SetBackdropColor(
@@ -21,8 +20,8 @@ P.ask("pp").answer("reTooltip", function(pp)
     -- tooltip status bar
 
     GameTooltipStatusBar:ClearAllPoints();
-    GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -px);
-    GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", 0, -px);
+    GameTooltipStatusBar:SetPoint("TOPLEFT", GameTooltip, "BOTTOMLEFT", 0, -1);
+    GameTooltipStatusBar:SetPoint("TOPRIGHT", GameTooltip, "BOTTOMRIGHT", 0, -1);
 
     GameTooltipStatusBar:SetBackdrop({
         bgFile = nil,
@@ -35,7 +34,7 @@ P.ask("pp").answer("reTooltip", function(pp)
         tile = false,
         tileSize = 0,
         edgeFile = A.Res.tile32,
-        edgeSize = px,
+        edgeSize = 1,
     });
     GameTooltipStatusBar:SetStatusBarTexture(A.Res.tile32);
 
@@ -46,7 +45,7 @@ P.ask("pp").answer("reTooltip", function(pp)
 
     local hpValue = GameTooltipStatusBar:CreateFontString(nil, "OVERLAY", "GameFontHighlight");
     hpValue:SetJustifyH("RIGHT");
-    hpValue:SetPoint("RIGHT", -2 * px, 0);
+    hpValue:SetPoint("RIGHT", -2, 0);
 
     function updateStatusBarText(self)
         local currentValue = self:GetValue();
@@ -61,4 +60,4 @@ P.ask("pp").answer("reTooltip", function(pp)
 
     GameTooltipStatusBar:HookScript("OnShow", updateStatusBarText);
     GameTooltipStatusBar:HookScript("OnValueChanged", updateStatusBarText);
-end);
+end)();

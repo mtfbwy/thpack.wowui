@@ -1,8 +1,8 @@
 -- a top-center text to warn something
-P.ask("pp").answer("Duang", function(pp)
+local Duang = (function()
 
     local fontDefault = A.Res.fontDefault;
-    local dp = pp.dp;
+    local dp = A.dp;
 
     -- relative to the canvas
     local normalSize = 32 * dp;
@@ -86,10 +86,10 @@ P.ask("pp").answer("Duang", function(pp)
     return {
         notify = notify
     };
-end);
+end)();
 
 -- notify the player when cast succeed
-P.ask("Duang").answer("kongfu", function(Duang)
+(function(Duang)
 
     local announcements = {
         ["寒冰屏障"]    = "冰箱",
@@ -145,4 +145,4 @@ P.ask("Duang").answer("kongfu", function(Duang)
     end);
 
     A.logi(string.format("kongfu loaded. Type \"%s\" to learn more.", "/kongfu"));
-end);
+end)(Duang);

@@ -13,6 +13,7 @@ src/adt/Color.lua
 src/adt/ColorExt.lua
 
 src/A.lua
+src/A.pixelPerfect.lua
 
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
@@ -21,6 +22,7 @@ src/backpack/backpackRemaining.lua
 
 src/misc/autoDismount.lua
 src/misc/buffCaster.lua
+src/misc/castBarReskin.lua
 src/misc/energyTick.lua
 src/misc/fastLoot.lua
 src/misc/filterErrorMessage.lua
@@ -30,15 +32,13 @@ src/misc/swingCrit.lua
 src/misc/tabSwitchChannel.lua
 src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
+src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
 
 src/adt/Timer.lua
 src/P.lua
 
 src/hud/yard.lua
-
-src/tweak/reCastBar.lua
-src/tweak/reTooltip.lua
 
 #src/newly/bindKey.lua
 src/newly/kongfu.lua
