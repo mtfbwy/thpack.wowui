@@ -1,5 +1,38 @@
--- addon memory and gc
 (function()
+
+    local getFps = function()
+        local fps = GetFramerate();
+        if (fps < 12) then
+            return fps, 1, 0, 0;
+        elseif (fps < 24) then
+            return fps, 1, 1, 0;
+        else
+            return fps, 0, 1, 0;
+        end
+    end;
+
+    A.addSlashCommand("thpackGetFps", "/fps", function()
+        local fps, r, g, b = getFps();
+        A.logi(string.format("fps: %d", fps), r, g, b);
+    end);
+
+    local getLag = function()
+        local lag = select(4, GetNetStats());
+        if lag < 300 then
+            return lag, 0, 1, 0;
+        elseif lag < 600 then
+            return lag, 1, 1, 0;
+        else
+            return lag, 1, 0, 0;
+        end
+    end;
+
+    A.addSlashCommand("thpackGetLag", "/lag", function()
+        local lag, r, g, b = getLag();
+        A.logi(string.format("lag: %d ms", lag), r, g, b);
+    end);
+
+    -- addon memory and gc
 
     local hostButton = MainMenuBarPerformanceBarFrameButton;
     if (hostButton == nil) then
@@ -30,7 +63,7 @@
         local totalMemory, detail = calculateAddonMemory();
 
         GameTooltip:ClearLines();
-        GameTooltip:AddLine(format("%d fps / %d ms", A.getFps(), A.getLag()), 1, 1, 1);
+        GameTooltip:AddLine(string.format("%d fps / %d ms", (getFps()), (getLag())), 1, 1, 1);
         if (totalMemory > 0) then
             GameTooltip:AddDoubleLine("Total Memory", string.format("|cff00ff00%.1f KB|r", totalMemory));
             GameTooltip:AddLine("------------------------");

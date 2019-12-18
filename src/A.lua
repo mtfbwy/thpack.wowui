@@ -4,7 +4,7 @@ end
 
 ----------------
 
-local A = (function()
+_G.A = (function()
 
     local logi = function(...)
         (DEFAULT_CHAT_FRAME or ChatFrame1):AddMessage(...);
@@ -31,34 +31,10 @@ local A = (function()
         SlashCmdList[id] = fn;
     end;
 
-    local getFps = function()
-        local fps = GetFramerate();
-        if (fps < 12) then
-            return fps, 1, 0, 0;
-        elseif (fps < 24) then
-            return fps, 1, 1, 0;
-        else
-            return fps, 0, 1, 0;
-        end
-    end;
-
-    local getLag = function()
-        local lag = select(4, GetNetStats());
-        if lag < 300 then
-            return lag, 0, 1, 0;
-        elseif lag < 600 then
-            return lag, 1, 1, 0;
-        else
-            return lag, 1, 0, 0;
-        end
-    end;
-
     return {
         logd = logd,
         logi = logi,
         addSlashCommand = addSlashCommand,
-        getFps = getFps,
-        getLag = getLag,
     };
 end)(...);
 
@@ -83,15 +59,8 @@ A.Res = (function(addonName)
 
         fontDefault = "fonts/arkai_t.ttf",
         fontCombat = "fonts/arkai_c.ttf",
-        fontAvqest = resRoot .. "font/avqest.ttf",
-        fontHooge0557 = resRoot .. "font/hooge0557.ttf",
-        fontLbrited = resRoot .. "font/lbrited.ttf",
     };
 end)(...);
-
-----------------
-
-_G.A = A;
 
 ----------------
 
@@ -111,14 +80,4 @@ A.addSlashCommand("thpackGetExp", "/exp", function()
     else
         A.logi(string.format("exp: %d / %d", currentExp, maxExp));
     end
-end);
-
-A.addSlashCommand("thpackGetFps", "/fps", function()
-    local fps, r, g, b = A.getFps();
-    A.logi(string.format("fps: %d", fps), r, g, b);
-end);
-
-A.addSlashCommand("thpackGetLag", "/lag", function()
-    local lag, r, g, b = A.getLag();
-    A.logi(string.format("lag: %d ms", lag), r, g, b);
 end);
