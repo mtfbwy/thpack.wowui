@@ -1,4 +1,4 @@
-P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
+(function()
 
     function clearAllOtherHotkeys(config)
         local modifiers = [[ctrl-:alt-:shift-:ctrl-shift-:]]
@@ -177,4 +177,4 @@ P.ask("VARIABLES_LOADED", "PLAYER_LOGIN").answer("bindKey", function()
     end);
 
     A.logi(string.format("bindKey loaded. Type \"%s\" to learn more.", "/bindKey"));
-end);
+end)();

@@ -1,10 +1,4 @@
-if P then
-    return;
-end
-
-----------------
-
-_G.P = (function()
+_G.P = _G.P or (function()
 
     local generateModName = (function()
         local nameIndex = -1;
@@ -157,53 +151,3 @@ _G.P = (function()
         ask = ask
     };
 end)(...);
-
-----------------
-
-(function()
-    local f = CreateFrame("Frame");
-    f:RegisterEvent("PLAYER_LOGIN");
-    f:SetScript("OnEvent", function(self, eventName, ...)
-        self:UnregisterEvent(eventName);
-        P.ask().answer(eventName, nil);
-    end);
-end)();
-
-----------------
-
-P.ask().answer("cvar", function()
-
-    SetCVar("screenshotQuality", 10);
-
-    RegisterCVar("profanityFilter", 0);
-    SetCVar("profanityFilter", 0);
-
-    SetCVar("lootUnderMouse", 0);
-    SetCVar("autoLootDefault", 1);
-    SetCVar("autoLootRate", 0);
-    SetCVar("autoOpenLootHistory", 0);
-
-    SetCVar("alwaysShowActionBars", 1);
-
-    SetCVar("nameplateMaxDistance", 50);
-    SetCVar("nameplateOtherTopInset", GetCVarDefault("nameplateOtherTopInset"));
-    SetCVar("nameplateOtherBottomInset", GetCVarDefault("nameplateOtherBottomInset"));
-
-    RegisterCVar("targetNearestDistance", 50);
-    SetCVar("targetNearestDistance", 50);
-    RegisterCVar("targetNearestDistanceRadius", 50);
-    SetCVar("targetNearestDistanceRadius", 50);
-
-    RegisterCVar("CombatLogRangeCreature", 50);
-    SetCVar("CombatLogRangeCreature", 50);
-    RegisterCVar("CombatLogRangeHostilePlayers", 50);
-    SetCVar("CombatLogRangeHostilePlayers", 50);
-
-    -- enable name colored by class in chat frame
-    SetCVar("chatClassColorOverride", 0);
-
-    SetCVar("scriptErrors", 1);
-
-    RegisterCVar("taintLog", 1);
-    SetCVar("taintLog", 1);
-end);

@@ -14,6 +14,7 @@ src/adt/ColorExt.lua
 
 src/A.lua
 src/A.pixelPerfect.lua
+src/cvar.lua
 
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
@@ -34,9 +35,6 @@ src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
-
-src/adt/Timer.lua
-src/P.lua
 
 src/hud/yard.lua
 
