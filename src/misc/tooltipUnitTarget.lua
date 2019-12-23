@@ -24,12 +24,12 @@
             if (UnitIsUnit(unitTarget, "player")) then
                 self:AddLine(prefix .. A.getColoredString(Color.pick("red"), "!!!"), 1, 1, 1);
             else
-                local offensiveColor = A.getUnitOffensiveColorByUnit(unitTarget);
+                local nameColor = A.getUnitNameColorByUnit(unitTarget);
                 self:AddLine(
                         string.format("%s%s%s",
                                 prefix,
                                 A.getUnitClassColorTextureStringByUnit(unitTarget, 8),
-                                A.getColoredString(offensiveColor, UnitName(unitTarget))),
+                                A.getColoredString(nameColor, UnitName(unitTarget))),
                         1, 1, 1);
             end
         end

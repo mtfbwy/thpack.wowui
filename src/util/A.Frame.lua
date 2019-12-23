@@ -1,34 +1,36 @@
-A.Frame = (function()
+A = A or {};
 
-    function safeInvoke(callback, f)
-        if (not InCombatLockdown()) then
-            callback();
-            return;
-        end
-        if (f == nil) then
-            f = CreateFrame("Frame");
-        end
-        f:RegisterEvent("PLAYER_REGEN_ENABLED");
-        f:SetScript("OnEvent", function(self, event)
-            self:UnregisterAllEvents();
-            self:SetScript("OnEvent", nil);
-            callback();
-        end);
-    end
+A.Frame = A.Frame or {};
 
-    function attachEvents(frame, events)
-        frame.events = frame.events or {};
-        table.merge(frame.events, events);
-        for event, handler in pairs(events) do
-            frame:RegisterEvent(event)
-        end
-        frame:SetScript("OnEvent", function(self, event, ...)
-            local handler = self.events[event];
-            if (type(handler) == "function") then
-                handler(self, ...);
-            end
-        end);
+A.Frame.safeInvoke = A.Frame.safeInvoke or function(callback, f)
+    if (not InCombatLockdown()) then
+        callback();
+        return;
     end
+    if (f == nil) then
+        f = CreateFrame("Frame");
+    end
+    f:RegisterEvent("PLAYER_REGEN_ENABLED");
+    f:SetScript("OnEvent", function(self, eventName)
+        self:UnregisterAllEvents();
+        self:SetScript("OnEvent", nil);
+        callback();
+    end);
+end;
+
+A.Frame.attachEventHandlers = A.Frame.attachEventHandlers or function(frame, eventHandlers)
+    for eventName, handler in pairs(eventHandlers) do
+        frame:RegisterEvent(eventName)
+    end
+    frame:SetScript("OnEvent", function(self, eventName, ...)
+        local handler = eventHandlers[eventName];
+        if (type(handler) == "function") then
+            handler(self, ...);
+        end
+    end);
+end;
+
+table.merge(A.Frame, (function()
 
     -- frame strata > frame level
     local FrameStratas = {
@@ -58,7 +60,7 @@ A.Frame = (function()
     --  border: 1px white;
     --  padding: 1px;
 
-    function createFrame(parentFrame, major, minor)
+    local function createFrame(parentFrame, major, minor)
         major = major or 1; -- default to "BACKGROUND"
         minor = minor or 1;
         local f = CreateFrame("Frame", nil, parentFrame, nil);
@@ -67,47 +69,47 @@ A.Frame = (function()
         return f;
     end
 
-    function createDragAnchorFrame(parentFrame)
-        local anchorFrame = createFrame(parentFrame);
-        anchorFrame:SetSize(40, 10);
-        anchorFrame:SetBackdrop({
+    local function createDraggerFrame(parentFrame)
+        local draggerFrame = createFrame(parentFrame);
+        draggerFrame:SetSize(40, 10);
+        draggerFrame:SetBackdrop({
             bgFile = A.Res.tile32
         });
-        anchorFrame:SetBackdropColor(0, 0, 0, 0);
+        draggerFrame:SetBackdropColor(0, 0, 0, 0);
 
-        anchorFrame:SetMovable(true);
-        anchorFrame:RegisterForDrag("LeftButton");
-        anchorFrame:SetScript("OnMouseDown", function(self, button)
+        draggerFrame:SetMovable(true);
+        draggerFrame:RegisterForDrag("LeftButton");
+        draggerFrame:SetScript("OnMouseDown", function(self, button)
             if (IsLeftControlKeyDown() and button == "LeftButton") then
                 self:StartMoving();
             end
         end);
-        anchorFrame:SetScript("OnMouseUp", function(self, button)
+        draggerFrame:SetScript("OnMouseUp", function(self, button)
             self:StopMovingOrSizing();
         end);
 
-        anchorFrame:SetScript("OnEnter", function(self)
+        draggerFrame:SetScript("OnEnter", function(self)
             self:SetBackdropColor(0.2, 0.2, 0.2);
             GameTooltip:SetOwner(self);
             GameTooltip:AddLine("hold <Ctrl> to drag");
             GameTooltip:Show();
         end);
-        anchorFrame:SetScript("OnLeave", function(self)
+        draggerFrame:SetScript("OnLeave", function(self)
             self:SetBackdropColor(0, 0, 0, 0);
             GameTooltip:Hide();
         end);
 
-        return anchorFrame;
+        return draggerFrame;
     end
 
     -- content-box
-    function createBorderFrame(parentFrame, backdrop, borderOffset)
+    local function createBorderFrame(parentFrame, backdrop, extraBorderOffset)
         if (parentFrame == nil) then
             error("NullPointerException");
             return;
         end
 
-        borderOffset = borderOffset or backdrop.edgeSize;
+        local borderOffset = (backdrop.edgeSize or 0) + (extraBorderOffset or 0);
         local frame = createFrame(parentFrame);
         frame:SetBackdrop(backdrop);
         frame:SetPoint("TOPLEFT", -borderOffset, borderOffset);
@@ -115,13 +117,13 @@ A.Frame = (function()
         return frame;
     end
 
-    function createDefaultGlowFrame(parentFrame)
+    local function createDefaultGlowFrame(parentFrame)
         if (parentFrame == nil) then
             error("NullPointerException");
             return;
         end
 
-        locla frame = createBorderFrame(parentFrame, {
+        local frame = createBorderFrame(parentFrame, {
             edgeFile = A.Res.path .. "/3p/glow.tga",
             edgeSize = 5,
         });
@@ -129,7 +131,7 @@ A.Frame = (function()
         return frame;
     end
 
-    function setFrameDefaultBorder(frame)
+    local function setFrameDefaultBorder(frame)
         if (frame == nil) then
             error("NullPointerException");
             return;
@@ -150,7 +152,7 @@ A.Frame = (function()
         };
 
         if (frame:GetObjectType() == "StatusBar") then
-            local borderFrame = createBorderFrame(frame, pixelBackdrop, 2);
+            local borderFrame = createBorderFrame(frame, pixelBackdrop, 1);
             borderFrame:SetBackdropColor(0, 0, 0, 0.15);
         else
             frame:SetBackdrop(pixelBackdrop);
@@ -159,7 +161,7 @@ A.Frame = (function()
     end
 
     -- no size or position
-    function createProgressBar(parentFrame, major, minor)
+    local function createProgressBar(parentFrame, major, minor)
         major = major or 1;
         minor = minor or 1;
 
@@ -172,18 +174,18 @@ A.Frame = (function()
         return f;
     end
 
-    function createTextRegion(parentFrame)
+    local function createTextRegion(parentFrame)
         return parentFrame:CreateFontString(nil, "ARTWORK", "TextStatusBarText");
     end
 
-    function createTextureRegion(parentFrame, major, minor)
+    local function createTextureRegion(parentFrame, major, minor)
         major = major or 3;  -- default to "ARTWORK"
         minor = minor or 1;
         return parentFrame:CreateTexture(nil, TextureLayers[major], nil, minor);
     end
 
     -- cut off texture border
-    function cropTextureRegion(textureRegion)
+    local function cropTextureRegion(textureRegion)
         textureRegion:SetTexCoord(5/64, 59/64, 5/64, 59/64);
         return textureRegion;
     end
@@ -191,11 +193,7 @@ A.Frame = (function()
     return {
         createFrame = createFrame,
         createBorderFrame = createBorderFrame,
-        createDefaultGlowFrame = createDefaultGlowFrame,
-        setFrameDefaultBorder = setFrameDefaultBorder,
         createProgressBar = createProgressBar,
-        createTextRegion = createTextRegion,
-        createTextureRegion = createTextureRegion,
         cropTextureRegion = cropTextureRegion,
     };
-end)();
+end)());

@@ -16,9 +16,14 @@ src/cvar.lua
 src/util/A.lua
 src/util/A.Res.lua
 src/util/A.pixelPerfect.lua
+src/util/A.Frame.lua
 src/util/A.createBlizzardRoundButton.lua
 src/util/A.getColoredString.lua
+src/util/A.getUnitCastInfoByUnit.lua
 src/util/A.getUnitClassColorByUnit.lua
+src/util/A.getUnitHealthColor.lua
+src/util/A.getUnitLevelColorByUnit.lua
+src/util/A.getUnitNameColorByUnit.lua
 src/util/A.post.lua
 
 src/backpack/autoRepair.lua
@@ -44,3 +49,6 @@ src/misc/tooltipUnitTarget.lua
 
 src/hud/kongfu.lua
 src/hud/yard.lua
+
+src/unitframe/FlatUnitFrame.lua
+src/unitframe/FlatNamePlate.lua

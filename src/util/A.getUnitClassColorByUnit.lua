@@ -1,57 +1,12 @@
 A = A or {};
 
--- use aligned color
-A.getUnitClassColorByUnit = A.getUnitClassColorByUnit or function(unit)
+A.getUnitClassColorByUnit = A.getUnitClassColorByUnit or function(unit, useAlignedColor)
     local _, enUnitClass = UnitClass(unit);
-    return Color.pick(enUnitClass);
-end;
-
-A.getUnitOffensiveColorByUnit = A.getUnitOffensiveColorByUnit or function(unit)
-    if (UnitPlayerControlled(unit)) then
-        if (UnitCanAttack(unit, "player")) then
-            if (UnitCanAttack("player", unit)) then
-                -- normal hostile
-                return Color.pick("red");
-            else
-                -- only he can attack
-                return Color.pick("orangered");
-            end
-        elseif (UnitCanAttack("player", unit)) then
-            return Color.pick("yellow");
-        else
-            -- friendly
-            if (UnitIsPVP(unit)) then
-                return Color.pick("green");
-            else
-                return Color.pick("blue");
-            end
-        end
-    else
-        if (UnitIsEnemy("player", unit)) then
-            return Color.pick("red");
-        elseif (UnitIsFriend("player", unit)) then
-            return Color.pick("green");
-        else
-            return Color.pick("yellow");
-        end
+    if (useAlignedColor) then
+        return Color.pick(enUnitClass);
     end
-end;
-
-A.getUnitManaTypeColorByUnit = A.getUnitManaTypeColorByUnit or function(unit)
-    local typ = UnitPowerType(unit);
-    if (typ == 0) then
-        return Color.pick("royalblue");
-    elseif (typ == 1) then
-        return Color.pick("firebrick");
-    elseif (typ == 2) then
-        return Color.pick("coral");
-    elseif (typ == 3) then
-        return Color.pick("gold");
-    elseif (typ == 6) then
-        return Color.pick("turquoise");
-    else
-        return Color.pick("white");
-    end
+    local c = RAID_CLASS_COLORS[enUnitClass];
+    return c and Color.fromVertex(c.r, c.g, c.b);
 end;
 
 A.getUnitClassTextureStringByUnit = A.getUnitClassTextureStringByUnit or function(unit, fontSize)
