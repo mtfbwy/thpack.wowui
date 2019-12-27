@@ -1,7 +1,6 @@
 -- a top-center text to warn something
 local Duang = (function()
 
-    local fontDefault = A.Res.fontDefault;
     local dp = A.dp;
 
     -- relative to the canvas
@@ -16,7 +15,7 @@ local Duang = (function()
     f:SetPoint("topright", 0, -0.1 * UIParent:GetHeight());
 
     local fs = f:CreateFontString()
-    fs:SetFont(fontDefault, normalSize, "outline");
+    fs:SetFont("fonts/arkai_t.ttf", normalSize, "OUTLINE");
     fs:SetJustifyH("center");
     fs:SetAllPoints();
     fs:Show();

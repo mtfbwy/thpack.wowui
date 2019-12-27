@@ -49,18 +49,12 @@ A.Color = Color;
 
 A.Res = (function(addonName)
 
-    local resRoot = "interface/addons/" .. addonName .. "/res";
+    local path = "interface/addons/" .. addonName .. "/res";
 
     return {
-        hpbar32 = resRoot .. "/hpbar32.tga",
-        tile32 = resRoot .. "/tile32.tga", -- simple white square texture
-
-        tgaCombopoint1 = resRoot .. "/combopoint1.tga",
-        tgaGlow1 = resRoot .. "/glow1.tga",
-
-        oggFight = resRoot .. "/Fight.ogg",
-
-        fontDefault = "fonts/arkai_t.ttf",
-        fontCombat = "fonts/arkai_c.ttf",
+        path = path,
+        combopoint16 = path .. "/combopoint16.tga",
+        healthbar32 = path .. "/healthbar32.tga",
+        tile32 = path .. "/tile32.tga", -- simple white square texture
     };
 end)(...);

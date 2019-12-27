@@ -3,8 +3,6 @@
 
     local dp = A.dp;
 
-    local fontCombat = A.Res.fontCombat;
-
     local rawConfig = {
         item = {
             ["霜纹投网"] = 25,
@@ -67,7 +65,7 @@
     f.elapsed = 0;
 
     local fs = f:CreateFontString();
-    fs:SetFont(fontCombat, 32 * dp, "OUTLINE");
+    fs:SetFont("fonts/arkai_c.ttf", 32 * dp, "OUTLINE");
     fs:SetTextColor(0, 1, 0);
     fs:SetJustifyH("CENTER");
     fs:SetJustifyV("MIDDLE");

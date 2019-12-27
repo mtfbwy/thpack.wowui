@@ -38,7 +38,7 @@ A.Frame = (function()
         end
 
         locla frame = createBorderFrame(parentFrame, {
-            edgeFile = A.Res.tgaGlow1,
+            edgeFile = A.Res.path .. "/3p/glow.tga",
             edgeSize = 5,
         });
         frame:SetBackdropBorderColor(0, 0, 0, 0.85);
