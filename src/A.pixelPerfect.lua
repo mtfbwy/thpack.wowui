@@ -5,6 +5,11 @@
         CONFIG = {};
     end
 
+    local A = _G.A or {
+	-- add fake dependencies in case
+        addSlashCommand = function() end,
+        logi = function() end,
+    };
     -- extra command for user to force his screen resolution
     A.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
         if (x == nil or x == "") then
@@ -23,7 +28,7 @@
     local screenResolution;
     if (CONFIG.screenResolution ~= nil) then
         screenResolution = CONFIG.screenResolution;
-        A.logi(string.format("[%s] loaded. (see %s)", screenResolution, "/screenResolution"));
+        A.logi(string.format("pixel-perfect: [%s] loaded. (see %s)", screenResolution, "/screenResolution"));
     else
         -- once upon a time screenResolution is GetCVar("gxResolution")
         local possibleResolutions = { GetScreenResolutions() };
@@ -32,12 +37,12 @@
             resolutionIndex = 1;
         end
         screenResolution = possibleResolutions[resolutionIndex];
-        A.logi(string.format("[%s] detected. (see %s)", screenResolution, "/screenResolution"));
+        A.logi(string.format("pixel-perfect: [%s] detected. (see %s)", screenResolution, "/screenResolution"));
     end
 
     local yResolution = tonumber(string.match(screenResolution, "%d+x(%d+)"));
     if (yResolution < 768) then
-        A.logi(string.format("  Y-Resolution has min value 768. [%s] ignored.", screenResolution));
+        A.logi(string.format("pixel-perfect: Y-Resolution has min value 768. [%s] ignored.", screenResolution));
         yResolution = 768;
     end
 
@@ -54,15 +59,16 @@
     SetCVar("useUiScale", 0);
 
     -- keep a point integer multiple of pixel
-    local numPixelsPerPoint = math.floor(yResolution / 768);
-
-    A.logi(string.format("  1 (point) => %d (pixel)", numPixelsPerPoint));
+    local numPixelsPerPoint = math.floor(yResolution / 768 + 0.2);
 
     local f = CreateFrame("Frame");
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
     f:SetScript("OnEvent", function(self, event)
-        UIParent:SetScale(numPixelsPerPoint * 768 / yResolution);
         self:UnregisterAllEvents();
+        local scale = numPixelsPerPoint * 768 / yResolution;
+        UIParent:SetScale(scale);
+        A.logi(string.format("pixel-perfect: set: 1 (point) = %d (pixel)", numPixelsPerPoint));
+        A.logi(string.format("pixel-perfect: set: scale = %.06f", scale));
     end);
 
     -- not use "percentage" because 100% x 100% is likely a square
