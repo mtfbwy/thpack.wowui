@@ -1,6 +1,6 @@
 (function()
 
-    function playCritSoundEffect()
+    local function playCritSoundEffect()
         PlaySoundFile(A.Res.path .. "/3p/Fight.ogg");
     end
 

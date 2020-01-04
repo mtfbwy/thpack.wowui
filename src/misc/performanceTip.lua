@@ -39,7 +39,7 @@
         return;
     end
 
-    function calculateAddonMemory()
+    local function calculateAddonMemory()
         UpdateAddOnMemoryUsage();
 
         local a = {};
@@ -59,7 +59,7 @@
         return totalMemory, a;
     end
 
-    function updateTooltip()
+    local function updateTooltip()
         local totalMemory, detail = calculateAddonMemory();
 
         GameTooltip:ClearLines();

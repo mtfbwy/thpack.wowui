@@ -6,7 +6,7 @@
         tooltipAmount = amount;
     end)
 
-    function sellThem()
+    local function sellThem()
         local amount = 0;
         for id = 0, NUM_BAG_FRAMES, 1 do
             for slot = 1, GetContainerNumSlots(id), 1 do

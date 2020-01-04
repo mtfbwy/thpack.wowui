@@ -3,7 +3,7 @@
 -- 商人/邮箱/银行关闭时不关包
 (function()
 
-    function getContainerFrame(id)
+    local function getContainerFrame(id)
         if (id < 0) then
             id = -id - 1 + NUM_BAG_SLOTS + NUM_BANKBAGSLOTS;
         else
@@ -12,7 +12,7 @@
         return _G["ContainerFrame" .. id];
     end
 
-    function toggleOne(id, cmd)
+    local function toggleOne(id, cmd)
         id = id or 0;
         cmd = cmd or "TOGGLE";
         local size = GetContainerNumSlots(id);
@@ -39,7 +39,7 @@
         return 0;
     end
 
-    function toggleAll(cmd)
+    local function toggleAll(cmd)
         cmd = cmd or "TOGGLE";
         local m = 0;
         local n = 0;
@@ -63,11 +63,11 @@
         end
     end
 
-    function openAll()
+    local function openAll()
         toggleAll("SHOW");
     end
 
-    function closeAll(frame)
+    local function closeAll(frame)
         if (frame ~= nil) then
             return;
         end

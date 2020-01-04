@@ -2,7 +2,7 @@
 
     local tooltip = CreateFrame("GameTooltip");
 
-    function repairThem()
+    local function repairThem()
         local amount, fixable = GetRepairAllCost();
         if fixable then
             RepairAllItems();

@@ -4,11 +4,11 @@
     -- 当鼠标快速移动时其实显示的是最后一次设置的颜色。
     -- BlizUI在任何情况下都不改变边框颜色，所以看起来没有问题。
     -- 若不修正，一旦设定可变的边框颜色(如物品品质)，则将看到五颜六色的商店招牌。
-    function hookResetTooltipBorderColor(self)
+    local function hookResetTooltipBorderColor(self)
         self:SetBackdropBorderColor(1, 1, 1);
     end
 
-    function hookOnTooltipSetItem(self)
+    local function hookOnTooltipSetItem(self)
         local _, itemLink = self:GetItem();
         if (itemLink) then
             local itemId = itemLink:match("item:(%d+)");

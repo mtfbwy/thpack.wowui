@@ -47,7 +47,7 @@
     hpValue:SetJustifyH("RIGHT");
     hpValue:SetPoint("RIGHT", -2, 0);
 
-    function updateStatusBarText(self)
+    local function updateStatusBarText(self)
         local currentValue = self:GetValue();
         local _, maxValue = self:GetMinMaxValues();
         hpPercentage:SetFormattedText("%.1f%%", currentValue / maxValue * 100);

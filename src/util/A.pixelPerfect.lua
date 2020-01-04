@@ -77,7 +77,7 @@
     local numPointsPerDp = yResolution / numPixelsPerPoint / 1024;
 
     -- keep 6 digits after the point
-    function round6(number)
+    local function round6(number)
         return math.floor(number * 1000000 + 0.5) / 1000000;
     end
 

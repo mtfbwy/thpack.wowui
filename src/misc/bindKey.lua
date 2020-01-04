@@ -1,6 +1,6 @@
 (function()
 
-    function clearAllOtherHotkeys(config)
+    local function clearAllOtherHotkeys(config)
         local modifiers = [[ctrl-:alt-:shift-:ctrl-shift-:]]
         local keys = [[button3:button4:mousewheelup:mousewheeldown]];
         keys = keys .. ":" .. [[0:1:2:3:4:5:6:7:8:9]];
@@ -21,7 +21,7 @@
         end
     end
 
-    function setHotkeys(config)
+    local function setHotkeys(config)
         if (config == nil) then
             return;
         end
@@ -30,7 +30,7 @@
         end
     end
 
-    function saveHotkeys()
+    local function saveHotkeys()
         local i = GetCurrentBindingSet();
         if i and (i == 1 or i == 2) then
             SaveBindings(i);
@@ -116,7 +116,7 @@
         return config;
     end)();
 
-    function setGeneralHotkeys()
+    local function setGeneralHotkeys()
         if (config[0] ~= nil) then
             setHotkeys(config[0]);
             saveHotkeys();
