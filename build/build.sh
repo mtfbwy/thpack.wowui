@@ -74,7 +74,7 @@ function deployAll() {
 
 ########################################
 
-WOW_ROOT="/mnt/d/app/World of Warcraft"
+WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11302
 DATE=$(date +%Y-%m-%d)
