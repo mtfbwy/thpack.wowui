@@ -40,7 +40,7 @@
             local unit = "target";
             if UnitIsPlayer(unit) and not UnitCanAttack("player", unit) then
                 if InspectFrame and InspectFrame:IsShown() then
-                    InspectFrame:Hide();
+                    InspectFrameCloseButton:Click();
                 else
                     InspectUnit(unit);
                 end
