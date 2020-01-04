@@ -1,4 +1,4 @@
-_G.P = _G.P or (function()
+P = P or (function()
 
     local generateModName = (function()
         local nameIndex = -1;
@@ -17,6 +17,9 @@ _G.P = _G.P or (function()
     };
 
     local isExecuting = false;
+
+    -- forward declaration of local funtion
+    local mayReady;
 
     local execute = function()
         if (isExecuting) then
@@ -82,7 +85,7 @@ _G.P = _G.P or (function()
         end
     end
 
-    function accept(modName, modFn, upstreamModNames)
+    local function accept(modName, modFn, upstreamModNames)
         if (table.containsKey(mods, modName)) then
             error(string.format("E: name conflict: [%s]", modName));
             return;
@@ -125,7 +128,7 @@ _G.P = _G.P or (function()
                 end
 
                 accept(name, fn, a);
-            end
+            end,
         };
     end;
 

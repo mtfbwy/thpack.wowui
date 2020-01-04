@@ -1,10 +1,10 @@
-## Interface: 11302
+## Interface: 11300
 ## X-Interface: 80200
 ## Title: thpack.wowui
 ## DefaultState: Enabled
 ## Version: 80200.877
 ## Author: tanghao
-## Date: 2019-12-09
+## Date: 2020-01-05
 ## SavedVariables: CONFIG
 
 src/lang/table.lua
@@ -13,8 +13,13 @@ src/adt/Color.lua
 
 src/cvar.lua
 
-src/A.lua
-src/A.pixelPerfect.lua
+src/util/A.lua
+src/util/A.Res.lua
+src/util/A.pixelPerfect.lua
+src/util/A.createBlizzardRoundButton.lua
+src/util/A.getColoredString.lua
+src/util/A.getUnitClassColorByUnit.lua
+src/util/A.post.lua
 
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua

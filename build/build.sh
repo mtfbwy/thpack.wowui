@@ -81,7 +81,7 @@ DATE=$(date +%Y-%m-%d)
 
 BACKPACK=thpack.backpack
 BACKPACK_FILES="
-src/A.lua
+src/util/A.lua
 src/backpack/backpack.lua
 src/backpack/backpackRemaining.lua
 src/backpack/autoRepair.lua

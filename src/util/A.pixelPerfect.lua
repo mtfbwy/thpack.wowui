@@ -5,11 +5,12 @@
         CONFIG = {};
     end
 
-    local A = _G.A or {
-	-- add fake dependencies in case
+    local A = A or {
+        -- add fake dependencies in case
         addSlashCommand = function() end,
         logi = function() end,
     };
+
     -- extra command for user to force his screen resolution
     A.addSlashCommand("thpackScreenResolution", "/screenResolution", function(x)
         if (x == nil or x == "") then
