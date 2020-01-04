@@ -52,3 +52,4 @@ src/hud/yard.lua
 
 src/unitframe/FlatUnitFrame.lua
 src/unitframe/FlatNamePlate.lua
+src/hud/myflat.lua
