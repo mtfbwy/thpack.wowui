@@ -50,6 +50,7 @@ function FlatUnitFrame.createUnitFrame(parentFrame)
     raidMarkTextureRegion:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcons");
     raidMarkTextureRegion:SetSize(32, 32);
     raidMarkTextureRegion:SetPoint("BOTTOM", uf, "TOP", 0, 0);
+    raidMarkTextureRegion:Hide();
     uf.raidMarkTextureRegion = raidMarkTextureRegion;
 
     local selectionHighlightTextureRegion = uf:CreateTexture(nil, "BACKGROUND");
