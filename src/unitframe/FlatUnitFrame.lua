@@ -175,7 +175,7 @@ function FlatUnitFrame.createCastBar(uf)
             if (castGlowFrame) then
                 if (castInfo.castIsShielded) then
                     -- XXX gold for iron?
-                    castGlowFrame:SetBackdropBorderColor(Color.pick("#ffd700cc"):toVertex());
+                    castGlowFrame:SetBackdropBorderColor(Color.pick("#343434b2"):toVertex());
                     --castGlowFrame:Show();
                 else
                     castGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
