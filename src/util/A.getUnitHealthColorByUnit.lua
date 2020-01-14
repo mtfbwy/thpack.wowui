@@ -1,6 +1,13 @@
 A = A or {};
 
-A.getUnitHealthColor = A.getUnitHealthColor or function(healthRate)
+A.getUnitHealthColorByUnit = A.getUnitHealthColorByUnit or function(unit)
+    local currentHealth = UnitHealth(unit);
+    local maxHealth = UnitHealthMax(unit);
+    local healthRate = currentHealth / maxHealth;
+    return A.getUnitHealthColorByRate(healthRate);
+end;
+
+A.getUnitHealthColorByRate = A.getUnitHealthColorByRate or function(healthRate)
     -- color gradient is difficult to distinguish
     if (healthRate < 0.2) then
         -- 斩杀线

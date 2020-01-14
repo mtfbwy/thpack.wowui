@@ -2,6 +2,7 @@ function table.clear(o)
     for k in next, o do
         rawset(o, k, nil);
     end
+    return o;
 end
 
 function table.containsKey(o, key)

@@ -21,7 +21,7 @@ src/util/A.createBlizzardRoundButton.lua
 src/util/A.getColoredString.lua
 src/util/A.getUnitCastInfoByUnit.lua
 src/util/A.getUnitClassColorByUnit.lua
-src/util/A.getUnitHealthColor.lua
+src/util/A.getUnitHealthColorByUnit.lua
 src/util/A.getUnitLevelColorByUnit.lua
 src/util/A.getUnitNameColorByUnit.lua
 src/util/A.post.lua

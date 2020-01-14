@@ -1,7 +1,13 @@
+-- naming:
+--  invalidate(): called after the model is ready, register for UI refresh
+--  refresh(): fetch data, compose model and call invalidate()
+--  textView, textureView, inputView
+
 FlatUnitFrame = FlatUnitFrame or {};
 
 function FlatUnitFrame.createUnitFrame(parentFrame)
     local uf = CreateFrame("Button", nil, parentFrame, nil);
+    uf:SetSize(60, 20);
     uf:EnableMouse(false);
     if (parentFrame) then
         uf:SetFrameLevel(parentFrame:GetFrameLevel());
@@ -9,62 +15,70 @@ function FlatUnitFrame.createUnitFrame(parentFrame)
 
     uf.eventHandlers = {};
 
-    local nameTextRegion = uf:CreateFontString(nil, "BACKGROUND", nil);
-    nameTextRegion:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
-    nameTextRegion:SetShadowOffset(0, 0);
-    nameTextRegion:SetJustifyH("CENTER");
-    nameTextRegion:SetPoint("BOTTOM", uf, "BOTTOM", 0, 6);
-    uf.nameTextRegion = nameTextRegion;
+    do
+        local nameText = uf:CreateFontString(nil, "BACKGROUND", nil);
+        nameText:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
+        nameText:SetShadowOffset(0, 0);
+        nameText:SetJustifyH("CENTER");
+        nameText:SetPoint("BOTTOM", uf, "BOTTOM", 0, 6); -- auto expand in x-axis
+        uf.nameText = nameText;
+    end
 
-    local levelTextRegion = uf:CreateFontString(nil, "BACKGROUND", nil);
-    levelTextRegion:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
-    levelTextRegion:SetShadowOffset(0, 0);
-    levelTextRegion:SetJustifyH("RIGHT");
-    -- logically should to the left of name, but it not balanced in appearance
-    levelTextRegion:SetPoint("RIGHT", nameTextRegion, "BOTTOMLEFT", -2, -4);
-    uf.levelTextRegion = levelTextRegion;
+    do
+        local levelText = uf:CreateFontString(nil, "BACKGROUND", nil);
+        levelText:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
+        levelText:SetShadowOffset(0, 0);
+        levelText:SetJustifyH("RIGHT");
+        levelText:SetPoint("BOTTOMRIGHT", uf, "BOTTOMLEFT", -3, -3); -- XXX go with name?
+        uf.levelText = levelText;
+    end
 
-    local raidMarkTextureRegion = uf:CreateTexture(nil, "ARTWORK");
-    raidMarkTextureRegion:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcons");
-    raidMarkTextureRegion:SetSize(32, 32);
-    raidMarkTextureRegion:SetPoint("BOTTOM", uf, "TOP", 0, 0);
-    raidMarkTextureRegion:Hide();
-    uf.raidMarkTextureRegion = raidMarkTextureRegion;
+    do
+        local raidTargetIcon = uf:CreateTexture(nil, "ARTWORK");
+        raidTargetIcon:SetTexture("Interface/TargetingFrame/UI-RaidTargetingIcons");
+        raidTargetIcon:SetSize(32, 32);
+        raidTargetIcon:SetPoint("BOTTOM", uf, "TOP", 0, 0);
+        raidTargetIcon:Hide();
+        uf.raidTargetIcon = raidTargetIcon;
+    end
 
-    local selectionHighlightTextureRegion = uf:CreateTexture(nil, "BACKGROUND");
-    selectionHighlightTextureRegion:SetTexture(A.Res.path .. "/3p/highlight.tga");
-    selectionHighlightTextureRegion:SetVertexColor(1, 1, 1);
-    selectionHighlightTextureRegion:SetTexCoord(0, 1, 0, 1);
-    selectionHighlightTextureRegion:SetBlendMode("ADD");
-    selectionHighlightTextureRegion:SetPoint("TOPLEFT", uf, "BOTTOMLEFT", 0, 4);
-    selectionHighlightTextureRegion:SetPoint("TOPRIGHT", uf, "BOTTOMRIGHT", 0, 4);
-    uf.selectionHighlightTextureRegion = selectionHighlightTextureRegion;
+    do
+        local selectionHighlight = uf:CreateTexture(nil, "BACKGROUND");
+        selectionHighlight:SetTexture(A.Res.path .. "/3p/highlight.tga");
+        selectionHighlight:SetVertexColor(1, 1, 1);
+        selectionHighlight:SetTexCoord(0, 1, 0, 1);
+        selectionHighlight:SetBlendMode("ADD");
+        selectionHighlight:SetPoint("TOPLEFT", uf, "BOTTOMLEFT", 0, 4);
+        selectionHighlight:SetPoint("TOPRIGHT", uf, "BOTTOMRIGHT", 0, 4);
+        uf.selectionHighlight = selectionHighlight;
+    end
 
-    local function _checkUnitAndUpdate(self, unit)
-        if (unit == FlatUnitFrame.getUnit(self)) then
-            -- low frequence event, update all for convenience
-            FlatUnitFrame.update(self);
+    local function _checkUnitAndRefresh(self, unit)
+        if (FlatUnitFrame._checkUnit(self, unit)) then
+            -- low frequence event, refresh all for convenience
+            FlatUnitFrame.refresh(self);
         end
     end
 
-    local events = {
-        ["PLAYER_ENTERING_WORLD"] = FlatUnitFrame.update,
-        ["PLAYER_TARGET_CHANGED"] = FlatUnitFrame.updateSelection,
-        ["RAID_TARGET_UPDATE"] = FlatUnitFrame.updateRaidMark,
-        ["UNIT_FACTION"] = _checkUnitAndUpdate,
-        ["UNIT_LEVEL"] = _checkUnitAndUpdate,
-        ["UNIT_NAME_UPDATE"] = _checkUnitAndUpdate,
+    uf.eventHandlers["main"] = {
+        ["PLAYER_ENTERING_WORLD"] = FlatUnitFrame.refresh,
+        ["PLAYER_TARGET_CHANGED"] = FlatUnitFrame.refreshSelectionTexture,
+        ["RAID_TARGET_UPDATE"] = FlatUnitFrame.refreshRaidTargetIcon,
+        ["UNIT_FACTION"] = _checkUnitAndRefresh,
+        ["UNIT_LEVEL"] = _checkUnitAndRefresh,
+        ["UNIT_NAME_UPDATE"] = _checkUnitAndRefresh,
         -- TODO vehicle
     };
-    uf.eventHandlers["main"] = events;
 
-    local healthEventHandler = FlatUnitFrame.createHealthBar(uf);
-    uf.eventHandlers["health"] = healthEventHandler;
+    uf.eventHandlers["health"] = FlatUnitFrame.createHealthFrame(uf);
 
-    local castEventHandler = FlatUnitFrame.createCastBar(uf);
-    uf.eventHandlers["cast"] = castEventHandler;
+    uf.eventHandlers["cast"] = FlatUnitFrame.createCastFrame(uf);
 
     return uf;
+end
+
+function FlatUnitFrame._checkUnit(uf, unit)
+    return unit == FlatUnitFrame.getUnit(uf);
 end
 
 function FlatUnitFrame.getUnit(uf)
@@ -72,7 +86,8 @@ function FlatUnitFrame.getUnit(uf)
 end
 
 function FlatUnitFrame.setUnit(uf, unit)
-    uf:SetAttribute("unit", unit and string.lower(unit));
+    unit = unit and string.lower(unit);
+    uf:SetAttribute("unit", unit);
 end
 
 function FlatUnitFrame.start(uf)
@@ -89,8 +104,19 @@ function FlatUnitFrame.start(uf)
             end
         end
     end);
+
+    local unit = FlatUnitFrame.getUnit(uf);
+    A.castCube.acceptSubscriber(unit, function(unitGuid, castInfo)
+        local ufUnit = FlatUnitFrame.getUnit(uf);
+        local ufUnitGuid = ufUnit and UnitExists(ufUnit) and UnitGUID(ufUnit);
+        if (ufUnitGuid ~= unitGuid) then
+            return "invalid";
+        end
+        FlatUnitFrame.refreshCast(uf, castInfo);
+    end);
+
+    FlatUnitFrame.refresh(uf);
     uf:Show();
-    FlatUnitFrame.update(uf);
 end
 
 function FlatUnitFrame.stop(uf)
@@ -99,96 +125,108 @@ function FlatUnitFrame.stop(uf)
     uf:SetScript("OnEvent", nil);
 end
 
-function FlatUnitFrame.update(uf)
-    FlatUnitFrame.updateHealth(uf);
-    FlatUnitFrame.updateName(uf);
-    FlatUnitFrame.updateLevel(uf);
-    FlatUnitFrame.updateRaidMark(uf);
-    FlatUnitFrame.updateSelection(uf);
-end
-
-function FlatUnitFrame.updateName(uf)
-    local unit = FlatUnitFrame.getUnit(uf);
-    if (not unit) then
-        return;
-    end
-
-    local nameTextRegion = uf.nameTextRegion;
-    if (nameTextRegion) then
-        if (UnitIsUnit(unit, "player")) then
-            nameTextRegion:SetText();
-        else
-            local nameString = GetUnitName(unit);
-            local nameColor = A.getUnitNameColorByUnit(unit);
-            nameTextRegion:SetText(nameString);
-            nameTextRegion:SetVertexColor(nameColor:toVertex());
-        end
-    end
-end
-
-function FlatUnitFrame.updateLevel(uf)
-    local unit = FlatUnitFrame.getUnit(uf);
-    if (not unit) then
-        return;
-    end
-
-    local levelTextRegion = uf.levelTextRegion;
-    if (levelTextRegion) then
-        local playerLevel = UnitLevel("player");
-        local unitLevel = UnitLevel(unit);
-        local unitLevelSuffix = A.getUnitLevelSuffixByUnit(unit);
-        if (unitLevel == -1) then
-            levelTextRegion:SetText(A.getUnitLevelSkullTextureString(18));
-        elseif (playerLevel == MAX_PLAYER_LEVEL and unitLevel == MAX_PLAYER_LEVEL and unitLevelSuffix == "") then
-            levelTextRegion:SetText(nil);
-        else
-            levelTextRegion:SetText(unitLevel .. unitLevelSuffix);
-            levelTextRegion:SetVertexColor(A.getUnitLevelColorByUnit(unit):toVertex());
-        end
-    end
-end
-
-function FlatUnitFrame.updateRaidMark(uf)
-    local unit = FlatUnitFrame.getUnit(uf);
+function FlatUnitFrame.refresh(uf, unit)
+    local unit = unit or FlatUnitFrame.getUnit(uf);
     if (not unit or not UnitExists(unit)) then
         return;
     end
 
-    local raidMarkTextureRegion = uf.raidMarkTextureRegion;
-    if (raidMarkTextureRegion) then
-        local index = GetRaidTargetIndex(unit);
-        if (index) then
-            SetRaidTargetIconTexture(raidMarkTextureRegion, index);
-            raidMarkTextureRegion:Show();
-        else
-            raidMarkTextureRegion:Hide();
-        end
-    end
+    FlatUnitFrame.refreshNameText(uf, unit);
+
+    FlatUnitFrame.refreshLevelText(uf, unit);
+
+    FlatUnitFrame.refreshRaidTargetIcon(uf, unit);
+
+    FlatUnitFrame.refreshSelectionTexture(uf, unit);
+
+    FlatUnitFrame.refreshHealth(uf, unit);
+
+    FlatUnitFrame.refreshCast(uf);
 end
 
-function FlatUnitFrame.updateSelection(uf)
-    local unit = FlatUnitFrame.getUnit(uf);
-    if (not unit) then
+function FlatUnitFrame.refreshNameText(uf, unit)
+    local nameText = uf.nameText;
+    if (not nameText) then
         return;
     end
 
-    local selectionHighlightTextureRegion = uf.selectionHighlightTextureRegion;
-    if (selectionHighlightTextureRegion) then
-        local isSelected = UnitIsUnit(unit, "target");
-        if (isSelected) then
-            selectionHighlightTextureRegion:SetVertexColor(1, 1, 1, 0.2);
-            selectionHighlightTextureRegion:Show();
-        else
-            selectionHighlightTextureRegion:Hide();
-        end
+    if (UnitIsUnit(unit, "player")) then
+        nameText:SetText(nil);
+    else
+        local name = GetUnitName(unit);
+        local nameColor = A.getUnitNameColorByUnit(unit);
+        nameText:SetText(name);
+        nameText:SetVertexColor(nameColor:toVertex());
+    end
+end
+
+function FlatUnitFrame.refreshLevelText(uf, unit)
+    local levelText = uf.levelText;
+    if (not levelText) then
+        return;
+    end
+
+    local myLevel = UnitLevel("player");
+    local unitLevel = UnitLevel(unit);
+    local unitLevelSuffix = A.getUnitLevelSuffixByUnit(unit);
+    if (unitLevel == -1) then
+        levelText:SetText(A.getUnitLevelSkullTextureString(18));
+    elseif (myLevel == MAX_PLAYER_LEVEL and unitLevel == MAX_PLAYER_LEVEL and unitLevelSuffix == "") then
+        levelText:SetText(nil);
+    else
+        levelText:SetText(unitLevel .. unitLevelSuffix);
+        levelText:SetVertexColor(A.getUnitLevelColorByUnit(unit):toVertex());
+    end
+end
+
+function FlatUnitFrame.refreshRaidTargetIcon(uf, unit)
+    local raidTargetIcon = uf.raidTargetIcon;
+    if (not raidTargetIcon) then
+        return;
+    end
+
+    unit = unit or FlatUnitFrame.getUnit(uf);
+    if (not unit or not UnitExists(unit)) then
+        return;
+    end
+
+    local index = GetRaidTargetIndex(unit);
+    if (index) then
+        SetRaidTargetIconTexture(raidTargetIcon, index);
+        raidTargetIcon:Show();
+    else
+        raidTargetIcon:Hide();
+    end
+end
+
+function FlatUnitFrame.refreshSelectionTexture(uf, unit)
+    local selectionHighlight = uf.selectionHighlight;
+    if (not selectionHighlight) then
+        return;
+    end
+
+    unit = unit or FlatUnitFrame.getUnit(uf);
+    if (not unit or not UnitExists(unit)) then
+        return;
+    end
+
+    local isSelected = UnitIsUnit(unit, "target");
+    if (isSelected) then
+        selectionHighlight:SetVertexColor(1, 1, 1, 0.2);
+        selectionHighlight:Show();
+    else
+        selectionHighlight:Hide();
     end
 end
 
 ----------------
 -- health
 
-function FlatUnitFrame.createHealthBar(uf)
-    local healthBar = CreateFrame("StatusBar", nil, uf, nil);
+function FlatUnitFrame.createHealthFrame(uf)
+    local healthFrame = CreateFrame("Frame", nil, uf, nil);
+    uf.healthFrame = healthFrame;
+
+    local healthBar = CreateFrame("StatusBar", nil, healthFrame, nil);
     healthBar:SetFrameStrata("BACKGROUND");
     healthBar:SetFrameLevel(1);
     healthBar:SetMinMaxValues(0, 1);
@@ -199,42 +237,44 @@ function FlatUnitFrame.createHealthBar(uf)
     healthBar:SetBackdropColor(0, 0, 0, 0.85);
     healthBar:SetSize(60, 4);
     healthBar:SetPoint("BOTTOM", uf, "BOTTOM", 0, 0);
-    uf.healthBar = healthBar;
+    healthFrame.healthBar = healthBar;
 
-    local healthBarGlowFrame = A.Frame.createBorderFrame(healthBar, {
+    local healthGlowFrame = A.Frame.createBorderFrame(healthBar, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 5,
     });
-    healthBarGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
-    healthBar.glowFrame = healthBarGlowFrame;
+    healthGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
+    healthFrame.glowFrame = healthGlowFrame;
+
     -- TODO health bar glow for threat level
 
-    local healthTextRegion = uf:CreateFontString(nil, "ARTWORK", nil);
-    healthTextRegion:SetFont(A.Res.path .. "/3p/impact.ttf", 12, "OUTLINE");
-    healthTextRegion:SetVertexColor(1, 1, 1);
-    healthTextRegion:SetShadowOffset(0, 0);
-    healthTextRegion:SetJustifyH("LEFT");
-    -- no left/right point so it expands with content
-    -- to the right due to flat is in narrow style
-    healthTextRegion:SetPoint("LEFT", healthBar, "RIGHT", 2, 0);
-    uf.healthTextRegion = healthTextRegion;
+    local healthText = healthFrame:CreateFontString(nil, "ARTWORK", nil);
+    healthText:SetFont(A.Res.path .. "/3p/impact.ttf", 12, "OUTLINE");
+    healthText:SetVertexColor(1, 1, 1);
+    healthText:SetShadowOffset(0, 0);
+    healthText:SetJustifyH("LEFT");
+    healthText:SetPoint("LEFT", healthBar, "RIGHT", 2, 1);
+    healthFrame.healthText = healthText;
 
-    local events = {
-        ["PLAYER_REGEN_ENABLED"] = FlatUnitFrame.updateHealth,
-        ["PLAYER_REGEN_DISABLED"] = FlatUnitFrame.updateHealth,
+    return {
+        ["PLAYER_REGEN_ENABLED"] = FlatUnitFrame.refreshHealth,
+        ["PLAYER_REGEN_DISABLED"] = FlatUnitFrame.refreshHealth,
         ["UNIT_HEALTH_FREQUENT"] = function(self, ...)
             local unit = ...;
-            if (unit == FlatUnitFrame.getUnit(self)) then
-                FlatUnitFrame.updateHealth(self);
+            if (FlatUnitFrame._checkUnit(self, unit)) then
+                FlatUnitFrame.refreshHealth(self, unit);
             end
         end,
     };
-
-    return healthBar, events;
 end
 
-function FlatUnitFrame.updateHealth(uf)
-    local unit = FlatUnitFrame.getUnit(uf);
+function FlatUnitFrame.refreshHealth(uf, unit)
+    local healthFrame = uf.healthFrame;
+    if (not healthFrame) then
+        return;
+    end
+
+    local unit = unit or FlatUnitFrame.getUnit(uf);
     if (not unit) then
         return;
     end
@@ -243,7 +283,7 @@ function FlatUnitFrame.updateHealth(uf)
     local maxHealth = UnitHealthMax(unit);
     local healthRate = currentHealth / maxHealth;
 
-    local healthBar = uf.healthBar;
+    local healthBar = healthFrame.healthBar;
     if (healthBar) then
         healthBar:SetValue(healthRate);
         if (UnitIsPlayer(unit) and UnitIsEnemy("player", unit)) then
@@ -253,15 +293,14 @@ function FlatUnitFrame.updateHealth(uf)
         end
     end
 
-    local healthTextRegion = uf.healthTextRegion;
-    if (healthTextRegion) then
+    local healthText = healthFrame.healthText;
+    if (healthText) then
         local percentage = math.floor(healthRate * 100);
         if (percentage == 100 and not UnitAffectingCombat("player")) then
-            healthTextRegion:SetText(nil);
+            healthText:SetText(nil);
         else
-            healthTextRegion:SetText(percentage);
-            local healthColor = A.getUnitHealthColor(healthRate);
-            healthTextRegion:SetVertexColor(healthColor:toVertex());
+            healthText:SetText(percentage);
+            healthText:SetVertexColor(A.getUnitHealthColorByRate(healthRate):toVertex());
         end
     end
 end
@@ -269,22 +308,17 @@ end
 ----------------
 -- cast
 
-function FlatUnitFrame.createCastBar(uf)
-    --local castBar = CreateFrame("StatusBar", nil, uf, nil);
-    --castBar:SetFrameStrata("MEDIUM");
-    --castBar:SetFrameLevel(1);
-    --castBar:SetMinMaxValues(0, 1);
-    --castBar:SetStatusBarTexture(A.Res.path .. "/3p/norm.tga");
-    --castBar:SetHeight(2);
-    --castBar:SetPoint("TOPLEFT", uf, "BOTTOMLEFT", 0, 1);
-    --castBar:SetPoint("TOPRIGHT", uf, "BOTTOMRIGHT", 0, 1);
-    --castBar:Hide();
-    --uf.castBar = castBar;
-
+function FlatUnitFrame.createCastFrame(uf)
     local castFrame = CreateFrame("Frame", nil, uf, nil);
-    castFrame:SetFrameStrata("MEDIUM");
-    castFrame:SetFrameLevel(1);
-    castFrame:SetBackdrop({
+    castFrame:Hide();
+    uf.castFrame = castFrame;
+
+    -- castBar placeholder
+
+    local spellIconFrame = CreateFrame("Frame", nil, castFrame, nil);
+    spellIconFrame:SetFrameStrata("MEDIUM");
+    spellIconFrame:SetFrameLevel(2);
+    spellIconFrame:SetBackdrop({
         bgFile = A.Res.tile32,
         insets = {
             left = -1,
@@ -293,199 +327,171 @@ function FlatUnitFrame.createCastBar(uf)
             bottom = -1,
         },
     });
-    castFrame:SetBackdropColor(0, 0, 0, 0.85);
-    castFrame:SetSize(18, 18);
-    castFrame:SetPoint("BOTTOMRIGHT", uf, "BOTTOMLEFT", -4, -3);
-    castFrame:Hide();
-    uf.castFrame = castFrame;
+    spellIconFrame:SetBackdropColor(0, 0, 0, 0.85);
+    spellIconFrame:SetSize(18, 18);
+    spellIconFrame:SetPoint("BOTTOMRIGHT", uf, "BOTTOM", -34, -3);
+    castFrame.spellIconFrame = spellIconFrame;
 
-    castFrame:SetScript("OnUpdate", function(self, elapsed)
-        local uf = self:GetParent();
-        local unit = FlatUnitFrame.getUnit(uf);
-        if (not unit) then
-            return;
-        end
+    local spellIcon = spellIconFrame:CreateTexture(nil, "ARTWORK", nil, 1);
+    A.Frame.cropTextureRegion(spellIcon);
+    spellIcon:SetAllPoints();
+    spellIcon:SetTexture(A.Res.healthbar32);
+    castFrame.spellIcon = spellIcon;
 
-        if (not self.castInfo) then
-            local castInfo = A.getUnitCastInfoByUnit(unit);
-            if (not castInfo) then
-                -- there may be a delay on setting cast info
-                return;
-            end
-            -- init cast
-
-            local spellIconTextureRegion = self.spellIconTextureRegion;
-            if (spellIconTextureRegion) then
-                spellIconTextureRegion:SetTexture(castInfo.spellIcon);
-            end
-
-            local castGlowFrame = self.glowFrame;
-            if (castGlowFrame) then
-                if (castInfo.castIsShielded) then
-                    -- XXX gold for iron?
-                    castGlowFrame:SetBackdropBorderColor(Color.pick("#343434b2"):toVertex());
-                    --castGlowFrame:Show();
-                else
-                    castGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
-                end
-            end
-
-            local spellNameTextRegion = self.spellNameTextRegion;
-            if (spellNameTextRegion) then
-                spellNameTextRegion:SetText(castInfo.spellName);
-            end
-
-            local castBar = uf.castBar;
-            if (castBar) then
-                if (castInfo.castProgressing == "CASTING") then
-                    castBar:SetStatusBarColor(Color.pick("gold"):toVertex());
-                elseif (castInfo.castProgressing == "CHANNELING") then
-                    castBar:SetStatusBarColor(Color.pick("green"):toVertex());
-                else
-                    castBar:SetStatusBarColor(Color.pick("blue"):toVertex());
-                end
-            end
-
-            self.castInfo = castInfo;
-        end
-
-        local castInfo = self.castInfo;
-        local currentTime = GetTime();
-        if (not castInfo.castEndTime) then
-            -- it does not tell when to end
-            -- dummy
-        elseif (currentTime < castInfo.castEndTime) then
-            local totalSeconds = castInfo.castEndTime - castInfo.castStartTime;
-            local elapsedSeconds = currentTime - castInfo.castStartTime;
-            local rate = elapsedSeconds / totalSeconds;
-            if (rate > 1) then
-                rate = 1;
-            end
-
-            local castBar = uf.castBar;
-            if (castBar) then
-                if (castInfo.castProgressing == "CASTING") then
-                    castBar:SetValue(rate);
-                elseif (castInfo.castProgressing == "CHANNELING") then
-                    castBar:SetValue(1 - rate);
-                end
-                local castCountdownTextRegion = castBar.castCountdownTextRegion;
-                if (castCountdownTextRegion) then
-                    castCountdownTextRegion:SetFormattedText("%.1f", totalSeconds - elapsedSeconds);
-                end
-            end
-        else
-            -- do not end cast; leave to cast end event
-            -- dummy
-        end
-    end);
-
-    local spellIconTextureRegion = castFrame:CreateTexture(nil, "ARTWORK", nil, 1);
-    A.Frame.cropTextureRegion(spellIconTextureRegion);
-    spellIconTextureRegion:SetAllPoints();
-    spellIconTextureRegion:SetTexture(A.Res.healthbar32);
-    castFrame.spellIconTextureRegion = spellIconTextureRegion;
-
-    local castGlowFrame = A.Frame.createBorderFrame(castFrame, {
+    local castGlowFrame = A.Frame.createBorderFrame(spellIconFrame, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 5,
     }, 1);
     castFrame.glowFrame = castGlowFrame;
 
-    local function _checkUnit(self, unit)
-        return unit == FlatUnitFrame.getUnit(self);
-    end
+    local spellNameText = castFrame:CreateFontString(nil, "BACKGROUND", nil);
+    spellNameText:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
+    spellNameText:SetShadowOffset(0, 0);
+    spellNameText:SetJustifyH("LEFT");
+    spellNameText:SetPoint("BOTTOMLEFT", uf, "BOTTOMLEFT", 0, 6);
+    castFrame.spellNameText = spellNameText;
 
-    local function _checkUnitAndStartCast(self, ...)
-        local unit, castGuid, spellId = ...;
-        if (_checkUnit(self, ...)) then
-            FlatUnitFrame.startCast(self);
+    castFrame:SetScript("OnUpdate", function(self, elapsed)
+        local castFrame = self;
+        local uf = castFrame:GetParent();
+        local unit = FlatUnitFrame.getUnit(uf);
+        if (not unit) then
+            return;
         end
-    end
 
-    local function _checkUnitAndEndCast(self, ...)
-        if (_checkUnit(self, ...)) then
-            FlatUnitFrame.endCast(self);
+        local currentTime = time();
+        local castInfo = self.castInfo;
+        if (not castInfo) then
+            FlatUnitFrame.clearCast(uf);
+            return;
+        elseif (castInfo.castEndTimePossible and castInfo.castEndTimePossible <= currentTime) then
+            FlatUnitFrame.clearCast(uf);
+            return;
+        elseif (not castInfo.castEndTime) then
+            -- casting, but no eta
+            -- dummy
+            return;
+        elseif (castInfo.castEndTime <= currentTime) then
+            FlatUnitFrame.clearCast(uf);
+            return;
         end
-    end
 
-    local events = {
-        ["PET_ATTACK_START"] = function(self, ...)
-            local unit = "pet";
-            if (UnitIsUnit(unit, FlatUnitFrame.getUnit(self))) then
-                FlatUnitFrame.startCast(self);
-            end
-        end,
-        ["PET_ATTACK_STOP"] = function(self, ...)
-            local unit = "pet";
-            if (UnitIsUnit(unit, FlatUnitFrame.getUnit(self))) then
-                FlatUnitFrame.endCast(self);
-            end
-        end,
-        ["UNIT_SPELLCAST_CHANNEL_START"] = _checkUnitAndStartCast,
-        ["UNIT_SPELLCAST_CHANNEL_STOP"] = function(self, ...)
-            if (_checkUnit(self, ...)) then
-                FlatUnitFrame.endCast(self, "SUCCEEDED");
-            end
-        end,
-        --["UNIT_SPELLCAST_CHANNEL_UPDATE"] = TODO,
-        --["UNIT_SPELLCAST_DELAYED"] = TODO,
-        ["UNIT_SPELLCAST_FAILED"] = function(self, ...)
-            if (_checkUnit(self, ...)) then
-                FlatUnitFrame.endCast(self, "FAILED");
-            end
-        end,
-        ["UNIT_SPELLCAST_FAILED_QUIET"] = function(self, ...)
-            if (_checkUnit(self, ...)) then
-                FlatUnitFrame.endCast(self, "FAILED");
-            end
-        end,
-        ["UNIT_SPELLCAST_INTERRUPTED"] = function(self, ...)
-            if (_checkUnit(self, ...)) then
-                FlatUnitFrame.endCast(self, "INTERRUPTED");
-            end
-        end,
-        --["UNIT_SPELLCAST_INTERRUPTIBLE"] = _checkUnitAndStartCast,
-        --["UNIT_SPELLCAST_NOT_INTERRUPTIBLE"] = _checkUnitAndStartCast,
-        ["UNIT_SPELLCAST_START"] = _checkUnitAndStartCast,
-        ["UNIT_SPELLCAST_STOP"] = _checkUnitAndEndCast,
-        ["UNIT_SPELLCAST_SUCCEEDED"] = function(self, ...)
-            if (_checkUnit(self, ...)) then
-                FlatUnitFrame.endCast(self, "SUCCEEDED");
-            end
-        end,
-    };
+        -- progressing
+        local totalSeconds = castInfo.castEndTime - castInfo.castStartTime;
+        local elapsedSeconds = currentTime - castInfo.castStartTime;
+        local rate = elapsedSeconds / totalSeconds;
+        if (rate > 1) then
+            rate = 1;
+        end
 
-    return castBar, castFrame, events;
+        local castBar = castFrame.castBar;
+        if (castBar) then
+            if (castInfo.castProgressing == "CASTING") then
+                castBar:SetValue(rate);
+            elseif (castInfo.castProgressing == "CHANNELING") then
+                castBar:SetValue(1 - rate);
+            end
+        end
+
+        local castCountdownText = castFrame.castCountdownText;
+        if (castCountdownText) then
+            castCountdownText:SetFormattedText("%.1f", totalSeconds - elapsedSeconds);
+        end
+    end);
 end
 
-function FlatUnitFrame.startCast(uf)
+-- called either on cast start event or on show
+function FlatUnitFrame.refreshCast(uf, castInfo)
+    -- reset cast
+    FlatUnitFrame.clearCast(uf);
+
     local unit = FlatUnitFrame.getUnit(uf);
     if (not unit) then
         return;
     end
 
-    local castFrame = uf.castFrame;
-    if (castFrame) then
-        castFrame:Show();
+    local currentTime = time();
+    castInfo = castInfo or A.getUnitCastInfoByUnit(unit);
+    if (not castInfo) then
+        FlatUnitFrame.clearCast(uf);
+        return;
+    elseif (castInfo.castEndTimePossible and castInfo.castEndTimePossible <= currentTime) then
+        FlatUnitFrame.clearCast(uf);
+        return;
+    elseif (castInfo.castEndTime and castInfo.castEndTime <= currentTime) then
+        FlatUnitFrame.clearCast(uf);
+        return;
     end
 
-    local castBar = uf.castBar;
-    if (castBar) then
-        castBar:Show();
+    local castFrame = uf.castFrame;
+    if (not castFrame) then
+        return;
     end
+
+    if (castInfo.castProgress or castInfo.castGuid) then
+        -- it's from spell info api or UNIT_SPELLCAST_* event
+        castFrame.castInfo = castInfo;
+    elseif (not castFrame.castInfo) then
+        castFrame.castInfo = castInfo;
+    elseif (castInfo.spellName ~= castFrame.castInfo.spellName) then
+        castFrame.castInfo = castInfo;
+    else
+        local timeDiff = castInfo.castStartTime - castFrame.castInfo.castStartTime;
+        if (timeDiff > -0.3 and timeDiff < 0.3) then
+            return;
+        end
+        castFrame.castInfo = castInfo;
+    end
+
+    local spellNameText = castFrame.spellNameText;
+    if (spellNameText) then
+        spellNameText:SetText(castInfo.spellName);
+    end
+
+    local spellIcon = castFrame.spellIcon;
+    if (spellIcon) then
+        spellIcon:SetTexture(castInfo.spellIcon);
+    end
+
+    local castGlowFrame = castFrame.glowFrame;
+    if (castGlowFrame) then
+        if (castInfo.castIsShielded) then
+            -- iron color
+            castGlowFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.7);
+        else
+            castGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
+        end
+    end
+
+    local castBar = castFrame.castBar;
+    if (castBar) then
+        if (not castInfo.castEndTime) then
+            castBar:Hide();
+        else
+            castBar:Show();
+        end
+        if (castInfo.castProgressing == "CASTING") then
+            castBar:SetStatusBarColor(Color.pick("gold"):toVertex());
+        elseif (castInfo.castProgressing == "CHANNELING") then
+            castBar:SetStatusBarColor(Color.pick("green"):toVertex());
+        else
+            castBar:SetStatusBarColor(Color.pick("blue"):toVertex());
+        end
+    end
+
+    local castCountdownText = castFrame.castCountdownText;
+    if (castCountdownText) then
+        castCountdownText:SetText(nil);
+    end
+
+    castFrame:Show();
 end
 
-function FlatUnitFrame.endCast(uf, reason)
+function FlatUnitFrame.clearCast(uf, reason)
     -- TODO animation for succeeded, failed, interrupted, etc
     local castFrame = uf.castFrame;
     if (castFrame) then
         castFrame:Hide();
         castFrame.castInfo = nil;
-    end
-
-    local castBar = uf.castBar;
-    if (castBar) then
-        castBar:Hide();
     end
 end

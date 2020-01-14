@@ -1,5 +1,8 @@
 A = A or {};
 
+-- lowerCamelCase for variable and method
+-- UpperCamelCase for class
+-- UpperCamelCase for package; package is more like static class rather than variable: it should not be duplicated
 A.Frame = A.Frame or {};
 
 A.Frame.safeInvoke = A.Frame.safeInvoke or function(callback, f)

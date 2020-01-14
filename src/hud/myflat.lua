@@ -3,10 +3,9 @@
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
     f:SetScript("OnEvent", function(self, event, ...)
         self:UnregisterAllEvents();
-        local uf = FlatUnitFrame.createUnitFrame(UIParent);
+        local uf = FlatUnitFrame.createUnitFrame(nil);
         uf.raidMarkTextureRegion = nil;
-        uf:SetSize(100, 20);
-        uf:SetPoint("CENTER", UIParent, "CENTER", 0, -60 * A.dp);
+        uf:SetPoint("CENTER", UIParent, "CENTER", 0, -60);
         FlatUnitFrame.setUnit(uf, "player");
         FlatUnitFrame.start(uf);
     end);

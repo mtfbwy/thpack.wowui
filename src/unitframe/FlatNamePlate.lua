@@ -73,9 +73,13 @@
         elseif (event == "NAME_PLATE_CREATED") then
             local namePlate = ...
             local uf = FlatUnitFrame.createUnitFrame(namePlate);
-            uf:SetAllPoints(namePlate);
+            uf:SetPoint("BOTTOM", namePlate, "BOTTOM");
             FlatUnitFrame.stop(uf);
             namePlate.flatUnitFrame = uf;
+            namePlate:HookScript("OnShow", function(self)
+                local uf = self.flatUnitFrame;
+                FlatUnitFrame.refresh(uf);
+            end);
         elseif (event == "NAME_PLATE_UNIT_ADDED") then
             local unit = ...;
             local namePlate = C_NamePlate.GetNamePlateForUnit(unit);
