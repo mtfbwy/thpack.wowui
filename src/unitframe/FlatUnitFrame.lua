@@ -1,8 +1,3 @@
--- naming:
---  invalidate(): called after the model is ready, register for UI refresh
---  refresh(): fetch data, compose model and call invalidate()
---  textView, textureView, inputView
-
 FlatUnitFrame = FlatUnitFrame or {};
 
 function FlatUnitFrame.createUnitFrame(parentFrame)
@@ -72,8 +67,6 @@ function FlatUnitFrame.createUnitFrame(parentFrame)
 
     uf.eventHandlers["health"] = FlatUnitFrame.createHealthFrame(uf);
 
-    uf.eventHandlers["cast"] = FlatUnitFrame.createCastFrame(uf);
-
     return uf;
 end
 
@@ -105,16 +98,6 @@ function FlatUnitFrame.start(uf)
         end
     end);
 
-    local unit = FlatUnitFrame.getUnit(uf);
-    A.castCube.acceptSubscriber(unit, function(unitGuid, castInfo)
-        local ufUnit = FlatUnitFrame.getUnit(uf);
-        local ufUnitGuid = ufUnit and UnitExists(ufUnit) and UnitGUID(ufUnit);
-        if (ufUnitGuid ~= unitGuid) then
-            return "invalid";
-        end
-        FlatUnitFrame.refreshCast(uf, castInfo);
-    end);
-
     FlatUnitFrame.refresh(uf);
     uf:Show();
 end
@@ -140,8 +123,6 @@ function FlatUnitFrame.refresh(uf, unit)
     FlatUnitFrame.refreshSelectionTexture(uf, unit);
 
     FlatUnitFrame.refreshHealth(uf, unit);
-
-    FlatUnitFrame.refreshCast(uf);
 end
 
 function FlatUnitFrame.refreshNameText(uf, unit)
@@ -302,196 +283,5 @@ function FlatUnitFrame.refreshHealth(uf, unit)
             healthText:SetText(percentage);
             healthText:SetVertexColor(A.getUnitHealthColorByRate(healthRate):toVertex());
         end
-    end
-end
-
-----------------
--- cast
-
-function FlatUnitFrame.createCastFrame(uf)
-    local castFrame = CreateFrame("Frame", nil, uf, nil);
-    castFrame:Hide();
-    uf.castFrame = castFrame;
-
-    -- castBar placeholder
-
-    local spellIconFrame = CreateFrame("Frame", nil, castFrame, nil);
-    spellIconFrame:SetFrameStrata("MEDIUM");
-    spellIconFrame:SetFrameLevel(2);
-    spellIconFrame:SetBackdrop({
-        bgFile = A.Res.tile32,
-        insets = {
-            left = -1,
-            right = -1,
-            top = -1,
-            bottom = -1,
-        },
-    });
-    spellIconFrame:SetBackdropColor(0, 0, 0, 0.85);
-    spellIconFrame:SetSize(18, 18);
-    spellIconFrame:SetPoint("BOTTOMRIGHT", uf, "BOTTOM", -34, -3);
-    castFrame.spellIconFrame = spellIconFrame;
-
-    local spellIcon = spellIconFrame:CreateTexture(nil, "ARTWORK", nil, 1);
-    A.Frame.cropTextureRegion(spellIcon);
-    spellIcon:SetAllPoints();
-    spellIcon:SetTexture(A.Res.healthbar32);
-    castFrame.spellIcon = spellIcon;
-
-    local castGlowFrame = A.Frame.createBorderFrame(spellIconFrame, {
-        edgeFile = A.Res.path .. "/3p/glow.tga",
-        edgeSize = 5,
-    }, 1);
-    castFrame.glowFrame = castGlowFrame;
-
-    local spellNameText = castFrame:CreateFontString(nil, "BACKGROUND", nil);
-    spellNameText:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE");
-    spellNameText:SetShadowOffset(0, 0);
-    spellNameText:SetJustifyH("LEFT");
-    spellNameText:SetPoint("BOTTOMLEFT", uf, "BOTTOMLEFT", 0, 6);
-    castFrame.spellNameText = spellNameText;
-
-    castFrame:SetScript("OnUpdate", function(self, elapsed)
-        local castFrame = self;
-        local uf = castFrame:GetParent();
-        local unit = FlatUnitFrame.getUnit(uf);
-        if (not unit) then
-            return;
-        end
-
-        local currentTime = time();
-        local castInfo = self.castInfo;
-        if (not castInfo) then
-            FlatUnitFrame.clearCast(uf);
-            return;
-        elseif (castInfo.castEndTimePossible and castInfo.castEndTimePossible <= currentTime) then
-            FlatUnitFrame.clearCast(uf);
-            return;
-        elseif (not castInfo.castEndTime) then
-            -- casting, but no eta
-            -- dummy
-            return;
-        elseif (castInfo.castEndTime <= currentTime) then
-            FlatUnitFrame.clearCast(uf);
-            return;
-        end
-
-        -- progressing
-        local totalSeconds = castInfo.castEndTime - castInfo.castStartTime;
-        local elapsedSeconds = currentTime - castInfo.castStartTime;
-        local rate = elapsedSeconds / totalSeconds;
-        if (rate > 1) then
-            rate = 1;
-        end
-
-        local castBar = castFrame.castBar;
-        if (castBar) then
-            if (castInfo.castProgressing == "CASTING") then
-                castBar:SetValue(rate);
-            elseif (castInfo.castProgressing == "CHANNELING") then
-                castBar:SetValue(1 - rate);
-            end
-        end
-
-        local castCountdownText = castFrame.castCountdownText;
-        if (castCountdownText) then
-            castCountdownText:SetFormattedText("%.1f", totalSeconds - elapsedSeconds);
-        end
-    end);
-end
-
--- called either on cast start event or on show
-function FlatUnitFrame.refreshCast(uf, castInfo)
-    -- reset cast
-    FlatUnitFrame.clearCast(uf);
-
-    local unit = FlatUnitFrame.getUnit(uf);
-    if (not unit) then
-        return;
-    end
-
-    local currentTime = time();
-    castInfo = castInfo or A.getUnitCastInfoByUnit(unit);
-    if (not castInfo) then
-        FlatUnitFrame.clearCast(uf);
-        return;
-    elseif (castInfo.castEndTimePossible and castInfo.castEndTimePossible <= currentTime) then
-        FlatUnitFrame.clearCast(uf);
-        return;
-    elseif (castInfo.castEndTime and castInfo.castEndTime <= currentTime) then
-        FlatUnitFrame.clearCast(uf);
-        return;
-    end
-
-    local castFrame = uf.castFrame;
-    if (not castFrame) then
-        return;
-    end
-
-    if (castInfo.castProgress or castInfo.castGuid) then
-        -- it's from spell info api or UNIT_SPELLCAST_* event
-        castFrame.castInfo = castInfo;
-    elseif (not castFrame.castInfo) then
-        castFrame.castInfo = castInfo;
-    elseif (castInfo.spellName ~= castFrame.castInfo.spellName) then
-        castFrame.castInfo = castInfo;
-    else
-        local timeDiff = castInfo.castStartTime - castFrame.castInfo.castStartTime;
-        if (timeDiff > -0.3 and timeDiff < 0.3) then
-            return;
-        end
-        castFrame.castInfo = castInfo;
-    end
-
-    local spellNameText = castFrame.spellNameText;
-    if (spellNameText) then
-        spellNameText:SetText(castInfo.spellName);
-    end
-
-    local spellIcon = castFrame.spellIcon;
-    if (spellIcon) then
-        spellIcon:SetTexture(castInfo.spellIcon);
-    end
-
-    local castGlowFrame = castFrame.glowFrame;
-    if (castGlowFrame) then
-        if (castInfo.castIsShielded) then
-            -- iron color
-            castGlowFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.7);
-        else
-            castGlowFrame:SetBackdropBorderColor(0, 0, 0, 0.7);
-        end
-    end
-
-    local castBar = castFrame.castBar;
-    if (castBar) then
-        if (not castInfo.castEndTime) then
-            castBar:Hide();
-        else
-            castBar:Show();
-        end
-        if (castInfo.castProgressing == "CASTING") then
-            castBar:SetStatusBarColor(Color.pick("gold"):toVertex());
-        elseif (castInfo.castProgressing == "CHANNELING") then
-            castBar:SetStatusBarColor(Color.pick("green"):toVertex());
-        else
-            castBar:SetStatusBarColor(Color.pick("blue"):toVertex());
-        end
-    end
-
-    local castCountdownText = castFrame.castCountdownText;
-    if (castCountdownText) then
-        castCountdownText:SetText(nil);
-    end
-
-    castFrame:Show();
-end
-
-function FlatUnitFrame.clearCast(uf, reason)
-    -- TODO animation for succeeded, failed, interrupted, etc
-    local castFrame = uf.castFrame;
-    if (castFrame) then
-        castFrame:Hide();
-        castFrame.castInfo = nil;
     end
 end

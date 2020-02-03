@@ -19,7 +19,6 @@ src/util/A.pixelPerfect.lua
 src/util/A.Frame.lua
 src/util/A.createBlizzardRoundButton.lua
 src/util/A.getColoredString.lua
-src/util/A.getUnitCastInfoByUnit.lua
 src/util/A.getUnitClassColorByUnit.lua
 src/util/A.getUnitHealthColorByUnit.lua
 src/util/A.getUnitLevelColorByUnit.lua
