@@ -4,93 +4,59 @@
 TOP=$(readlink -f $(dirname $BASH_SOURCE)/..)
 
 function buildAddon() {
-    local UI_VERSION=$1
-    local DATE=$2
-    local ADDON_NAME=$3
-    local ADDON_FILES=$4
-    local ADDON_ZIP=$5
+    local ADDON=$1
+    local UI_VERSION=$2
+    local SRC_FILES=$3
 
-    echo "building [$ADDON_ZIP] ..."
+    local DATE=$(date +%Y-%m-%d)
+    local ZIP_BASENAME=$ADDON.$UI_VERSION.$DATE.zip
 
-    rm -rf $TOP/out/$ADDON_NAME
-    mkdir -p $TOP/out/$ADDON_NAME
+    echo "building [$ZIP_BASENAME] ..."
 
-    cat > $TOP/out/$ADDON_NAME/$ADDON_NAME.toc << EOF
+    rm -rf $TOP/out/$ADDON
+    mkdir -p $TOP/out/$ADDON
+
+    cat > $TOP/out/$ADDON/$ADDON.toc << EOF
 ## Interface: $UI_VERSION
-## Title: $ADDON_NAME
+## Title: $ADDON
 ## Date: $DATE
-$ADDON_FILES
+$SRC_FILES
 EOF
 
     cd $TOP
-    cp --parents -t $TOP/out/$ADDON_NAME $ADDON_FILES
+    cp --parents -t $TOP/out/$ADDON $SRC_FILES
     cd - >/dev/null
 
     cd $TOP/out
-    zip -r $ADDON_ZIP $ADDON_NAME >/dev/null
+    zip -r $ZIP_BASENAME $ADDON >/dev/null
     cd - >/dev/null
-}
-
-function deployAddon() {
-    local WOW_ROOT=$1
-    local ADDON_ZIP=$2
-
-    echo "deploying [$ADDON_ZIP] ..."
-
-    if test ! -d "$WOW_ROOT"; then
-        echo "E: invalid wow dir [$WOW_ROOT]"
-        return
-    fi
-
-    if [[ $ADDON_ZIP == *.$UI_VERSION_CLASSIC.* ]]; then
-        WOW_BRANCH=_classic_
-    else
-        WOW_BRANCH=_retail_
-    fi
-    unzip -o $TOP/out/$ADDON_ZIP -d "$WOW_ROOT/$WOW_BRANCH/Interface/AddOns" >/dev/null
-}
-
-function deployAll() {
-    local WOW_ROOT=$1
-
-    echo "deploying all ..."
-
-    if test ! -d "$WOW_ROOT"; then
-        echo "E: invalid wow dir [$WOW_ROOT]"
-        return
-    fi
-
-    for i in _retail_ _classic_; do
-        local WOW_ADDON_ROOT=$WOW_ROOT/$i/Interface/AddOns
-        mkdir -p "$WOW_ADDON_ROOT/thpack.wowui"
-        cd $TOP
-        cp --parents -t "$WOW_ADDON_ROOT/thpack.wowui" \
-            *.toc *.xml \
-            -r src \
-            -r res
-        cd - >/dev/null
-    done
 }
 
 ########################################
 
 WOW_ROOT="$HOME/app/World of Warcraft"
 
-UI_VERSION_CLASSIC=11302
-DATE=$(date +%Y-%m-%d)
+UI_VERSION_CLASSIC=11300
 
-BACKPACK=thpack.backpack
-BACKPACK_FILES="
+buildAddon thpack.backpack $UI_VERSION_CLASSIC "
 src/util/A.lua
 src/backpack/backpack.lua
 src/backpack/backpackRemaining.lua
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
 "
-BACKPACK_ZIP=$BACKPACK.$UI_VERSION_CLASSIC.$DATE.zip
 
-buildAddon $UI_VERSION_CLASSIC $DATE \
-    $BACKPACK "$BACKPACK_FILES" $BACKPACK_ZIP
-#deployAddon "$WOW_ROOT" $BACKPACK_ZIP
-
-deployAll "$WOW_ROOT"
+buildAddon thpack.FlatNamePlate $UI_VERSION_CLASSIC "
+res/3p/highlight.tga
+res/3p/glow.tga
+res/3p/impact.ttf
+res/healthbar32.tga
+res/tile32.tga
+src/util/A.Frame.lua
+src/util/A.getUnitClassColorByUnit.lua
+src/util/A.getUnitNameColorByUnit.lua
+src/util/A.getUnitHealthColorByUnit.lua
+src/util/A.getUnitCastInfoByUnit.lua
+src/unitframe/FlatUnitFrame.lua
+src/unitframe/FlatNamePlate.lua
+"

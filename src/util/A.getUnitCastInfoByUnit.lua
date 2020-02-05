@@ -61,16 +61,14 @@ A.castCube = A.castCube or (function()
         end
     end
 
-    local function logCleuCastStart(unitGuid, timestamp, spellId, spellName)
+    local function logCleuCastStart(unitGuid, timestamp, spellId, spellName, spellSchool)
         if (not unitGuid) then
             return;
         end
-        local spName, _, spellIcon, castTimeMilliseconds, minRange, maxRange, spId = GetSpellInfo(spellId or spellName);
-        spellName = spellName or spName;
-        spellId = spellId or spId;
-        if (spellName == nil) then
-            return;
-        end
+        spellId = spellId and spellId > 0 and spellId;
+        local _spellName, _, spellIcon, castTimeMilliseconds, minRange, maxRange, _ = spellId and GetSpellInfo(spellId);
+        spellName = spellName or _spellName;
+        castTimeMilliseconds = castTimeMilliseconds or 10000; -- 10s
         local a = {
             unitGuid = unitGuid,
             castStartTime = timestamp,
@@ -78,7 +76,7 @@ A.castCube = A.castCube or (function()
             -- would be the max possible end time
             -- sometimes we cannot hear the cast end event, e.g. due to out of CLEU range
             -- so necessary to have a safe exit
-            castEndTimePossible = timestamp + (castTimeMilliseconds and castTimeMilliseconds / 1000 or 10),
+            castEndTimePossible = timestamp + castTimeMilliseconds,
             spellName = spellName,
             spellIcon = spellIcon,
             source = "CLEU",
@@ -98,6 +96,14 @@ A.castCube = A.castCube or (function()
         return a; -- provide the reason
     end
 
+    local function logCleuCastSucceeded(unitGuid, timestamp, spellId, spellName)
+        if (not cleuCube[unitGuid]) then
+            logCleuCastStart(unitGuid, timestamp, spellId, spellName);
+            return logCleuCastEnd(unitGuid, timestamp, "INSTANT_SUCCEEDED");
+        end
+        return logCleuCastEnd(unitGuid, timestamp, "SUCCEEDED");
+    end
+
     local function onCleuEvent(...)
         local timestamp, eventName, hidesCaster = ...;
         local srcGuid, srcName, srcFlags, srcRaidFlags = select(4, ...);
@@ -110,17 +116,21 @@ A.castCube = A.castCube or (function()
             -- v11303 cannot hear item horse-mount, but can hear Hearthstone
             -- v11303 spellId is always 0
             local spellId, spellName, spellSchool = select(12, ...);
-            local a = logCleuCastStart(srcGuid, timestamp, spellId and spellId > 0 and spellId or nil, spellName);
+            local a = logCleuCastStart(srcGuid, timestamp, spellId, spellName, spellSchool);
             emitCastEvent(srcGuid, a);
         elseif (eventName == "SPELL_CAST_SUCCESS") then
-            -- TODO instant spell
-            local a = logCleuCastEnd(srcGuid, timestamp, "SUCCESS");
+            -- TODO animation for instant spell
+            local a = logCleuCastSucceeded(srcGuid, timestamp, spellId, spellName, spellSchool);
             emitCastEvent(srcGuid, a);
         elseif (eventName == "SPELL_CAST_FAILED") then
-            local a = logCleuCastEnd(srcGuid, timestamp, "FAILED");
-            emitCastEvent(srcGuid, a);
+            -- distinguish self-interrupt and failed-before-start
+            local failedType = select(15, ...);
+            if (failedType == SPELL_FAILED_INTERRUPTED) then
+                local a = logCleuCastEnd(srcGuid, timestamp, "SELF_INTERRUPTED");
+                emitCastEvent(srcGuid, a);
+            end
         elseif (eventName == "SPELL_INTERRUPT") then
-            local a = logCleuCastEnd(srcGuid, timestamp, "INTERRUPT");
+            local a = logCleuCastEnd(srcGuid, timestamp, "INTERRUPTED");
             emitCastEvent(srcGuid, a);
         elseif (eventName == "SPELL_AURA_APPLIED") then
         elseif (eventName == "SPELL_AURA_REMOVED") then
