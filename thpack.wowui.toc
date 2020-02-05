@@ -46,6 +46,7 @@ src/misc/tooltipUnitTarget.lua
 #src/misc/bindKey.lua
 
 src/hud/kongfu.lua
+src/hud/overpower.lua
 src/hud/yard.lua
 
 src/unitframe/FlatUnitFrame.lua
