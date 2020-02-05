@@ -1,7 +1,11 @@
 (function()
 
     local function initialize()
-        SetCVar("namePlateMaxDistance", 60);
+        SetCVar("namePlateMaxDistance", 50);
+
+        SetCVar("namePlateOtherTopInset", GetCVarDefault("namePlateOtherTopInset"));
+        SetCVar("namePlateOtherBottomInset", GetCVarDefault("namePlateOtherBottomInset"));
+
         SetCVar("namePlateMinScale", 1);
         SetCVar("namePlateMaxScale", 1);
         SetCVar("namePlateLargerScale", 1);
