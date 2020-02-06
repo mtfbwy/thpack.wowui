@@ -38,6 +38,7 @@ src/misc/fastLoot.lua
 src/misc/filterErrorMessage.lua
 src/misc/mostExpensiveReward.lua
 src/misc/performanceTip.lua
+src/misc/poisonCount.lua
 src/misc/tabSwitchChannel.lua
 src/misc/targetClassIcon.lua
 src/misc/tooltipItemQuality.lua
