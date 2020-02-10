@@ -4,8 +4,11 @@ end
 
 FlatUnitFrame = {};
 
+-- it is for name plate.
+-- name plate does not parent to UIParent; set scale for pixel perfect
 function FlatUnitFrame.createBaseFrame(parentFrame)
     local uf = CreateFrame("Button", nil, parentFrame, nil);
+    uf:SetScale(UIParent:GetScale());
     uf:SetSize(60, 20);
     uf:EnableMouse(false);
     if (parentFrame) then
