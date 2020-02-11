@@ -1,5 +1,12 @@
 (function()
 
+    local BLIZZARD_NAME_PLATE_WIDTH = 128;
+    local BLIZZARD_NAME_PLATE_HEIGHT = 32;
+
+    -- the click region
+    local FLAT_NAME_PLATE_WIDTH = 100;
+    local FLAT_NAME_PLATE_HEIGHT = 20;
+
     local function initialize()
         SetCVar("namePlateMaxDistance", 50);
 
@@ -34,10 +41,8 @@
         C_NamePlate.SetNamePlateEnemyClickThrough(false)
         C_NamePlate.SetNamePlateFriendlyClickThrough(false)
 
-        local namePlateWidth = 100; -- blizzard default 128
-        local namePlateHeight = 20; -- blizzard default 32
-        C_NamePlate.SetNamePlateSelfSize(namePlateWidth, namePlateHeight)
-        C_NamePlate.SetNamePlateEnemySize(namePlateWidth, namePlateHeight)
+        C_NamePlate.SetNamePlateSelfSize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT)
+        C_NamePlate.SetNamePlateEnemySize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT)
 
         --NamePlateDriverFrame:UnregisterAllEvents();
         --NamePlateDriverFrame.SetupClassNameplateBars = function()
@@ -70,9 +75,9 @@
             initialize();
         elseif (event == "PLAYER_ENTERING_WORLD") then
             if (IsInInstance()) then
-                C_NamePlate.SetNamePlateFriendlySize(128, 32);
+                C_NamePlate.SetNamePlateFriendlySize(BLIZZARD_NAME_PLATE_WIDTH, BLIZZARD_NAME_PLATE_HEIGHT);
             else
-                C_NamePlate.SetNamePlateFriendlySize(100, 20);
+                C_NamePlate.SetNamePlateFriendlySize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT);
             end
         elseif (event == "NAME_PLATE_CREATED") then
             local namePlate = ...
