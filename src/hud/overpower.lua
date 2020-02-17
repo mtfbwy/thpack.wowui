@@ -95,20 +95,22 @@ local function createSpellIconFrame(parentFrame, spellName)
     return f;
 end
 
-local function onCleuEvent(...)
+local MY_GUID = UnitGUID("player");
+
+local function onCleuEvent(f, ...)
     local timestamp, eventName, hidesCaster = ...;
     local srcGuid, srcName, srcFlags, srcRaidFlags = select(4, ...);
     local dstGuid, dstName, dstFlags, dstRaidFlags = select(8, ...);
 
-    local isSrcUnit = (srcGuid == UnitGUID("player"));
-    local isDstUnit = (dstGuid == UnitGUID("player"));
+    local isSrcUnit = (srcGuid == MY_GUID);
+    local isDstUnit = (dstGuid == MY_GUID);
 
     if (isSrcUnit and eventName == "SPELL_CAST_SUCCESS") then
         local spellId, spellName, spellSchool = select(12, ...);
         if (spellName == SPELL_NAME_OVERPOWER) then
-            activateIconFrame(self.overpowerIconFrame, false);
+            activateIconFrame(f.overpowerIconFrame, false);
         elseif (spellName == SPELL_NAME_REVENGE) then
-            activateIconFrame(self.revengeIconFrame, false);
+            activateIconFrame(f.revengeIconFrame, false);
         end
         return;
     end
