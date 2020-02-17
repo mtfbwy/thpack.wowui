@@ -58,9 +58,9 @@ function FlatUnitFrame.createUnitFrame(parentFrame)
     return uf;
 end
 
-function FlatUnitFrame._checkUnitAndRefresh(self, unit)
-    if (FlatUnitFrame._checkUnit(self, unit)) then
-        FlatUnitFrame._refresh(self);
+function FlatUnitFrame._checkUnitAndRefresh(uf, unit)
+    if (FlatUnitFrame._checkUnit(uf, unit)) then
+        FlatUnitFrame._refresh(uf);
     end
 end
 
@@ -87,15 +87,7 @@ function FlatUnitFrame.start(uf)
             end
         end
     end
-    uf:SetScript("OnEvent", function(self, event, ...)
-        for _, module in pairs(uf.modules) do
-            local events = module and module[2];
-            local f = events and events[event];
-            if (f) then
-                f(self, ...);
-            end
-        end
-    end);
+    uf:SetScript("OnEvent", FlatUnitFrame._onEvent);
 
     FlatUnitFrame._refresh(uf);
     uf:Show();
@@ -105,6 +97,16 @@ function FlatUnitFrame.stop(uf)
     uf:Hide();
     uf:UnregisterAllEvents();
     uf:SetScript("OnEvent", nil);
+end
+
+function FlatUnitFrame._onEvent(uf, event, ...)
+    for _, module in pairs(uf.modules) do
+        local events = module and module[2];
+        local f = events and events[event];
+        if (f) then
+            f(uf, ...);
+        end
+    end
 end
 
 ----------------
@@ -281,8 +283,8 @@ function FlatUnitFrame.createHealthFrame(uf)
 end
 
 function FlatUnitFrame._checkUnitAndRefreshHealthFrame(uf, unit)
-    if (FlatUnitFrame._checkUnit(self, unit)) then
-        FlatUnitFrame._refreshHealthFrame(self, unit);
+    if (FlatUnitFrame._checkUnit(uf, unit)) then
+        FlatUnitFrame._refreshHealthFrame(uf, unit);
     end
 end
 
@@ -335,7 +337,7 @@ local function _tickCast(castFrame, elapsed)
     end
 
     local currentTime = time();
-    local castInfo = self.castInfo;
+    local castInfo = castFrame.castInfo;
     if (not castInfo) then
         FlatUnitFrame._clearCast(uf);
         return;

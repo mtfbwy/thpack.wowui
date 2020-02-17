@@ -43,11 +43,6 @@
 
         C_NamePlate.SetNamePlateSelfSize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT)
         C_NamePlate.SetNamePlateEnemySize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT)
-
-        --NamePlateDriverFrame:UnregisterAllEvents();
-        --NamePlateDriverFrame.SetupClassNameplateBars = function()
-            -- dummy
-        --end;
     end
 
     local function enableBlizzardNamePlate(blizNamePlate, enabled)
@@ -85,10 +80,6 @@
             uf:SetPoint("BOTTOM", namePlate, "BOTTOM");
             FlatUnitFrame.stop(uf);
             namePlate.flatUnitFrame = uf;
-            namePlate:HookScript("OnShow", function(self)
-                local uf = self.flatUnitFrame;
-                FlatUnitFrame.refresh(uf);
-            end);
         elseif (event == "NAME_PLATE_UNIT_ADDED") then
             local unit = ...;
             local namePlate = C_NamePlate.GetNamePlateForUnit(unit);
