@@ -1,11 +1,14 @@
 #!/bin/bash
 
-#echo BASH_SOURCE: $BASH_SOURCE
-TOP=$(readlink -f $(dirname $BASH_SOURCE)/..)
+if [[ "$BASH_SOURCE" == /* ]]; then
+     TOP=$(realpath $(dirname $BASH_SOURCE)/..)
+else
+     TOP=$(realpath $(pwd)/$(dirname $BASH_SOURCE)/..)
+fi
 
 function deployAddon() {
-    local WOW_ROOT=$1
-    local ADDON_ZIP=$2
+    local ADDON_ZIP=$1
+    local WOW_ROOT=$2
 
     echo "deploying [$ADDON_ZIP] ..."
 
@@ -15,9 +18,9 @@ function deployAddon() {
     fi
 
     if [[ $ADDON_ZIP == *.$UI_VERSION_CLASSIC.* ]]; then
-        WOW_BRANCH=_classic_
+        local WOW_BRANCH="_classic_"
     else
-        WOW_BRANCH=_retail_
+        local WOW_BRANCH="_retail_"
     fi
     unzip -o $ADDON_ZIP -d "$WOW_ROOT/$WOW_BRANCH/Interface/AddOns" >/dev/null
 }
@@ -49,11 +52,7 @@ function deployAll() {
 WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11300
-DATE=$(date +%Y-%m-%d)
 
 for f in `\ls $TOP/out/*.zip`; do
-    echo $f
+    deployAddon $f "$WOW_ROOT"
 done
-#deployAddon "$WOW_ROOT" $TOP/out/$BACKPACK_ZIP
-
-#deployAll "$WOW_ROOT"

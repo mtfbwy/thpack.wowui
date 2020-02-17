@@ -1,7 +1,10 @@
 #!/bin/bash
 
-#echo BASH_SOURCE: $BASH_SOURCE
-TOP=$(readlink -f $(dirname $BASH_SOURCE)/..)
+if [[ "$BASH_SOURCE" == /* ]]; then
+    TOP=$(realpath $(dirname $BASH_SOURCE)/..)
+else
+    TOP=$(realpath $(pwd)/$(dirname $BASH_SOURCE)/..)
+fi
 
 function buildAddon() {
     local ADDON=$1
@@ -38,7 +41,7 @@ WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11300
 
-buildAddon thpack.backpack $UI_VERSION_CLASSIC "
+buildAddon thpack.Backpack $UI_VERSION_CLASSIC "
 src/util/A.lua
 src/backpack/backpack.lua
 src/backpack/backpackRemaining.lua
