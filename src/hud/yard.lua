@@ -1,4 +1,4 @@
-A.TargetDistance = (function()
+(function()
 
     local ITEM_RANGES = {
         ["霜纹投网"] = 25,
@@ -122,15 +122,11 @@ A.TargetDistance = (function()
         end
     end);
 
-    return {
-        setViewPort = function(rangeTextView)
-            f.rangeTextView = rangeTextView;
-        end,
-    };
-end)();
+    function setViewPort(rangeTextView)
+        f.rangeTextView = rangeTextView;
+    end
 
-(function()
-    local dp = A.dp or 1;
+    local dp = A and A.dp or 1;
 
     local textView = UIParent:CreateFontString();
     textView:SetFont("fonts/arkai_c.ttf", 32 * dp, "OUTLINE");
@@ -140,5 +136,5 @@ end)();
     textView:SetSize(60 * dp, 32 * dp);
     textView:SetPoint("CENTER", UIParent, "CENTER", 0, -40 * dp)
 
-    A.TargetDistance.setViewPort(textView);
+    setViewPort(textView);
 end)();

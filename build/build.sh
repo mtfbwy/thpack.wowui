@@ -41,6 +41,35 @@ WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11300
 
+buildAddon thpack.wowui $UI_VERSION_CLASSIC "
+bindings.xml
+res/healthbar32.tga
+res/tile32.tga
+res/3p/glow.tga
+res/3p/norm.tga
+src/cvar.lua
+src/util/A.lua
+src/util/A.pixelPerfect.lua
+src/util/A.Res.lua
+src/util/A.Frame.lua
+src/util/A.Util.lua
+src/misc/autoDismount.lua
+src/misc/buffCaster.lua
+src/misc/castBarReskin.lua
+src/misc/energyTick.lua
+src/misc/fastLoot.lua
+src/misc/filterErrorMessage.lua
+src/misc/mostExpensiveReward.lua
+src/misc/performanceTip.lua
+src/misc/poisonCount.lua
+src/misc/reagentCount.lua
+src/misc/tabSwitchChannel.lua
+src/misc/targetClassIcon.lua
+src/misc/tooltipItemQuality.lua
+src/misc/tooltipReskin.lua
+src/misc/tooltipUnitTarget.lua
+"
+
 buildAddon thpack.Backpack $UI_VERSION_CLASSIC "
 src/util/A.lua
 src/backpack/backpack.lua
@@ -59,4 +88,15 @@ src/util/A.Frame.lua
 src/util/A.Util.lua
 src/unitframe/FlatUnitFrame.lua
 src/unitframe/FlatNamePlate.lua
+"
+
+buildAddon thpack.TargetDistance $UI_VERSION_CLASSIC "
+src/hud/yard.lua
+"
+
+buildAddon thpack.Overpower $UI_VERSION_CLASSIC "
+res/tile32.tga
+src/util/A.Res.lua
+src/util/A.Frame.lua
+src/hud/overpower.lua
 "

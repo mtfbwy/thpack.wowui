@@ -6,7 +6,7 @@ else
      TOP=$(realpath $(pwd)/$(dirname $BASH_SOURCE)/..)
 fi
 
-function deployAddon() {
+function installAddon() {
     local ADDON_ZIP=$1
     local WOW_ROOT=$2
 
@@ -17,6 +17,8 @@ function deployAddon() {
         return
     fi
 
+    # TODO extract version from file basename
+    local UI_VERSION_CLASSIC=11300
     if [[ $ADDON_ZIP == *.$UI_VERSION_CLASSIC.* ]]; then
         local WOW_BRANCH="_classic_"
     else
@@ -25,34 +27,13 @@ function deployAddon() {
     unzip -o $ADDON_ZIP -d "$WOW_ROOT/$WOW_BRANCH/Interface/AddOns" >/dev/null
 }
 
-function deployAll() {
-    local WOW_ROOT=$1
-
-    echo "deploying all ..."
-
-    if test ! -d "$WOW_ROOT"; then
-        echo "E: invalid wow dir [$WOW_ROOT]"
-        return
-    fi
-
-    for br in _retail_ _classic_; do
-        local WOW_ADDON_ROOT=$WOW_ROOT/$br/Interface/AddOns
-        mkdir -p "$WOW_ADDON_ROOT/thpack.wowui"
-        cd $TOP
-        cp --parents -t "$WOW_ADDON_ROOT/thpack.wowui" \
-            *.toc *.xml \
-            -r src \
-            -r res
-        cd - >/dev/null
-    done
-}
-
 ########################################
 
 WOW_ROOT="$HOME/app/World of Warcraft"
-
-UI_VERSION_CLASSIC=11300
-
-for f in `\ls $TOP/out/*.zip`; do
-    deployAddon $f "$WOW_ROOT"
-done
+if test ! -d "$WOW_ROOT"; then
+    echo "E: invalid wow dir [$WOW_ROOT]"
+else
+    for f in `\ls $TOP/out/*.zip`; do
+        installAddon $f "$WOW_ROOT"
+    done
+fi
