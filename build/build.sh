@@ -56,10 +56,7 @@ res/3p/impact.ttf
 res/healthbar32.tga
 res/tile32.tga
 src/util/A.Frame.lua
-src/util/A.getUnitClassColorByUnit.lua
-src/util/A.getUnitNameColorByUnit.lua
-src/util/A.getUnitHealthColorByUnit.lua
-src/util/A.getUnitCastInfoByUnit.lua
+src/util/A.Util.lua
 src/unitframe/FlatUnitFrame.lua
 src/unitframe/FlatNamePlate.lua
 "

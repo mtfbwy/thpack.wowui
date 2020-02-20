@@ -1,5 +1,5 @@
 (function()
-    local classIcon = A.createBlizzardRoundButton(TargetFrame, nil, 40);
+    local classIcon = A.Frame.createBlizzardRoundButton(TargetFrame, nil, 40);
     classIcon:SetPoint("topleft", 115, -3); -- no pixel fix since align to bliz mod
     RaiseFrameLevel(classIcon);
     classIcon.artworkTexture:SetTexture([[Interface\WorldStateFrame\Icons-Classes]]);

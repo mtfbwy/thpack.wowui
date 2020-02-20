@@ -14,16 +14,11 @@ src/adt/Color.lua
 src/cvar.lua
 
 src/util/A.lua
-src/util/A.Res.lua
 src/util/A.pixelPerfect.lua
-src/util/A.Frame.lua
-src/util/A.createBlizzardRoundButton.lua
-src/util/A.getColoredString.lua
-src/util/A.getUnitClassColorByUnit.lua
-src/util/A.getUnitHealthColorByUnit.lua
-src/util/A.getUnitLevelColorByUnit.lua
-src/util/A.getUnitNameColorByUnit.lua
 src/util/A.post.lua
+src/util/A.Res.lua
+src/util/A.Frame.lua
+src/util/A.Util.lua
 
 src/backpack/autoRepair.lua
 src/backpack/autoSell.lua
