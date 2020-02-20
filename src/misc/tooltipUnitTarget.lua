@@ -28,7 +28,7 @@
                 self:AddLine(
                         string.format("%s%s%s",
                                 prefix,
-                                A.getUnitClassColorTextureStringByUnit(unitTarget, 8),
+                                A.getUnitClassTextureStringByUnit(unitTarget, 13),
                                 A.getColoredString(nameColor, UnitName(unitTarget))),
                         1, 1, 1);
             end
