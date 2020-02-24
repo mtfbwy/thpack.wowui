@@ -50,7 +50,7 @@ end
 local function createSpellIconFrame(parentFrame, spellName)
     local spellName, _, spellIcon = GetSpellInfo(spellName);
 
-    local f = CreateFrame("Frame", nil, f, nil);
+    local f = CreateFrame("Frame", nil, parentFrame, nil);
     f:Hide();
     f.spellIcon = spellIcon;
     f.spellName = spellName;
@@ -123,7 +123,7 @@ local function onCleuEvent(f, ...)
             missType = select(12, ...);
         end
         if (missType == "DODGE") then
-            activateIconFrame(self.overpowerIconFrame, true, 5);
+            activateIconFrame(f.overpowerIconFrame, true, 5);
         end
     end
 
@@ -135,7 +135,7 @@ local function onCleuEvent(f, ...)
             missType = select(12, ...);
         end
         if (missType == "BLOCK" or missType == "DODGE" or missType == "PARRY") then
-            activateIconFrame(self.revengeIconFrame, true, 5);
+            activateIconFrame(f.revengeIconFrame, true, 5);
         end
     end
 end
