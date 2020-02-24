@@ -11,6 +11,14 @@ function buildAddon() {
     local UI_VERSION=$2
     local SRC_FILES=$3
 
+    local NON_RES_FILES=""
+    for i in $SRC_FILES; do
+        if [[ "$i" != res/* ]]; then
+            NON_RES_FILES="$NON_RES_FILES
+$i"
+        fi
+    done
+
     local DATE=$(date +%Y-%m-%d)
     local ZIP_BASENAME=$ADDON.$UI_VERSION.$DATE.zip
 
@@ -23,7 +31,7 @@ function buildAddon() {
 ## Interface: $UI_VERSION
 ## Title: $ADDON
 ## Date: $DATE
-$SRC_FILES
+$NON_RES_FILES
 EOF
 
     cd $TOP
@@ -41,7 +49,7 @@ WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11300
 
-buildAddon thpack.wowui $UI_VERSION_CLASSIC "
+buildAddon thpack.Misc $UI_VERSION_CLASSIC "
 bindings.xml
 res/healthbar32.tga
 res/tile32.tga
@@ -84,6 +92,11 @@ res/3p/glow.tga
 res/3p/impact.ttf
 res/healthbar32.tga
 res/tile32.tga
+src/lang/table.lua
+src/lang/proto.lua
+src/adt/Color.lua
+src/util/A.lua
+src/util/A.Res.lua
 src/util/A.Frame.lua
 src/util/A.Util.lua
 src/unitframe/FlatUnitFrame.lua
@@ -91,6 +104,7 @@ src/unitframe/FlatNamePlate.lua
 "
 
 buildAddon thpack.TargetDistance $UI_VERSION_CLASSIC "
+src/lang/table.lua
 src/hud/yard.lua
 "
 
