@@ -63,16 +63,22 @@
     f:RegisterEvent("NAME_PLATE_UNIT_REMOVED");
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
     f:RegisterEvent("VARIABLES_LOADED");
+    f:RegisterEvent("DISPLAY_SIZE_CHANGED");
     f:SetScript("OnEvent", function(self, event, ...)
         if (event == "VARIABLES_LOADED") then
-            -- "PLAYER_ENTERING_WORLD"
-            -- "DISPLAY_SIZE_CHANGED"
             initialize();
         elseif (event == "PLAYER_ENTERING_WORLD") then
             if (IsInInstance()) then
                 C_NamePlate.SetNamePlateFriendlySize(BLIZZARD_NAME_PLATE_WIDTH, BLIZZARD_NAME_PLATE_HEIGHT);
             else
                 C_NamePlate.SetNamePlateFriendlySize(FLAT_NAME_PLATE_WIDTH, FLAT_NAME_PLATE_HEIGHT);
+            end
+        elseif (event == "DISPLAY_SIZE_CHANGED") then
+            for i, namePlate in ipairs(C_NamePlate.GetNamePlates()) do
+                local unit = namePlate.namePlateUnitToken;
+                if (not IsInInstance() or not UnitIsFriend("player", unit)) then
+                    enableBlizzardNamePlate(namePlate, false);
+                end
             end
         elseif (event == "NAME_PLATE_CREATED") then
             local namePlate = ...
