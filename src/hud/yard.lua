@@ -126,7 +126,7 @@
         f.rangeTextView = rangeTextView;
     end
 
-    local dp = A and A.dp or 1;
+    local dp = A and A.dp or 0.75;
 
     local textView = UIParent:CreateFontString();
     textView:SetFont("fonts/arkai_c.ttf", 32 * dp, "OUTLINE");

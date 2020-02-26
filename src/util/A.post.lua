@@ -1,7 +1,7 @@
 A = A or {};
 
 A.post = A.post or (function()
-    local dp = A and A.dp or (UIParent:GetHeight() / 1024);
+    local dp = A and A.dp or 0.75;
 
     -- relative to the canvas
     local normalSize = 32 * dp;
