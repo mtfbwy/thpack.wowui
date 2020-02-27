@@ -110,6 +110,7 @@ src/hud/yard.lua
 
 buildAddon thpack.Overpower $UI_VERSION_CLASSIC "
 res/tile32.tga
+src/lang/table.lua
 src/util/A.Res.lua
 src/util/A.Frame.lua
 src/hud/overpower.lua
