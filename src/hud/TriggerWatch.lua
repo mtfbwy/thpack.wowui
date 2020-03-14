@@ -117,8 +117,6 @@ function gridManager:activateSpellTriggerCountdown(iconFrame, enabled, ttl)
 end
 
 function gridManager:tickSpellTriggerCountdown(iconFrame, elapsed)
-    local grid = self;
-
     local n = table.size(iconFrame.buffs);
     if (n == 0) then
         iconFrame:Hide();
@@ -208,7 +206,9 @@ function gridManager:start()
     end);
 end
 
-----------------
+gridManager:start();
+
+--------
 
 local SPELL_ID_OVERPOWER1 = 7384;
 gridPlate:registerSpellTriggerCountdown(SPELL_ID_OVERPOWER1, function(grid, iconFrame, ...)
@@ -246,7 +246,7 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(grid, iconFr
     local dstGuid, dstName, dstFlags, dstRaidFlags = select(8, ...);
 
     local isSrcUnit = (srcGuid == UnitGUID("player"));
-    local isDstUnit = (dstGuid == MY_GUID);
+    local isDstUnit = (dstGuid == UnitGUID("player"));
 
     if (isSrcUnit and eventName == "SPELL_CAST_SUCCESS") then
         local spellId, spellName, spellSchool = select(12, ...);
@@ -268,6 +268,3 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(grid, iconFr
         end
     end
 end);
-
-gridManager:start();
-
