@@ -22,7 +22,7 @@ function gridFrame:createIconFrame()
     -- TODO glow
 
     local iconControl = f:CreateTexture();
-    A.Frame.cropTextureRegion(iconControl);
+    A.cropTextureRegion(iconControl);
     iconControl:SetAllPoints();
     f.iconControl = iconControl;
 

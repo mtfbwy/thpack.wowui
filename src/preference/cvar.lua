@@ -1,7 +1,5 @@
 (function()
 
-    SetCVar("screenshotQuality", 10);
-
     RegisterCVar("profanityFilter", 0);
     SetCVar("profanityFilter", 0);
 
@@ -19,6 +17,13 @@
     SetCVar("CombatLogRangeCreature", 50);
     RegisterCVar("CombatLogRangeHostilePlayers", 50);
     SetCVar("CombatLogRangeHostilePlayers", 50);
+
+    SetCVar("lootUnderMouse", 0);
+    SetCVar("autoLootDefault", 1);
+    SetCVar("autoLootRate", 0);
+    SetCVar("autoOpenLootHistory", 0);
+
+    SetCVar("screenshotQuality", 10);
 
     SetCVar("scriptErrors", 1);
 

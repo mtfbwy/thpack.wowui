@@ -22,7 +22,7 @@
         if (UnitExists(unitTarget)) then
             local prefix = "=> ";
             if (UnitIsUnit(unitTarget, "player")) then
-                self:AddLine(prefix .. A.getColoredString(Color.pick("red"), "!!!"), 1, 1, 1);
+                self:AddLine(prefix .. A.getColoredString(Color.pick("Red"), "!!!"), 1, 1, 1);
             else
                 local nameColor = A.getUnitNameColorByUnit(unitTarget);
                 self:AddLine(

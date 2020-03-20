@@ -30,7 +30,7 @@ $i"
     cat > $TOP/out/$ADDON/$ADDON.toc << EOF
 ## Interface: $UI_VERSION
 ## Title: $ADDON
-## Date: $DATE
+## X-BuildDate: $DATE
 $NON_RES_FILES
 EOF
 
@@ -49,41 +49,44 @@ WOW_ROOT="$HOME/app/World of Warcraft"
 
 UI_VERSION_CLASSIC=11300
 
-buildAddon thpack.Misc $UI_VERSION_CLASSIC "
-bindings.xml
+buildAddon thpack.wowui $UI_VERSION_CLASSIC "
 res/healthbar32.tga
 res/tile32.tga
 res/3p/glow.tga
 res/3p/norm.tga
-src/cvar.lua
+
+src/lang/Table.lua
+src/lang/Proto.lua
+src/lang/Color.lua
+
 src/util/A.lua
-src/util/A.pixelPerfect.lua
-src/util/A.Res.lua
-src/util/A.Frame.lua
 src/util/A.Util.lua
+
+src/util/A.px.lua
+
 src/misc/autoDismount.lua
+src/misc/autoRepair.lua
+src/misc/autoSell.lua
+src/misc/backpack.lua
+src/misc/backpackRemaining.lua
 src/misc/buffCaster.lua
+src/misc/buffPoisonCount.lua
 src/misc/castBarReskin.lua
-src/misc/energyTick.lua
 src/misc/fastLoot.lua
 src/misc/filterErrorMessage.lua
 src/misc/mostExpensiveReward.lua
 src/misc/performanceTip.lua
-src/misc/poisonCount.lua
 src/misc/reagentCount.lua
-src/misc/tabSwitchChannel.lua
-src/misc/targetClassIcon.lua
+src/misc/tabSwitchChatChannel.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
-"
 
-buildAddon thpack.Backpack $UI_VERSION_CLASSIC "
-src/util/A.lua
-src/backpack/backpack.lua
-src/backpack/backpackRemaining.lua
-src/backpack/autoRepair.lua
-src/backpack/autoSell.lua
+src/unitframe/energyTick.lua
+src/unitframe/targetClassIcon.lua
+src/unitframe/targetDistance.lua
+
+src/hud/TriggerWatch.lua
 "
 
 buildAddon thpack.FlatNamePlate $UI_VERSION_CLASSIC "
@@ -92,26 +95,11 @@ res/3p/glow.tga
 res/3p/impact.ttf
 res/healthbar32.tga
 res/tile32.tga
-src/lang/table.lua
-src/lang/proto.lua
-src/adt/Color.lua
+src/lang/Table.lua
+src/lang/Proto.lua
+src/lang/Color.lua
 src/util/A.lua
-src/util/A.Res.lua
-src/util/A.Frame.lua
 src/util/A.Util.lua
-src/unitframe/FlatUnitFrame.lua
-src/unitframe/FlatNamePlate.lua
-"
-
-buildAddon thpack.TargetDistance $UI_VERSION_CLASSIC "
-src/lang/table.lua
-src/hud/yard.lua
-"
-
-buildAddon thpack.Overpower $UI_VERSION_CLASSIC "
-res/tile32.tga
-src/lang/table.lua
-src/util/A.Res.lua
-src/util/A.Frame.lua
-src/hud/overpower.lua
+src/nameplate/FlatUnitFrame.lua
+src/nameplate/FlatNamePlate.lua
 "

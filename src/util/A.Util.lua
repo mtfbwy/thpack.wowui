@@ -96,11 +96,11 @@ A.getUnitClassColorTextureStringByUnit = A.getUnitClassColorTextureStringByUnit 
         return "";
     end
 
-    local r, g, b = A.getUnitClassColorByUnit(unit):toRgba();
+    local rr, gg, bb = A.getUnitClassColorByUnit(unit):toComponents();
     return string.format(
             "|T%s:%s:%s:0:0:100:100:0:100:0:100:%s:%s:%s|t",
             A.Res.tile32, fontSize, fontSize,
-            r, g, b);
+            rr, gg, bb);
 end;
 
 ----------------------------------------
@@ -172,16 +172,37 @@ end;
 A.getUnitManaTypeColorByUnit = A.getUnitManaTypeColorByUnit or function(unit)
     local typ = UnitPowerType(unit);
     if (typ == 0) then
-        return Color.pick("royalblue");
+        return Color.pick("RoyalBlue");
     elseif (typ == 1) then
-        return Color.pick("firebrick");
+        return Color.pick("FireBrick");
     elseif (typ == 2) then
-        return Color.pick("coral");
+        return Color.pick("Coral");
     elseif (typ == 3) then
-        return Color.pick("gold");
+        return Color.pick("Gold");
     elseif (typ == 6) then
-        return Color.pick("turquoise");
+        return Color.pick("Turquoise");
     else
-        return Color.pick("white");
+        return Color.pick("White");
     end
+end;
+
+----------------------------------------
+-- widget
+
+-- content-box
+A.createBorderFrame = A.createBorderFrame or function(parentFrame, backdrop, extraBorderOffset)
+    local borderOffset = (backdrop.edgeSize or 0) + (extraBorderOffset or 0);
+    local frame = CreateFrame("Frame", nil, parentFrame, nil);
+    frame:SetFrameStrata("BACKGROUND");
+    frame:SetFrameLevel(1);
+    frame:SetBackdrop(backdrop);
+    frame:SetPoint("TOPLEFT", -borderOffset, borderOffset);
+    frame:SetPoint("BOTTOMRIGHT", borderOffset, -borderOffset);
+    return frame;
+end;
+
+-- cut off icon texture's border
+A.cropTextureRegion = A.cropTextureRegion or function(textureRegion)
+    textureRegion:SetTexCoord(5/64, 59/64, 5/64, 59/64);
+    return textureRegion;
 end;

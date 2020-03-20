@@ -1,7 +1,7 @@
 -- pixel perfect
 (function()
 
-    CONFIG = CONFIG or {};
+    WTF = WTF or {}; -- used to be saved variables
 
     -- extra command for user to force his client resolution
     -- this is necessary for those mods using A.px and A.dp
@@ -11,17 +11,17 @@
             A.logi("  e.g. /resolution reset");
             A.logi("  e.g. /resolution 1024x768");
         elseif (x == "unset" or x == "reset" or x == "clear" or x == "nil") then
-            CONFIG.clientResolution = nil;
+            WTF.clientResolution = nil;
             A.logi("Resolution is reset. Reload to apply.");
         else
-            CONFIG.clientResolution = x;
+            WTF.clientResolution = x;
             A.logi(string.format("Resolution [%s] is saved. Reload to apply.", x));
         end
     end);
 
     local function getSavedClientResolution()
-        if (CONFIG and CONFIG.clientResolution) then
-            local clientResolution = CONFIG.clientResolution;
+        if (WTF and WTF.clientResolution) then
+            local clientResolution = WTF.clientResolution;
             A.logi(string.format("Resolution [%s] loaded. (see %s)", clientResolution, "/resolution"));
             return clientResolution;
         end

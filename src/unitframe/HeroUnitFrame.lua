@@ -50,7 +50,7 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
             --     portrait3d:SetPosition(0, 0, -0.25)
             -- end
 
-            local classColor = A.Color.getUnitClassColorByUnit(unit) or A.Color.pick("#7b7b7b");
+            local classColor = Color.getUnitClassColorByUnit(unit) or Color.pick("#7b7b7b");
             self:SetBackdropBorderColor(classColor:toVertex());
         end);
 
@@ -152,7 +152,7 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
         local function setRedout(portraitTextureRegion, shows)
             shows = (shows == "TOGGLE") and not portraitTextureRegion.isRedout or shows;
             portraitTextureRegion.isRedout = shows;
-            local color = A.Color.pick(shows and "red" or "white");
+            local color = Color.pick(shows and "Red" or "White");
             portraitTextureRegion:SetVertexColor(color:toVertex());
         end
 
@@ -288,7 +288,7 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
                     self:SetStatusBarColor(1, p * 2, 0);
                 end
             end
-            self:SetStatusBarColor(A.Color.pick("green"):toVertex());
+            self:SetStatusBarColor(Color.pick("Green"):toVertex());
 
             if (self.countdownTextRegion) then
                 self.countdownTextRegion:SetText(currentValue);
@@ -314,7 +314,7 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
                 return;
             end
             if (eventName == "UNIT_DISPLAYPOWER") then
-                local barColor = A.Color.getManaTypeColorByUnit(unit);
+                local barColor = Color.getManaTypeColorByUnit(unit);
                 self:SetStatusBarColor(barColor:toVertex());
             else
                 local currentValue = UnitPower(unit);
@@ -346,7 +346,7 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
 
         -- shielded cast
         local glowFrame = A.Frame.createDefaultGlowFrame(castBar);
-        glowFrame:SetBackdropBorderColor(A.Color.pick("silver"):toVertex());
+        glowFrame:SetBackdropBorderColor(Color.pick("Silver"):toVertex());
         glowFrame:Hide();
         castBar.glowFrame = glowFrame;
 
@@ -407,9 +407,9 @@ P.ask("pp", "A.Frame").answer("HeroUnitFrame", function(pp, _)
             end
 
             if (castBar.isChanneling) then
-                castBar:SetStatusBarColor(A.Color.pick("green"):toVertex());
+                castBar:SetStatusBarColor(Color.pick("Green"):toVertex());
             else
-                castBar:SetStatusBarColor(A.Color.pick("gold"):toVertex());
+                castBar:SetStatusBarColor(Color.pick("Gold"):toVertex());
             end
 
             if (castBar.spellIsInterruptible) then

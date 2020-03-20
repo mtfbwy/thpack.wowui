@@ -71,7 +71,7 @@ A.post = A.post or (function()
             return;
         end
 
-        color = color or Color.pick("white");
+        color = color or Color.pick("White");
 
         local t1 = enteringTimeSpan or 0.15;
         local t2 = t1 + (lastingTimeSpan or 1.5);

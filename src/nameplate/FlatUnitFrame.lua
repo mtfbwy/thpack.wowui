@@ -258,7 +258,7 @@ function FlatUnitFrame.createHealthFrame(uf)
     healthBar:SetPoint("BOTTOM", uf, "BOTTOM", 0, 0);
     healthFrame.healthBar = healthBar;
 
-    local healthGlowFrame = A.Frame.createBorderFrame(healthBar, {
+    local healthGlowFrame = A.createBorderFrame(healthBar, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 5,
     });
@@ -399,12 +399,12 @@ function FlatUnitFrame.createCastFrame(uf)
     castFrame.spellIconFrame = spellIconFrame;
 
     local spellIcon = spellIconFrame:CreateTexture(nil, "ARTWORK", nil, 1);
-    A.Frame.cropTextureRegion(spellIcon);
+    A.cropTextureRegion(spellIcon);
     spellIcon:SetAllPoints();
     spellIcon:SetTexture(A.Res.healthbar32);
     castFrame.spellIcon = spellIcon;
 
-    local castGlowFrame = A.Frame.createBorderFrame(spellIconFrame, {
+    local castGlowFrame = A.createBorderFrame(spellIconFrame, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 5,
     }, 1);
@@ -525,11 +525,11 @@ function FlatUnitFrame._initCast(uf, castInfo)
             castBar:Show();
         end
         if (castInfo.castProgressing == "CASTING") then
-            castBar:SetStatusBarColor(Color.pick("gold"):toVertex());
+            castBar:SetStatusBarColor(Color.pick("Gold"):toVertex());
         elseif (castInfo.castProgressing == "CHANNELING") then
-            castBar:SetStatusBarColor(Color.pick("green"):toVertex());
+            castBar:SetStatusBarColor(Color.pick("Green"):toVertex());
         else
-            castBar:SetStatusBarColor(Color.pick("blue"):toVertex());
+            castBar:SetStatusBarColor(Color.pick("Blue"):toVertex());
         end
     end
 
