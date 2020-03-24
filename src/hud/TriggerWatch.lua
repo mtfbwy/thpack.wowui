@@ -3,67 +3,7 @@ local dp = A and A.dp or 0.75;
 
 --------
 
--- manage icon frame positions
-local gridFrame = (function()
-    local f = CreateFrame("Frame", nil, UIParent, nil);
-    f:SetPoint("TOPLEFT", UIParent, "CENTER", 160 * dp, 120 * dp);
-    f:SetSize(1, 1);
-
-    f.nextIndex = 0;
-
-    return f;
-end)();
-
--- icon's 躯壳
-function gridFrame:createIconFrame()
-    local f = CreateFrame("Frame", nil, self, nil);
-    f:Hide();
-
-    -- TODO glow
-
-    local iconControl = f:CreateTexture();
-    A.cropTextureRegion(iconControl);
-    iconControl:SetAllPoints();
-    f.iconControl = iconControl;
-
-    local ttlBar = CreateFrame("StatusBar", nil, f, nil);
-    ttlBar:SetStatusBarTexture(A.Res.tile32);
-    ttlBar:SetStatusBarColor(0, 1, 0, 0.85);
-    ttlBar:SetHeight(4);
-    ttlBar:SetPoint("BOTTOMLEFT");
-    ttlBar:SetPoint("BOTTOMRIGHT");
-    f.ttlBar = ttlBar;
-
-    return f;
-end
-
-function gridFrame:layoutIconFrame(iconFrame)
-    local ICON_SIZE = 48 * dp;
-    local ICON_MARGIN = 4 * dp;
-    local X_SLOTS = 4;
-
-    local i = f.nextIndex;
-    local yPos = math.floor(i / X_SLOTS);
-    local xPos = i - yPos * X_SLOTS;
-
-    iconFrame:ClearAllPoints();
-    iconFrame:SetPoint("TOPLEFT", self, "TOPLEFT",
-            xPos * (ICON_SIZE + ICON_MARGIN),
-            yPos * (ICON_SIZE + ICON_MARGIN));
-    iconFrame:SetSize(ICON_SIZE, ICON_SIZE);
-
-    f.nextIndex = f.nextIndex + 1;
-
-    return i;
-end
-
---------
-
-local gridManager = {};
-gridManager.anchorFrame = gridFrame;
-gridManager.mods = {};
-
-function gridManager:activateActionButtonGlow(spellName, enabled)
+local function activateActionButtonGlow(spellName, enabled)
     local spellId = select(7, GetSpellInfo(spellName));
     if (not spellId) then
         return;
@@ -88,56 +28,76 @@ function gridManager:activateActionButtonGlow(spellName, enabled)
     end
 end
 
-function gridManager:registerSpellTriggerCountdown(spellId, onCleuEvent)
-    table.insert(self.mods, {
-        cti = "SpellTriggerCountdown",
-        spellId = spellId,
-        onCleuEvent = onCleuEvent
-    });
+--------
+
+local IconFrame = {};
+
+-- icon's 躯壳
+function IconFrame.createIconFrame(parentFrame)
+    local f = CreateFrame("Frame", nil, parentFrame, nil);
+    f:Hide();
+
+    -- TODO glow
+
+    local iconView = f:CreateTexture();
+    A.cropTextureRegion(iconView);
+    iconView:SetAllPoints();
+    f.iconView = iconView;
+
+    local ttlBar = CreateFrame("StatusBar", nil, f, nil);
+    ttlBar:SetStatusBarTexture(A.Res.tile32);
+    ttlBar:SetStatusBarColor(0, 1, 0, 0.85);
+    ttlBar:SetHeight(4);
+    ttlBar:SetPoint("BOTTOMLEFT");
+    ttlBar:SetPoint("BOTTOMRIGHT");
+    ttlBar:SetMinMaxValues(0, 5);
+    f.ttlBar = ttlBar;
+
+    local countText = f:CreateFontString(nil, "OVERLAY", nil);
+    countText:SetFont("fonts/ARKai_C.ttf", 12, "OUTLINE");
+    countText:SetShadowColor(0, 0, 0, 1);
+    countText:SetShadowOffset(0, 0);
+    countText:SetJustifyH("RIGHT");
+    countText:SetPoint("BOTTOMRIGHT", ttlBar, "TOPRIGHT", -1, 2);
+    f.countText = countText;
+
+    return f;
 end
 
--- think the trigger gives a buff, which is the reagent of triggered spell
-function gridManager:activateSpellTriggerCountdown(iconFrame, enabled, ttl)
-    if (enabled) then
-        local now = time();
-        iconFrame.buffs = iconFrame.buffs or {};
-        table.insert(iconFrame.buffs, {
-            startTime = now,
-            endTime = now + ttl,
-        });
-        iconFrame:Show();
-    else
-        table.remove(iconFrame.buffs, 1); -- remove the oldest
-    end
-    if (enabled) then
-        self:activateActionButtonGlow(iconFrame.spellName, true);
-    elseif (not iconFrame.buffs or table.size(iconFrame.buffs) == 0) then
-        self.activateActionButtonGlow(iconFrame.spellName, false);
-    end
-end
+function IconFrame.tickSpellTriggerCountdown(iconFrame, elapsed)
+    local now = GetTime();
 
-function gridManager:tickSpellTriggerCountdown(iconFrame, elapsed)
-    local n = table.size(iconFrame.buffs);
-    if (n == 0) then
+    local cooldownStartTime, cooldownDuration, cooldownEnabled = GetSpellCooldown(iconFrame.spellName);
+    local cooldownEndTime = cooldownEnabled and cooldownStartTime + cooldownDuration or 0;
+
+    while (#iconFrame.buffs > 0) do
+        local buff = iconFrame.buffs[1];
+        if (buff.endTime < now or buff.endTime < cooldownEndTime) then
+            IconFrame.onSpellTriggerCountdown(iconFrame, "DECREASE");
+        else
+            break;
+        end
+    end
+
+    local count = #iconFrame.buffs;
+    if (count == 0) then
+        IconFrame.onSpellTriggerCountdown(iconFrame, "CLEAR");
         iconFrame:Hide();
         return;
     end
 
-    local last = iconFrame.buffs[n];
-
-    local now = time();
-    local remainingTime = endTime - time();
-    if (now < last.endTime) then
-        iconFrame.ttlBar:SetValue(now);
+    if (count == 1) then
+        iconFrame.countText:SetText();
     else
-        table.clear(iconFrame.buffs);
-        return;
+        iconFrame.countText:SetText(count);
     end
 
+    -- the last is the longest
+    local buff = iconFrame.buffs[count];
+    iconFrame.ttlBar:SetValue(buff.endTime - now);
+
     -- check cooldown
-    local spellName = iconFrame.spellName;
-    local start, duration = GetSpellCooldown(spellName);
-    if (start + duration > GetTime()) then
+    if (cooldownEndTime > now) then
         -- in cooldown
         iconFrame:SetAlpha(0.7);
     else
@@ -148,57 +108,120 @@ function gridManager:tickSpellTriggerCountdown(iconFrame, elapsed)
     -- TODO check instance
 end
 
-function gridManager:initMod(mod)
-    local grid = self;
-
-    local spellId = mod.spellId;
-    local localName, _, _, = GetSpellInfo(spellId);
-    local spellName, _, spellIcon = GetSpellInfo(localName);
-
-    --GetSpellInfo(name) will return nil if spell not in spellbook
-    if (spellName) then
-        local iconFrame = grid.anchorFrame:createIconFrame();
-        iconFrame.spellName = spellName;
-        iconFrame.iconControl:SetTexture(spellIcon);
-        grid.anchorFrame:layoutIconFrame(iconFrame);
-        if (mod.cti == "SpellTriggerCountdown") then
-            iconFrame:SetScript("OnUpdate", function(self, elapsed)
-                grid:tickSpellTriggerCountdown(self, elapsed);
-            end);
-        end
-        mod.iconFrame = iconFrame;
-        return true;
+-- think the trigger gives a buff, which is the reagent of triggered spell
+function IconFrame.onSpellTriggerCountdown(iconFrame, op, ttl)
+    if (not iconFrame.buffs) then
+        iconFrame.buffs = {};
     end
-    return false;
+    if (op == "INCREASE") then
+        local now = GetTime();
+        table.insert(iconFrame.buffs, {
+            startTime = now,
+            endTime = now + ttl,
+        });
+        iconFrame:Show();
+
+        -- for visual impulse
+        activateActionButtonGlow(iconFrame.spellName, false);
+        activateActionButtonGlow(iconFrame.spellName, true);
+    elseif (op == "DECREASE") then
+        table.remove(iconFrame.buffs, 1); -- remove the oldest
+        if (table.size(iconFrame.buffs) == 0) then
+            activateActionButtonGlow(iconFrame.spellName, false);
+        end
+    elseif (op == "CLEAR") then
+        table.clear(iconFrame.buffs);
+        activateActionButtonGlow(iconFrame, false);
+    end
 end
 
-function gridManager:start()
-    local grid = self;
+--------
 
-    local f = grid.anchorFrame;
+-- manage icon frame positions
+local iconPlacer = {};
+iconPlacer.anchorFrame = (function()
+    local f = CreateFrame("Frame", nil, UIParent, nil);
+    f:SetPoint("TOPLEFT", UIParent, "CENTER", 200 * dp, 120 * dp);
+    f:SetSize(1, 1);
+    return f;
+end)();
+iconPlacer.anchorFrame.owner = iconPlacer;
+iconPlacer.nextIndex = 0;
+iconPlacer.knownMods = {};
+iconPlacer.runningMods = {};
+
+function iconPlacer:placeIconFrame(iconFrame)
+    local ICON_SIZE = 72 * dp;
+    local ICON_MARGIN = 4 * dp;
+    local X_SLOTS = 4;
+
+    local i = self.nextIndex;
+    local yPos = math.floor(i / X_SLOTS);
+    local xPos = i - yPos * X_SLOTS;
+
+    iconFrame:ClearAllPoints();
+    iconFrame:SetPoint("TOPLEFT", self.anchorFrame, "TOPLEFT",
+            xPos * (ICON_SIZE + ICON_MARGIN),
+            yPos * (ICON_SIZE + ICON_MARGIN));
+    iconFrame:SetSize(ICON_SIZE, ICON_SIZE);
+
+    self.nextIndex = i + 1;
+end
+
+function iconPlacer:registerSpellTriggerCountdown(spellId, checkTrigger, checkCost)
+    table.insert(self.knownMods, {
+        cti = "SpellTriggerCountdown",
+        spellId = spellId,
+        checkTrigger = checkTrigger,
+        checkCost = checkCost,
+    });
+end
+
+function iconPlacer:onInit()
+    for i, mod in ipairs(self.knownMods) do
+        local spellLocalName = GetSpellInfo(mod.spellId);
+        local spellLocalName, _, spellIcon = GetSpellInfo(spellLocalName);
+        if (spellLocalName) then
+            local iconFrame = IconFrame.createIconFrame(self.anchorFrame);
+            iconFrame.spellName = spellLocalName;
+            iconFrame.iconView:SetTexture(spellIcon);
+            if (mod.cti == "SpellTriggerCountdown") then
+                iconFrame:SetScript("OnUpdate", IconFrame.tickSpellTriggerCountdown);
+            end
+            self:placeIconFrame(iconFrame);
+            mod.iconFrame = iconFrame;
+
+            table.insert(self.runningMods, mod);
+        end
+    end
+end
+
+function iconPlacer:onCleuEvent(...)
+    -- dispatch
+    for i, mod in ipairs(self.runningMods) do
+        local changes, increases, ttl = mod.checkTrigger(mod.iconFrame, ...);
+        if (changes) then
+            IconFrame.onSpellTriggerCountdown(mod.iconFrame, increases and "INCREASE" or "DECREASE", ttl);
+        end
+    end
+end
+
+function iconPlacer:start()
+    local f = self.anchorFrame;
     f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
     f:RegisterEvent("PLAYER_DEAD");
     f:RegisterEvent("PLAYER_ENTERING_WORLD");
     f:SetScript("OnEvent", function(self, event, ...)
         if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
-            -- dispatch
-            for i, mod in ipairs(self.mods) do
-                mod.onCleuEvent(mod.iconFrame, event, ...);
-            end
+            self.owner:onCleuEvent(CombatLogGetCurrentEventInfo());
         elseif (event == "PLAYER_DEAD") then
-            for i, mod in ipairs(self.mods) do
-                grid:activateSpellTriggerCountdown(mod.iconFrame, false);
+            for i, mod in ipairs(self.owner.runningMods) do
+                IconFrame.onSpellTriggerCountdown(mod.iconFrame, "CLEAR");
             end
         elseif (event == "PLAYER_ENTERING_WORLD") then
             self:UnregisterEvent("PLAYER_ENTERING_WORLD");
-            local mods = grid.mods;
-            grid.mods = {};
-            for i, mod in ipairs(mods) do
-                if (grid:initMod(mod)) then
-                    table.insert(grid.mods, mod);
-                end
-            end
-            if (table.size(grid.mods) == 0) then
+            self.owner:onInit();
+            if (table.size(self.owner.runningMods) == 0) then
                 -- no valid trigger, halt
                 self:UnregisterAllEvents();
             end
@@ -206,12 +229,12 @@ function gridManager:start()
     end);
 end
 
-gridManager:start();
+iconPlacer:start();
 
 --------
 
 local SPELL_ID_OVERPOWER1 = 7384;
-gridPlate:registerSpellTriggerCountdown(SPELL_ID_OVERPOWER1, function(grid, iconFrame, ...)
+iconPlacer:registerSpellTriggerCountdown(SPELL_ID_OVERPOWER1, function(iconFrame, ...)
     local timestamp, eventName, hidesCaster = ...;
     local srcGuid, srcName, srcFlags, srcRaidFlags = select(4, ...);
     local dstGuid, dstName, dstFlags, dstRaidFlags = select(8, ...);
@@ -221,7 +244,7 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_OVERPOWER1, function(grid, icon
     if (isSrcUnit and eventName == "SPELL_CAST_SUCCESS") then
         local spellId, spellName, spellSchool = select(12, ...);
         if (spellName == iconFrame.spellName) then
-            grid:activateSpellTriggerCountdown(iconFrame, false);
+            return true, false;
         end
         return;
     end
@@ -234,13 +257,13 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_OVERPOWER1, function(grid, icon
             missType = select(12, ...);
         end
         if (missType == "DODGE") then
-            grid:activateSpellTriggerCountdown(iconFrame, true, 5);
+            return true, true, 5;
         end
     end
 end);
 
 local SPELL_ID_REVENGE1 = 6572;
-gridPlate:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(grid, iconFrame, ...)
+iconPlacer:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(iconFrame, ...)
     local timestamp, eventName, hidesCaster = ...;
     local srcGuid, srcName, srcFlags, srcRaidFlags = select(4, ...);
     local dstGuid, dstName, dstFlags, dstRaidFlags = select(8, ...);
@@ -251,7 +274,7 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(grid, iconFr
     if (isSrcUnit and eventName == "SPELL_CAST_SUCCESS") then
         local spellId, spellName, spellSchool = select(12, ...);
         if (spellName == iconFrame.spellName) then
-            grid:activateSpellTriggerCountdown(iconFrame, false);
+            return true, false;
         end
         return;
     end
@@ -264,7 +287,7 @@ gridPlate:registerSpellTriggerCountdown(SPELL_ID_REVENGE1, function(grid, iconFr
             missType = select(12, ...);
         end
         if (missType == "BLOCK" or missType == "DODGE" or missType == "PARRY") then
-            grid:activateSpellTriggerCountdown(iconFrame, true, 5);
+            return true, true, 5;
         end
     end
 end);
