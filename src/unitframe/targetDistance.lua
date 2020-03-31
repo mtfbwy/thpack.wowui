@@ -1,8 +1,48 @@
-(function()
+local function segIntersection(start1, end1, start2, end2)
+    local intersectionStart = start1 >= start2 and start1 or start2;
+    local intersectionEnd = end1 <= end2 and end1 or end2;
+    if (intersectionStart <= intersectionEnd) then
+        return intersectionStart, intersectionEnd;
+    else
+        return nil;
+    end
+end
 
-    local ITEM_RANGES = {
-        ["霜纹投网"] = 25,
-    };
+local function segSubstraction(start1, end1, start2, end2)
+    local intersectionStart, intersectionEnd = segIntersection(start1, end1, start2, end2);
+    if (not intersectionStart) then
+        return start1, end1;
+    elseif (start1 == intersectionStart) then
+        return intersectionEnd, end1;
+    elseif (end1 == intersectionEnd) then
+        return start1, intersectionStart;
+    else
+        return nil;
+    end
+end
+
+local function segsOp(segs, start2, end2, op)
+    if (op == "intersection") then
+        op = segIntersection;
+    elseif (op == "substraction") then
+        op = segSubstraction;
+    end
+    if (type(op) ~= "function") then
+        return nil;
+    end
+
+    local resultSegs = {};
+    for i = 1, #segs, 2 do
+        local resultStart, resultEnd = op(segs[i], segs[i + 1], start2, end2);
+        if (resultStart) then
+            table.insert(resultSegs, resultStart);
+            table.insert(resultSegs, resultEnd);
+        end
+    end
+    return resultSegs;
+end
+
+(function()
 
     local SELECTED_SPELLS = {
         -- common
@@ -12,7 +52,7 @@
         -- monk
         "碎玉闪电", "嚎镇八方", "分筋错骨", "怒雷破",
         -- paladin
-        "审判", "制裁之锤", "圣光术", "驱邪术",
+        "审判", "制裁之锤", "圣光术", "纯净术", "驱邪术",
         -- priest
         "惩击", "暗言术：痛",
         -- rogue
@@ -27,15 +67,14 @@
 
     local function rebuild()
         table.clear(spellRanges);
-        local spellNames = SELECTED_SPELLS;
-        for _, spellName in pairs(spellNames) do
+        for _, spellName in pairs(SELECTED_SPELLS) do
             local minRange, maxRange = select(5, GetSpellInfo(spellName));
             if (maxRange) then
                 if (maxRange == 0) then
                     -- melee
                     maxRange = 5;
                 end
-                spellRanges[spellName] = maxRange;
+                spellRanges[spellName] = { minRange, maxRange };
             end
         end
     end
@@ -50,21 +89,32 @@
         end
 
         local MAX_RANGE = 99;
-        local r = MAX_RANGE;
-        for itemName, range in pairs(ITEM_RANGES) do
-            if (IsItemInRange(itemName, "target") == 1 and r > range) then
-                r = range;
-            end
-        end
+        local resultSegs = { 0, MAX_RANGE };
         for spellName, range in pairs(spellRanges) do
-            if (IsSpellInRange(spellName, "target") == 1 and r > range) then
-                r = range;
+            local inRange = IsSpellInRange(spellName, "target");
+            if (inRange == 1) then
+                resultSegs = segsOp(resultSegs, range[1], range[2], segIntersection);
+            elseif (inRange == 0) then
+                resultSegs = segsOp(resultSegs, range[1], range[2], segSubstraction);
             end
         end
-        if (r == MAX_RANGE) then
-            r = ".";
+
+        if (resultSegs[2] == MAX_RANGE) then
+            return ".";
         end
-        return r;
+
+        if (#resultSegs == 2 and resultSegs[1] == 0) then
+            return resultSegs[2];
+        end
+
+        local s = "";
+        for i = 1, #resultSegs, 2 do
+            s = s .. resultSegs[i] .. "-" .. resultSegs[i + 1];
+            if (i + 1 < #resultSegs) then
+                s = s .. ","
+            end
+        end
+        return s;
     end
 
     local f = CreateFrame("Frame", nil, nil, nil);
@@ -85,7 +135,7 @@
                 f.pendingRebuild = 1;
             else
                 f.pendingRebuild = nil;
-             rebuild();
+                rebuild();
             end
         elseif (event == "PLAYER_TALENT_UPDATE" or event == "ACTIVE_TALENT_GROUP_CHANGED") then
             if (InCombatLockdown()) then
@@ -133,7 +183,7 @@
     textView:SetTextColor(0, 1, 0);
     textView:SetJustifyH("CENTER");
     textView:SetJustifyV("MIDDLE");
-    textView:SetSize(60 * dp, 32 * dp);
+    textView:SetSize(100 * dp, 32 * dp);
     textView:SetPoint("CENTER", UIParent, "CENTER", 0, -40 * dp)
 
     setViewPort(textView);
