@@ -1,15 +1,19 @@
-function table.clear(o)
+_G.Table = {};
+
+function Table.clear(o)
     for k in next, o do
         rawset(o, k, nil);
     end
     return o;
 end
+table.clear = Table.clear;
 
-function table.containsKey(o, key)
+function Table.containsKey(o, key)
     return o[key] ~= nil;
 end
+table.containsKey = Table.containsKey;
 
-function table.containsValue(o, value)
+function Table.containsValue(o, value)
     for i, v in pairs(o) do
         if (v == value) then
             return true;
@@ -17,23 +21,26 @@ function table.containsValue(o, value)
     end
     return false;
 end
+table.containsValue = Table.containsValue;
 
-function table.getOrAdd(o, key, value)
+function Table.getOrAdd(o, key, value)
     if (o[key] == nil) then
         o[key] = value;
     end
     return o[key];
 end
+table.getOrAdd = Table.getOrAdd;
 
-function table.keys(o)
+function Table.keys(o)
     local keys = {};
     for k, v in pairs(o) do
         table.insert(keys, k);
     end
     return keys;
 end
+table.keys = Table.keys;
 
-function table.merge(o, ...)
+function Table.merge(o, ...)
     local a = {...};
     for i = 1, #a do
         if type(a[i]) ~= "table" then
@@ -47,11 +54,13 @@ function table.merge(o, ...)
     end
     return o;
 end
+table.merge = Table.merge;
 
-function table.size(o)
+function Table.size(o)
     local n = 0;
     for k, v in pairs(o) do
         n = n + 1;
     end
     return n;
 end
+table.size = Table.size;
