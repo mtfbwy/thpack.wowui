@@ -89,6 +89,10 @@ src/unitframe/targetDistance.lua
 src/hud/TriggerWatch.lua
 "
 
+buildAddon thpack.preference $UI_VERSION_CLASSIC "
+src/preference/cvar.lua
+"
+
 buildAddon thpack.FlatNamePlate $UI_VERSION_CLASSIC "
 res/3p/highlight.tga
 res/3p/glow.tga
