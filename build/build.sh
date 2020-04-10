@@ -82,7 +82,7 @@ src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
 
-src/unitframe/energyTick.lua
+src/unitframe/ep2.lua
 src/unitframe/targetClassIcon.lua
 src/unitframe/targetDistance.lua
 
