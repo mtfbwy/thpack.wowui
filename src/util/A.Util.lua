@@ -9,6 +9,24 @@ A.getColoredString = A.getColoredString or function(color, s)
 end;
 
 ----------------------------------------
+
+A.getMasterUnitByUnit = A.getMasterUnitByUnit or function(unit)
+    if (unit == "pet" or unit == "vehicle") then
+        return "player";
+    end
+
+    local partypetn = unit:match("^partypet(%d+)$");
+    if (partypetn) then
+        return "party" .. partypetn;
+    end
+
+    local raidpetn = unit:match("^raidpet(%d+)$");
+    if (raidpetn) then
+        return "raid" .. raidpetn;
+    end
+end
+
+----------------------------------------
 -- name color
 
 -- TargetFrame_CheckFaction()

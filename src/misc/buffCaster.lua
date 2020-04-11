@@ -1,22 +1,21 @@
 -- add buff caster name to game tooltip
 (function()
     local addCasterName = function(self, unit, index, filter)
-        local src = select(7, UnitAura(unit, index, filter));
-        if src then
+        local srcUnit = select(7, UnitAura(unit, index, filter));
+        if (srcUnit) then
+            local srcMasterUnit = A.getMasterUnitByUnit(srcUnit);
+            local tipFormat = srcMasterUnit and "by %s(%s)%s" or "by %s%s%s";
+            srcUnit = srcMasterUnit or srcUnit;
+
+            local nameColor = A.getUnitNameColorByUnit(srcUnit);
+            local classColor = A.getUnitClassColorByUnit(srcUnit);
+            local tip = string.format(tipFormat,
+                    A.getColoredString(nameColor, "["),
+                    A.getColoredString(classColor, GetUnitName(srcUnit, true)),
+                    A.getColoredString(nameColor, "]"));
+
             self:AddLine("");
-            local text = "by " .. GetUnitName(src, 1);
-            if src == "pet" or src == "vehicle" then
-                text = string.format("(%s)", GetUnitName("player", true));
-            else
-                local ppet = src:match("^partypet(%d+)$");
-                local rpet = src:match("^raidpet(%d+)$");
-                if ppet then
-                    text = string.format("(%s)", GetUnitName("party" .. ppet, true));
-                elseif rpet then
-                    text = string.format("(%s)", GetUnitName("raid" .. rpet, true));
-                end
-            end
-            self:AddLine(text);
+            self:AddLine(tip);
             self:Show();
         end
     end
