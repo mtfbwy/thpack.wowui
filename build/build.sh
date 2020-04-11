@@ -70,6 +70,7 @@ src/misc/autoSell.lua
 src/misc/backpack.lua
 src/misc/backpackRemaining.lua
 src/misc/buffCaster.lua
+src/misc/buffCountdown.lua
 src/misc/buffPoisonCount.lua
 src/misc/castBarReskin.lua
 src/misc/fastLoot.lua
