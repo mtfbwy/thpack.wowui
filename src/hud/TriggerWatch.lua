@@ -124,6 +124,8 @@ function IconFrame.onSpellTriggerCountdown(iconFrame, op, ttl)
         -- for visual impulse
         activateActionButtonGlow(iconFrame.spellName, false);
         activateActionButtonGlow(iconFrame.spellName, true);
+
+        PlaySoundFile("sound/spells/clearcasting_impact_chest.ogg");
     elseif (op == "DECREASE") then
         table.remove(iconFrame.buffs, 1); -- remove the oldest
         if (table.size(iconFrame.buffs) == 0) then
