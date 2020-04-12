@@ -63,6 +63,8 @@ data.spells = {
     "飞镖投掷", "暗影步", "致盲", "闷棍", "背刺",
     -- shaman
     "闪电箭", "大地震击", "治疗波", "治疗之涌", "先祖之魂", "风剪",
+    -- warlock
+    "暗影箭", "恐惧术", "魔息术",
     -- warrior
     "冲锋", "撕裂", "英勇投掷",
 };
@@ -90,7 +92,7 @@ local function findDistance(spellRanges)
     end
 
     if (UnitIsUnit(unit, "player")) then
-        return " . "; -- in case of in combat
+        return "."; -- in case of in combat
     end
 
     local MAX_RANGE = 99;
@@ -105,7 +107,7 @@ local function findDistance(spellRanges)
     end
 
     if (resultSegs[2] == MAX_RANGE) then
-        return " . ";
+        return ".";
     end
 
     if (#resultSegs == 2) then
@@ -128,7 +130,7 @@ end
 
 local f = CreateFrame("Frame", nil, TargetFrame, nil);
 f:SetSize(1, 1);
-f:SetPoint("BOTTOMRIGHT", TargetFrame, "TOPLEFT", 119, -20);
+f:SetPoint("BOTTOMRIGHT", TargetFrame, "TOPLEFT", 2, -39);
 
 local textView = f:CreateFontString();
 textView:SetFont(DAMAGE_TEXT_FONT, 14, "OUTLINE");
