@@ -55,13 +55,10 @@ res/tile32.tga
 res/3p/glow.tga
 res/3p/norm.tga
 
-src/lang/Table.lua
-src/lang/Proto.lua
-src/lang/Color.lua
-
+src/util/Proto.lua
+src/util/Color.lua
 src/util/A.lua
 src/util/A.Util.lua
-
 src/util/A.px.lua
 
 src/misc/autoDismount.lua
@@ -100,9 +97,8 @@ res/3p/glow.tga
 res/3p/impact.ttf
 res/healthbar32.tga
 res/tile32.tga
-src/lang/Table.lua
-src/lang/Proto.lua
-src/lang/Color.lua
+src/util/Proto.lua
+src/util/Color.lua
 src/util/A.lua
 src/util/A.Util.lua
 src/nameplate/FlatUnitFrame.lua
