@@ -99,14 +99,15 @@ end)();
 Color.pick = Color.pick or (function()
 
     local ansiColorCodes = {
-        ["Black"]   = "#000000",
-        ["Red"]     = "#ff0000",
-        ["Green"]   = "#00ff00",
-        ["Blue"]    = "#0000ff",
-        ["Yellow"]  = "#ffff00",
-        ["Magenta"] = "#ff00ff",
-        ["Cyan"]    = "#00ffff",
-        ["White"]   = "#ffffff",
+        ["transparent"] = "#00000000",
+        ["black"]   = "#000000",
+        ["red"]     = "#ff0000",
+        ["green"]   = "#00ff00",
+        ["blue"]    = "#0000ff",
+        ["yellow"]  = "#ffff00",
+        ["magenta"] = "#ff00ff",
+        ["cyan"]    = "#00ffff",
+        ["white"]   = "#ffffff",
     };
 
     local htmlColorCodes = {

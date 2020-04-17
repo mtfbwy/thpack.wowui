@@ -86,7 +86,8 @@ src/unitframe/ep2.lua
 src/unitframe/targetClassIcon.lua
 src/unitframe/targetRange.lua
 
-src/hud/TriggerWatch.lua
+src/triggerwatch/TriggerWatch.lua
+src/triggerwatch/tactic-warrior.lua
 "
 
 buildAddon thpack.preference $UI_VERSION_CLASSIC "

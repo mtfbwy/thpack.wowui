@@ -101,6 +101,14 @@ end
 
 _G.array = array or {};
 
+array.clear = table.clear;
+
+array.foreach = function(a, callback)
+    for i, v in ipairs(a) do
+        callback(i, v);
+    end
+end;
+
 array.insert = table.insert;
 
 array.remove = table.remove;
