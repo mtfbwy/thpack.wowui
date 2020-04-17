@@ -111,7 +111,7 @@ local function findDistance(spellRanges)
     end
 
     if (#resultSegs == 2) then
-        if (resultSegs[1] == 0 or resultSegs[1] > 10) then
+        if (resultSegs[1] == 0 or resultSegs[1] >= 10) then
             return resultSegs[2];
         end
     end
@@ -128,15 +128,15 @@ end
 
 --------
 
-local f = CreateFrame("Frame", nil, TargetFrame, nil);
+local f = CreateFrame("Frame", nil, UIParent, nil);
 f:SetSize(1, 1);
-f:SetPoint("BOTTOMRIGHT", TargetFrame, "TOPLEFT", 2, -39);
+f:SetPoint("TOPLEFT");
 
 local textView = f:CreateFontString();
-textView:SetFont(DAMAGE_TEXT_FONT, 14, "OUTLINE");
+textView:SetFont(DAMAGE_TEXT_FONT, 24, "OUTLINE");
 textView:SetTextColor(0, 1, 0);
 textView:SetJustifyH("RIGHT");
-textView:SetPoint("BOTTOMRIGHT");
+textView:SetPoint("CENTER", UIParent, "CENTER", 0, -40);
 f.textView = textView;
 
 if (select(4, GetBuildInfo()) >= 20000) then
