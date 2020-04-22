@@ -15,11 +15,15 @@ function Seg.getSubstraction(start1, end1, start2, end2)
     if (not intersectionStart) then
         return start1, end1;
     elseif (start1 == intersectionStart) then
-        return intersectionEnd, end1;
+        if (end1 == intersectionEnd) then
+            return nil;
+        else
+            return intersectionEnd, end1;
+        end
     elseif (end1 == intersectionEnd) then
         return start1, intersectionStart;
     else
-        return nil;
+        return start1, intersectionStart, intersectionEnd, end1;
     end
 end
 
@@ -35,10 +39,14 @@ function Seg.op(segs, start2, end2, op)
 
     local resultSegs = {};
     for i = 1, #segs, 2 do
-        local resultStart, resultEnd = op(segs[i], segs[i + 1], start2, end2);
-        if (resultStart) then
-            table.insert(resultSegs, resultStart);
-            table.insert(resultSegs, resultEnd);
+        local r1Start, r1End, r2Start, r2End = op(segs[i], segs[i + 1], start2, end2);
+        if (r1Start) then
+            table.insert(resultSegs, r1Start);
+            table.insert(resultSegs, r1End);
+        end
+        if (r2Start) then
+            table.insert(resultSegs, r2Start);
+            table.insert(resultSegs, r2End);
         end
     end
     return resultSegs;
@@ -66,7 +74,7 @@ data.spells = {
     -- warlock
     "暗影箭", "恐惧术", "魔息术",
     -- warrior
-    "冲锋", "撕裂", "英勇投掷",
+    "冲锋", "撕裂", "英勇投掷", "破胆怒吼",
 };
 
 data.spellRanges = {};
