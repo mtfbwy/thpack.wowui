@@ -57,6 +57,7 @@ res/3p/norm.tga
 
 src/util/Proto.lua
 src/util/Color.lua
+src/util/Seg.lua
 src/util/A.lua
 src/util/A.Util.lua
 src/util/A.px.lua
