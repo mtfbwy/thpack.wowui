@@ -21,6 +21,15 @@ function SpellBook.getSpellCooldownEndTime(spellIdOrName)
     return (isActive == 0) and 604800 or (startTime + duration);
 end
 
+function SpellBook.getSpellRange(spellIdOrName)
+    local localName, _, _, _, minRange, maxRange = GetSpellInfo(spellIdOrName);
+    if (not localName) then
+        return nil;
+    else
+        return minRange, maxRange;
+    end
+end
+
 function SpellBook.getStanceCooldownEndTime(index)
     local startTime, duration, isReady = GetShapeshiftFormCooldown(index);
     return isReady and 0 or (startTime + duration);

@@ -2,13 +2,18 @@ local data = {};
 
 data.spells = {
     -- mutual
-    "攻击", "射击", "投掷",
+    "攻击", "射击",
+    2764, -- throw [8,30]
     -- mage
     "火球术", "寒冰箭", "冰枪术", "奥术冲击", "变形术",
     -- monk
     "碎玉闪电", "嚎镇八方", "分筋错骨", "怒雷破",
     -- paladin
-    "审判", "制裁之锤", "圣光术", "纯净术", "驱邪术",
+    853, -- 制裁之锤 [0,10]
+    879, -- 驱邪术 [0,30]
+    20271, -- 审判 [0,10]
+    635, -- 圣光术 [0,40]
+    1152, -- 纯净术 [0,30]
     -- priest
     "惩击", "暗言术：痛",
     -- rogue
@@ -16,9 +21,14 @@ data.spells = {
     -- shaman
     "闪电箭", "大地震击", "治疗波", "治疗之涌", "先祖之魂", "风剪",
     -- warlock
-    "暗影箭", "恐惧术", "魔息术",
+    686, -- 暗影箭 [0-30]
+    5782, -- 恐惧术 [0-20]
+    5697, -- 魔息术 [0-30]
     -- warrior
-    "冲锋", "撕裂", "英勇投掷", "破胆怒吼",
+    100, -- charge [8,25]
+    772, -- rend [melee]
+    5246, -- intimidating-shout [0,10]
+    "英勇投掷",
 };
 
 data.spellRanges = {};
@@ -26,19 +36,21 @@ data.spellRanges = {};
 local function filterCandidate(spells, spellRanges)
     table.clear(spellRanges);
     for _, v in pairs(spells) do
-        local spellName, _, _, _, minRange, maxRange = GetSpellInfo(v);
-        if (maxRange) then
-            if (maxRange == 0) then
-                -- melee
-                maxRange = 5;
+        local spellName = SpellBook.getSpellName(v);
+        if (spellName) then
+            local minRange, maxRange = SpellBook.getSpellRange(spellName);
+            if (maxRange) then
+                if (maxRange == 0) then
+                    -- melee
+                    maxRange = 5;
+                end
+                spellRanges[spellName] = { minRange, maxRange };
             end
-            spellRanges[spellName] = { minRange, maxRange };
         end
     end
 end
 
-local function findDistance(spellRanges)
-    local unit = "target";
+local function getUnitRange(unit, spellRanges)
     if (not UnitExists(unit)) then
         return "";
     end
@@ -48,30 +60,30 @@ local function findDistance(spellRanges)
     end
 
     local MAX_RANGE = 99;
-    local resultSegs = { 0, MAX_RANGE };
+    local resultRange = { 0, MAX_RANGE };
     for spellName, range in pairs(spellRanges) do
         local inRange = IsSpellInRange(spellName, unit);
         if (inRange == 1) then
-            resultSegs = Seg.op(resultSegs, range[1], range[2], Seg.getIntersection);
+            resultRange = Seg.op(resultRange, range[1], range[2], Seg.getIntersection);
         elseif (inRange == 0) then
-            resultSegs = Seg.op(resultSegs, range[1], range[2], Seg.getSubstraction);
+            resultRange = Seg.op(resultRange, range[1], range[2], Seg.getSubstraction);
         end
     end
 
-    if (resultSegs[2] == MAX_RANGE) then
+    if (resultRange[2] == MAX_RANGE) then
         return ".";
     end
 
-    if (#resultSegs == 2) then
-        if (resultSegs[1] == 0 or resultSegs[1] >= 10) then
-            return resultSegs[2];
+    if (#resultRange == 2) then
+        if (resultRange[1] == 0 or resultRange[1] >= 10) then
+            return resultRange[2];
         end
     end
 
     local s = "";
-    for i = 1, #resultSegs, 2 do
-        s = s .. resultSegs[i] .. "-" .. resultSegs[i + 1];
-        if (i + 1 < #resultSegs) then
+    for i = 1, #resultRange, 2 do
+        s = s .. resultRange[i] .. "-" .. resultRange[i + 1];
+        if (i + 1 < #resultRange) then
             s = s .. ","
         end
     end
@@ -122,6 +134,6 @@ f:SetScript("OnUpdate", function(self, elapsed)
     self.elapsed = (self.elapsed or 0) + elapsed;
     if (self.elapsed > 0.1) then
         self.elapsed = 0;
-        self.textView:SetText(findDistance(data.spellRanges));
+        self.textView:SetText(getUnitRange("target", data.spellRanges));
     end
 end);

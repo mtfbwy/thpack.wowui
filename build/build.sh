@@ -84,7 +84,7 @@ src/misc/tooltipUnitTarget.lua
 
 src/unitframe/ep2.lua
 src/unitframe/targetClassIcon.lua
-src/unitframe/targetDistance.lua
+src/unitframe/targetRange.lua
 
 src/hud/TriggerWatch.lua
 "
