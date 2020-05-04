@@ -103,6 +103,13 @@ _G.array = array or {};
 
 array.clear = table.clear;
 
+array.concat = function(a, a1)
+    for _, v1 in ipairs(a1) do
+        array.insert(a, v1);
+    end
+    return a;
+end
+
 array.foreach = function(a, callback)
     for i, v in ipairs(a) do
         callback(i, v);

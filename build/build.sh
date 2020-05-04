@@ -77,17 +77,18 @@ src/misc/filterErrorMessage.lua
 src/misc/mostExpensiveReward.lua
 src/misc/performanceTip.lua
 src/misc/reagentCount.lua
+src/misc/stat.lua
 src/misc/tabSwitchChatChannel.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
 
+src/triggerwatch/TriggerWatch.lua
+src/triggerwatch/tactic-warrior.lua
+
 src/unitframe/ep2.lua
 src/unitframe/targetClassIcon.lua
 src/unitframe/targetRange.lua
-
-src/triggerwatch/TriggerWatch.lua
-src/triggerwatch/tactic-warrior.lua
 "
 
 buildAddon thpack.preference $UI_VERSION_CLASSIC "
