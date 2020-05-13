@@ -19,8 +19,6 @@ local function activateBlizzardActionButtonOverlayGlow(spellId, enabled)
                     -- visual impulse
                     onEvent(actionButton, "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", spellId);
                     onEvent(actionButton, "SPELL_ACTIVATION_OVERLAY_GLOW_SHOW", spellId);
-                    -- PlaySoundFile("sound/spells/clearcasting_impact_chest.ogg", "Master");
-                    PlaySound(4874);
                 else
                     onEvent(actionButton, "SPELL_ACTIVATION_OVERLAY_GLOW_HIDE", spellId);
                 end
@@ -136,10 +134,10 @@ end
 function CellView.refreshView(cellView, cell)
     if (cell.uiFlipActionButtonOverlayGlow == 1) then
         cell.uiFlipActionButtonOverlayGlow = 0;
-        activateBlizzardActionButtonOverlayGlow(cell.spellId, true);
+        -- PlaySoundFile("sound/spells/clearcasting_impact_chest.ogg", "Master");
+        PlaySound(4874);
     elseif (cell.uiFlipActionButtonOverlayGlow == -1) then
         cell.uiFlipActionButtonOverlayGlow = 0;
-        activateBlizzardActionButtonOverlayGlow(cell.spellId, false);
     end
 
     local f = cellView;
