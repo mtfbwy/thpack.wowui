@@ -26,6 +26,10 @@ local function getUnitBuffEndTime(unit, spellName)
     end
 end
 
+local function isFineTarget()
+    return UnitExists("target") and UnitIsEnemy("player", "target") and not UnitIsDead("target");
+end
+
 -- the behavior for fury warrior in dungeon or raid but not in battleground:
 --  isEnabled: when ui can show
 --  isReadyToCast: when isEnabled && you press hotkey and you cast
@@ -58,9 +62,7 @@ local grid = addon.TriggerWatch.GridCtrl.instance;
 local SPELL_ID_EXECUTE = 5308;
 grid:registerCell(SPELL_ID_EXECUTE, function(cell)
     function cell.refreshCell(cell)
-        local unit = "target";
-        local fineTarget = UnitExists(unit) and UnitIsEnemy("player", unit) and not UnitIsDead(unit);
-        cell.isEnabled = fineTarget and (UnitHealth(unit) / UnitHealthMax(unit) < 0.22);
+        cell.isEnabled = isFineTarget() and (UnitHealth("target") / UnitHealthMax("target") < 0.22);
         if (not cell.isEnabled) then
             return;
         end
@@ -92,6 +94,7 @@ grid:registerCell(SPELL_ID_BATTLE_SHOUT, function(cell)
 
         local hasBuffBattleShout = buffEndTime > 0;
         local fineCooldown = SpellBook.getSpellCooldownEndTime(cell.spellName) - now < 0.1;
+
         cell.isReadyToCast = not hasBuffBattleShout and fineCooldown and SpellBook.hasSpellCastResource(cell.spellName);
 
         cell.isSuggested = cell.isReadyToCast;
@@ -107,17 +110,14 @@ local SPELL_ID_BLOODTHIRST = 23881;
 grid:registerCell(SPELL_ID_BLOODTHIRST, function(cell)
     function cell.refreshCell(cell)
         local inCombat = UnitAffectingCombat("player");
-        local fineTarget = UnitExists("target") and UnitIsEnemy("player", "target") and not UnitIsDead("target");
+        local ttc = SpellBook.getSpellCooldownEndTime(cell.spellName) - GetTime();
 
-        local now = GetTime();
-        local fineCooldown = SpellBook.getSpellCooldownEndTime(cell.spellName) - now < 0.1;
-
-        cell.isEnabled = inCombat and fineTarget and fineCooldown;
+        cell.isEnabled = inCombat and isFineTarget() and (ttc < 1);
         if (not cell.isEnabled) then
             return;
         end
 
-        cell.isReadyToCast = fineCooldown and SpellBook.hasSpellCastResource(cell.spellName);
+        cell.isReadyToCast = (ttc < 0.1) and SpellBook.hasSpellCastResource(cell.spellName);
 
         cell.isSuggested = cell.isReadyToCast;
     end
@@ -140,14 +140,14 @@ grid:registerCell(SPELL_ID_WHIRLWIND, function(cell)
     function cell.refreshCell(cell)
         local inCombat = UnitAffectingCombat("player");
         local now = GetTime();
-        local fineCooldown = SpellBook.getSpellCooldownEndTime(cell.spellName) - now < 0.1;
+        local ttc = SpellBook.getSpellCooldownEndTime(cell.spellName) - now;
 
-        cell.isEnabled = inCombat and fineCooldown;
+        cell.isEnabled = inCombat and (ttc < 1);
         if (not cell.isEnabled) then
             return;
         end
 
-        cell.isReadyToCast = fineCooldown and SpellBook.hasSpellCastResource(cell.spellName);
+        cell.isReadyToCast = (ttc < 0.1) and SpellBook.hasSpellCastResource(cell.spellName);
 
         local bloodthirstAfterNextGcd = SpellBook.getSpellCooldownEndTime(cell.spellNameBloodthirst) - now > 1.5;
         local _, maxDph = getMainHandWeaponDph();
@@ -187,23 +187,17 @@ grid:registerCell(SPELL_ID_HAMSTRING, function(cell)
     function cell.refreshCell(cell)
         local now = GetTime();
         local fineCooldown = SpellBook.getSpellCooldownEndTime(cell.spellName) - now < 0.1;
-        local fineTarget = UnitExists("target") and UnitIsEnemy("player", "target") and not UnitIsDead("target");
-
-        cell.isReadyToCast = fineTarget and fineCooldown and SpellBook.hasSpellCastResource(cell.spellName);
-        if (not cell.isReadyToCast) then
-            cell.isEnabled = false;
-            return;
-        end
-
         local hasBuffFlurry = getUnitBuffEndTime("player", cell.spellNameFlurry) > 0;
         local bloodthirstAfterNextGcd = SpellBook.getSpellCooldownEndTime(cell.spellNameBloodthirst) - now > 1.5;
         local whirlwindAfterNextGcd = SpellBook.getSpellCooldownEndTime(cell.spellNameWhirlwind) - now > 1.5;
         local rage = UnitPower("player", Enum.PowerType.Rage);
 
-        cell.isEnabled = not hasBuffFlurry and bloodthirstAfterNextGcd and whirlwindAfterNextGcd and rage > 70;
+        cell.isEnabled = isFineTarget() and fineCooldown and SpellBook.hasSpellCastResource(cell.spellName) and not hasBuffFlurry and bloodthirstAfterNextGcd and whirlwindAfterNextGcd and rage > 70;
         if (not cell.isEnabled) then
             return;
         end
+
+        cell.isReadyToCast = true;
 
         cell.isSuggested = true;
     end
@@ -283,13 +277,12 @@ grid:registerCell(SPELL_ID_OVERPOWER, function(cell)
         local lastBuff = cell.buffs[count];
         cell.ttl = lastBuff and (lastBuff.endTime - now) or 0;
 
-        local fineTarget = UnitExists(unit) and UnitIsEnemy("player", unit) and not UnitIsDead(unit);
         local fineCooldown = cooldownEndTime - now < 0.1;
         local inBattleStance = (getStance() == 1);
         local fineStanceCooldown = SpellBook.getStanceCooldownEndTime(1) - now < 0.1;
         local rage = UnitPower("player", Enum.PowerType.Rage);
 
-        cell.isReadyToCast = fineTarget and (inBattleStance or fineStanceCooldown) and fineCooldown and (rage >= 5);
+        cell.isReadyToCast = isFineTarget() and (inBattleStance or fineStanceCooldown) and fineCooldown and (rage >= 5);
 
         cell.isSuggested = cell.isReadyToCast and (inBattleStance or rage <= 15);
     end
@@ -369,13 +362,12 @@ grid:registerCell(SPELL_ID_REVENGE, function(cell)
         local lastBuff = cell.buffs[count];
         cell.ttl = lastBuff and (lastBuff.endTime - now) or 0;
 
-        local fineTarget = UnitExists(unit) and UnitIsEnemy("player", unit) and not UnitIsDead(unit);
         local fineCooldown = cooldownEndTime - now < 0.1;
         local inProtStance = getStance() == 2;
         local fineStanceCooldown = SpellBook.getStanceCooldownEndTime(2) - now > 0.1;
         local rage = UnitPower("player", Enum.PowerType.Rage);
 
-        cell.isReadyToCast = fineTarget and (inProtStance or fineStanceCooldown) and fineCooldown and (rage >= 5);
+        cell.isReadyToCast = isFineTarget() and (inProtStance or fineStanceCooldown) and fineCooldown and (rage >= 5);
 
         cell.isSuggested = false;
     end
