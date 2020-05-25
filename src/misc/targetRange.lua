@@ -1,6 +1,9 @@
-local data = {};
+local addonName, addon = ...;
 
-data.spells = {
+addon.RangeBook = {};
+local RangeBook = addon.RangeBook;
+
+RangeBook.candidateSpells = {
     -- mutual
     "攻击", "射击",
     2764, -- throw [8,30]
@@ -31,9 +34,12 @@ data.spells = {
     "英勇投掷",
 };
 
-data.spellRanges = {};
+RangeBook.spellRanges = {};
 
-local function filterCandidate(spells, spellRanges)
+function RangeBook.init()
+    local spells = RangeBook.candidateSpells;
+    local spellRanges = RangeBook.spellRanges;
+
     table.clear(spellRanges);
     for _, v in pairs(spells) do
         local spellName = SpellBook.getSpellName(v);
@@ -50,40 +56,57 @@ local function filterCandidate(spells, spellRanges)
     end
 end
 
-local function getUnitRange(unit, spellRanges)
+function RangeBook.getUnitRange(unit)
     if (not UnitExists(unit)) then
-        return "";
+        return;
     end
+
+    local spellRanges = RangeBook.spellRanges;
 
     if (UnitIsUnit(unit, "player")) then
-        return "."; -- in case of in combat
+        return { 0, 0 };
     end
 
-    local MAX_RANGE = 99;
-    local resultRange = { 0, MAX_RANGE };
+    local resultRanges = { 0, 99 };
     for spellName, range in pairs(spellRanges) do
         local inRange = IsSpellInRange(spellName, unit);
         if (inRange == 1) then
-            resultRange = Seg.op(resultRange, range[1], range[2], Seg.getIntersection);
+            resultRanges = Seg.op(resultRanges, range[1], range[2], Seg.getIntersection);
         elseif (inRange == 0) then
-            resultRange = Seg.op(resultRange, range[1], range[2], Seg.getSubstraction);
+            resultRanges = Seg.op(resultRanges, range[1], range[2], Seg.getSubstraction);
         end
     end
+    return resultRanges;
+end
 
-    if (resultRange[2] == MAX_RANGE) then
+function RangeBook.getUnitRangeString(unit)
+    local resultRanges = RangeBook.getUnitRange(unit);
+
+    if (not resultRanges) then
+        return;
+    end
+
+    if (resultRanges[2] == 0) then
+        return ".";
+    end
+    if (resultRanges[2] == 99) then
         return ".";
     end
 
-    if (#resultRange == 2) then
-        if (resultRange[1] == 0 or resultRange[1] >= 10) then
-            return resultRange[2];
+    if (array.size(resultRanges) == 2) then
+        if (resultRanges[2] == 0) then
+            return 0;
+        elseif (resultRanges[2] == 99) then
+            return "."
+        elseif (resultRanges[1] == 0 or resultRanges[1] >= 10) then
+            return resultRanges[2];
         end
     end
 
     local s = "";
-    for i = 1, #resultRange, 2 do
-        s = s .. resultRange[i] .. "-" .. resultRange[i + 1];
-        if (i + 1 < #resultRange) then
+    for i = 1, array.size(resultRanges), 2 do
+        s = s .. resultRanges[i] .. "-" .. resultRanges[i + 1];
+        if (i + 1 < array.size(resultRanges)) then
             s = s .. ","
         end
     end
@@ -97,10 +120,10 @@ f:SetSize(1, 1);
 f:SetPoint("TOPLEFT");
 
 local textView = f:CreateFontString();
-textView:SetFont(DAMAGE_TEXT_FONT, 24, "OUTLINE");
+textView:SetFont(DAMAGE_TEXT_FONT, 16, "OUTLINE");
 textView:SetTextColor(0, 1, 0);
 textView:SetJustifyH("RIGHT");
-textView:SetPoint("CENTER", UIParent, "CENTER", 0, -40);
+textView:SetPoint("TOP", TargetFrame, "TOPLEFT", 112, -6);
 f.textView = textView;
 
 if (select(4, GetBuildInfo()) >= 20000) then
@@ -119,7 +142,7 @@ f:SetScript("OnEvent", function(self, event, ...)
             or event == "ACTIVE_TALENT_GROUP_CHANGED"
             or event == "LEARNED_SPELL_IN_TAB") then
         self:UnregisterEvent("PLAYER_ENTERING_WORLD");
-        filterCandidate(data.spells, data.spellRanges);
+        RangeBook.init();
     elseif (event == "PLAYER_REGEN_ENABLED") then
         self.textView:SetTextColor(0, 1, 0);
     elseif (event == "PLAYER_REGEN_DISABLED") then
@@ -134,6 +157,6 @@ f:SetScript("OnUpdate", function(self, elapsed)
     self.elapsed = (self.elapsed or 0) + elapsed;
     if (self.elapsed > 0.1) then
         self.elapsed = 0;
-        self.textView:SetText(getUnitRange("target", data.spellRanges));
+        self.textView:SetText(RangeBook.getUnitRangeString("target"));
     end
 end);
