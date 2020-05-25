@@ -9,12 +9,20 @@ fi
 function buildAddon() {
     local ADDON=$1
     local UI_VERSION=$2
-    local SRC_FILES=$3
+    local INPUT_FILES=$3
+    local ADDON_ROOT=$TOP/out/$ADDON
 
-    local NON_RES_FILES=""
-    for i in $SRC_FILES; do
+    local TO_COPY_FILES=""
+    local IN_TOC_FILES=""
+    for i in $INPUT_FILES; do
+        if [[ "$i" == \#* ]]; then
+            local j=${i#"#"}
+            TO_COPY_FILES="$TO_COPY_FILES $j"
+        else
+            TO_COPY_FILES="$TO_COPY_FILES $i"
+        fi
         if [[ "$i" != res/* ]]; then
-            NON_RES_FILES="$NON_RES_FILES
+            IN_TOC_FILES="$IN_TOC_FILES
 $i"
         fi
     done
@@ -24,18 +32,18 @@ $i"
 
     echo "building [$ZIP_BASENAME] ..."
 
-    rm -rf $TOP/out/$ADDON
-    mkdir -p $TOP/out/$ADDON
+    rm -rf $ADDON_ROOT
+    mkdir -p $ADDON_ROOT
 
-    cat > $TOP/out/$ADDON/$ADDON.toc << EOF
+    cat > $ADDON_ROOT/$ADDON.toc << EOF
 ## Interface: $UI_VERSION
 ## Title: $ADDON
 ## X-BuildDate: $DATE
-$NON_RES_FILES
+$IN_TOC_FILES
 EOF
 
     cd $TOP
-    cp --parents -t $TOP/out/$ADDON $SRC_FILES
+    cp --parents -t $ADDON_ROOT $TO_COPY_FILES
     cd - >/dev/null
 
     cd $TOP/out
@@ -72,6 +80,7 @@ src/misc/buffCaster.lua
 src/misc/buffCountdown.lua
 src/misc/buffPoisonCount.lua
 src/misc/castBarReskin.lua
+src/misc/ep2.lua
 src/misc/fastLoot.lua
 src/misc/filterErrorMessage.lua
 src/misc/mostExpensiveReward.lua
@@ -79,6 +88,8 @@ src/misc/performanceTip.lua
 src/misc/reagentCount.lua
 src/misc/stat.lua
 src/misc/tabSwitchChatChannel.lua
+src/misc/targetClassIcon.lua
+src/misc/targetRange.lua
 src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
@@ -86,13 +97,8 @@ src/misc/tooltipUnitTarget.lua
 src/triggerwatch/TriggerWatch.lua
 src/triggerwatch/tactic-warrior.lua
 
-src/unitframe/ep2.lua
-src/unitframe/targetClassIcon.lua
-src/unitframe/targetRange.lua
-"
-
-buildAddon thpack.preference $UI_VERSION_CLASSIC "
-src/preference/cvar.lua
+#src/wtf/cvar.lua
+#src/wtf/hotKey.lua
 "
 
 buildAddon thpack.FlatNamePlate $UI_VERSION_CLASSIC "
@@ -105,6 +111,6 @@ src/util/Proto.lua
 src/util/Color.lua
 src/util/A.lua
 src/util/A.Util.lua
-src/nameplate/FlatUnitFrame.lua
-src/nameplate/FlatNamePlate.lua
+src/unitframe/FlatUnitFrame.lua
+src/unitframe/FlatNamePlate.lua
 "
