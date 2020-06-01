@@ -94,8 +94,9 @@ src/misc/tooltipItemQuality.lua
 src/misc/tooltipReskin.lua
 src/misc/tooltipUnitTarget.lua
 
+src/triggerwatch/CellCtrl.lua
 src/triggerwatch/TriggerWatch.lua
-src/triggerwatch/tactic-warrior.lua
+src/triggerwatch/fury.lua
 
 src/wtf/cvar.lua
 #src/wtf/hotKey.lua

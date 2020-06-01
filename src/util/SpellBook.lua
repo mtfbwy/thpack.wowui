@@ -16,14 +16,18 @@ function SpellBook.getSpellName(spellIdOrName, notCheck)
 end
 
 function SpellBook.getSpellCooldownEndTime(spellIdOrName)
-    local uptime = 2419200;
     local spellName = SpellBook.getSpellName(spellIdOrName);
     if (not spellName) then
-        -- not learned: 4 weeks
-        return uptime + 2419200;
+        -- not learned, 28d
+        return GetTime() + 2419200, "unknown";
     end
-    local startTime, duration, isActive = GetSpellCooldown(spellName);
-    return (isActive == 0) and (uptime + 604800) or (startTime + duration);
+    local startTime, duration, castDone = GetSpellCooldown(spellName);
+    if (castDone == 0) then
+        -- spell is lasting, e.g. [Stealth]
+        return 0, "casting";
+    else
+        return startTime + duration, nil;
+    end
 end
 
 function SpellBook.getSpellRange(spellIdOrName)
@@ -40,11 +44,16 @@ function SpellBook.getStanceCooldownEndTime(index)
     return isReady and 0 or (startTime + duration);
 end
 
--- test learned
--- test mana/reagent
--- test reactive condition
--- not test cooldown
--- not test target/range
+function SpellBook.hasLearnedSpell(spellIdOrName)
+    return SpellBook.getSpellName(spellIdOrName) ~= nil;
+end
+
+-- check learned
+-- check mana/reagent
+-- check reactive condition
+-- not check cooldown
+-- not check target
+-- not check range
 -- see also: GetSpellPowerCost
 function SpellBook.hasSpellCastResource(spellIdOrName)
     return IsUsableSpell(spellIdOrName);
