@@ -1,5 +1,8 @@
 (function()
 
+    -- disable box world
+    SetCVar("overrideArchive", 0);
+
     RegisterCVar("profanityFilter", 0);
     SetCVar("profanityFilter", 0);
 
