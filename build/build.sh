@@ -97,7 +97,7 @@ src/misc/tooltipUnitTarget.lua
 src/triggerwatch/TriggerWatch.lua
 src/triggerwatch/tactic-warrior.lua
 
-#src/wtf/cvar.lua
+src/wtf/cvar.lua
 #src/wtf/hotKey.lua
 "
 

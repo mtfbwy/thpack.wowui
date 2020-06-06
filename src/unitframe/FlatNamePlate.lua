@@ -8,35 +8,35 @@
     local FLAT_NAME_PLATE_HEIGHT = 20;
 
     local function initialize()
-        SetCVar("namePlateMaxDistance", 50);
+        SetCVar("nameplateMaxDistance", 50);
 
-        SetCVar("namePlateOtherTopInset", GetCVarDefault("namePlateOtherTopInset"));
-        SetCVar("namePlateOtherBottomInset", GetCVarDefault("namePlateOtherBottomInset"));
+        SetCVar("nameplateOtherTopInset", GetCVarDefault("nameplateOtherTopInset"));
+        SetCVar("nameplateOtherBottomInset", GetCVarDefault("nameplateOtherBottomInset"));
 
-        SetCVar("namePlateMinScale", 1);
-        SetCVar("namePlateMaxScale", 1);
-        SetCVar("namePlateLargerScale", 1);
-        SetCVar("namePlateSelectedScale", 1);
-        SetCVar("namePlateHorizontalScale", 1);
-        SetCVar("namePlateVerticalScale", 1);
+        SetCVar("nameplateMinScale", 1);
+        SetCVar("nameplateMaxScale", 1);
+        SetCVar("nameplateLargerScale", 1);
+        SetCVar("nameplateMinAlpha", 0.9);
+        SetCVar("nameplateSelectedScale", 1);
+        SetCVar("nameplateHorizontalScale", 1);
+        SetCVar("nameplateVerticalScale", 1);
 
-        SetCVar("namePlateSelfAlpha", 1);
-        SetCVar("namePlatePersonalShowAlways", 1);
-        SetCVar("namePlatePersonalShowInCombat", 1);
-        SetCVar("namePlatePersonalShowWithTarget", 1);
-        SetCVar("namePlatePersonalHideDelaySeconds", 2);
+        SetCVar("nameplateSelfAlpha", 1);
+        SetCVar("nameplatePersonalShowAlways", 1);
+        SetCVar("nameplatePersonalShowWithTarget", 1);
 
-        SetCVar("namePlateShowEnemyGuardians", 1);
-        SetCVar("namePlateShowEnemyMinions", 1);
-        SetCVar("namePlateShowEnemyPets", 1);
-        SetCVar("namePlateShowEnemyTotems", 1);
-        SetCVar("namePlateShowEnemyMinus", 1);
+        SetCVar("nameplateShowEnemies", 1);
+        SetCVar("nameplateShowEnemyMinions", 1);
+        SetCVar("nameplateShowEnemyPets", 1);
+        SetCVar("nameplateShowEnemyGuardians", 1);
+        SetCVar("nameplateShowEnemyTotems", 1);
 
-        SetCVar("namePlateShowFriendlyGuardians", 1);
-        SetCVar("namePlateShowFriendlyMinions", 1);
-        SetCVar("namePlateShowFriendlyNPCs", 1);
-        SetCVar("namePlateShowFriendlyPets", 1);
-        SetCVar("namePlateShowFriendlyTotems", 1);
+        SetCVar("nameplateShowFriends", 1);
+        SetCVar("nameplateShowFriendlyMinions", 1);
+        SetCVar("nameplateShowFriendlyPets", 1);
+        SetCVar("nameplateShowFriendlyGuardians", 1);
+        SetCVar("nameplateShowFriendlyTotems", 1);
+        SetCVar("ShowClassColorInFriendlyNameplate", 0);
 
         C_NamePlate.SetNamePlateEnemyClickThrough(false)
         C_NamePlate.SetNamePlateFriendlyClickThrough(false)
