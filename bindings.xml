@@ -8,4 +8,11 @@
             HideUIPanel(WorldMapFrame)
         end
     </Binding>
+    <Binding name="THPACK_TOGGLE_SCOREBOARD" runOnUp="true">
+        if (keystate == "down") then
+            showScoreboard();
+        else
+            hideScoreboard();
+        end
+    </Binding>
 </Bindings>

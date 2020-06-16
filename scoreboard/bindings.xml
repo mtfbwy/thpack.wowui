@@ -1,0 +1,9 @@
+<Bindings>
+    <Binding name="Toggle Scoreboard" runOnUp="true" header="THPACK">
+        if (keystate == "down") then
+            showScoreboard();
+        else
+            hideScoreboard();
+        end
+    </Binding>
+</Bindings>

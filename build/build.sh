@@ -115,3 +115,5 @@ src/util/A.Util.lua
 src/unitframe/FlatUnitFrame.lua
 src/unitframe/FlatNamePlate.lua
 "
+
+. $TOP/build/build.scoreboard.sh
