@@ -116,4 +116,5 @@ src/unitframe/FlatUnitFrame.lua
 src/unitframe/FlatNamePlate.lua
 "
 
+. $TOP/build/build.chatfilter.sh
 . $TOP/build/build.scoreboard.sh
