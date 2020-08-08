@@ -6,9 +6,9 @@ else
     TOP=$(realpath $(pwd)/$(dirname $BASH_SOURCE)/..)
 fi
 
-function buildChatFilter() {
+function buildChatfilter() {
     local UI_VERSION=11300
-    local ADDON_NAME="thpack.ChatFilter"
+    local ADDON_NAME="thpack.Chatfilter"
     local ADDON_DATE=$(date +%Y-%m-%d)
     local ADDON_FILES="
 filterChatMessage.lua
@@ -38,4 +38,4 @@ EOF
     cd - >/dev/null
 }
 
-buildChatFilter
+buildChatfilter
