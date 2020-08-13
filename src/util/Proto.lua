@@ -110,6 +110,15 @@ array.concat = function(a, a1)
     return a;
 end
 
+array.contains = function(a, value)
+    for i, v in ipairs(a) do
+        if (v == value) then
+            return true;
+        end
+    end
+    return false;
+end
+
 array.foreach = function(a, callback)
     for i, v in ipairs(a) do
         callback(i, v);
