@@ -51,42 +51,19 @@ function CharacterBook.getCharacterAttributes(cti)
         cti = "all";
     end
 
-    local data = {};
+    CharacterBook.characterAttributes = CharacterBook.characterAttributes or {};
+    local data = CharacterBook.characterAttributes;
+
     if (cti == "all" or cti == "primary") then
         local spiritManaRegen, gearManaRegen = CharacterBook.getManaRegenPerPulse();
-        data.primary = {
-            health = UnitHealthMax("player"),
-            mana = UnitPowerMax("player", Enum.PowerType.Mana),
-            spiritManaRegen = spiritManaRegen,
-            gearManaRegen = gearManaRegen,
-        };
+        data.primary = data.primary or {};
+        data.primary.health = UnitHealthMax("player");
+        data.primary.mana = UnitPowerMax("player", Enum.PowerType.Mana);
+        data.primary.spiritManaRegen = spiritManaRegen;
+        data.primary.gearManaRegen = gearManaRegen;
     end
 
     if (cti == "all" or cti == "physical") then
-        local rank = 0;
-        for i = 1, GetNumSkillLines(), 1 do
-            local skillName, _, _, base, _, bonus = GetSkillLineInfo(i);
-            if (skillName == DEFENSE) then
-                rank = base + bonus;
-                break;
-            end
-        end
-        if (rank == 0) then
-            local base, bonus = UnitDefense("player");
-            rank = base + bonus;
-        end
-
-        local _, effectiveArmor, _, _, _ = UnitArmor("player");
-
-        local defense = {
-            rank = rank,
-            armor = effectiveArmor or 0,
-            dodge = GetDodgeChance() or 0,
-            parry = GetParryChance() or 0,
-            blockChance = GetBlockChance() or 0,
-            blockAmount = GetShieldBlock() or 0,
-        };
-
         local mainhandDps;
         local offhandDps;
         do
@@ -111,35 +88,59 @@ function CharacterBook.getCharacterAttributes(cti)
             rangedAp = (base + posBuff + negBuff) or 0;
         end
 
-        data.physical = {
-            mainhandDps = mainhandDps,
-            offhandDps = offhandDps,
-            meleeAp = meleeAp,
-            meleeCrit = GetCritChance() or 0,
-            hitBonus = GetHitModifier() or 0,
-            rangedDps = getRangedDps(),
-            rangedAp = rangedAp,
-            rangedCrit = GetRangedCritChance() or 0,
-            defense = defense,
-        };
+        data.physical = data.physical or {};
+        data.physical.mainhandDps = mainhandDps;
+        data.physical.offhandDps = offhandDps;
+        data.physical.meleeAp = meleeAp;
+        data.physical.meleeCrit = GetCritChance() or 0;
+        data.physical.hitBonus = GetHitModifier() or 0;
+        data.physical.rangedDps = getRangedDps();
+        data.physical.rangedAp = rangedAp;
+        data.physical.rangedCrit = GetRangedCritChance() or 0;
+
+        do
+            local rank = 0;
+            for i = 1, GetNumSkillLines(), 1 do
+                local skillName, _, _, base, _, bonus = GetSkillLineInfo(i);
+                if (skillName == DEFENSE) then
+                    rank = base + bonus;
+                    break;
+                end
+            end
+            if (rank == 0) then
+                local base, bonus = UnitDefense("player");
+                rank = base + bonus;
+            end
+
+            local _, effectiveArmor, _, _, _ = UnitArmor("player");
+
+            data.physical.defense = data.physical.defense or {};
+            local defense = data.physical.defense;
+            defense.rank = rank;
+            defense.armor = effectiveArmor or 0;
+            defense.dodge = GetDodgeChance() or 0;
+            defense.parry = GetParryChance() or 0;
+            defense.blockChance = GetBlockChance() or 0;
+            defense.blockAmount = GetShieldBlock() or 0;
+        end
     end
 
     if (cti == "all" or cti == "magical") then
-        data.magical = {
-            spellBonus = {
-                physical = GetSpellBonusDamage(1),
-                holy = GetSpellBonusDamage(2),
-                fire = GetSpellBonusDamage(3),
-                nature = GetSpellBonusDamage(4),
-                frost = GetSpellBonusDamage(5),
-                shadow = GetSpellBonusDamage(6),
-                arcane = GetSpellBonusDamage(7),
-                healing = GetSpellBonusHealing(),
-            },
-            spellCrit = GetSpellCritChance() or 0,
-            spellHitBonus = GetSpellHitModifier() or 0,
-            wandDps = getRangedDps(),
-        };
+        data.magical = data.magical or {};
+        data.magical.spellCrit = GetSpellCritChance() or 0;
+        data.magical.spellHitBonus = GetSpellHitModifier() or 0;
+        data.magical.wandDps = getRangedDps();
+
+        data.magical.spellBonus = data.magical.spellBonus or {};
+        local spellBonus = data.magical.spellBonus;
+        spellBonus.physical = GetSpellBonusDamage(1);
+        spellBonus.holy = GetSpellBonusDamage(2);
+        spellBonus.fire = GetSpellBonusDamage(3);
+        spellBonus.nature = GetSpellBonusDamage(4);
+        spellBonus.frost = GetSpellBonusDamage(5);
+        spellBonus.shadow = GetSpellBonusDamage(6);
+        spellBonus.arcane = GetSpellBonusDamage(7);
+        spellBonus.healing = GetSpellBonusHealing();
     end
 
     return data;
