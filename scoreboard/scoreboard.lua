@@ -50,6 +50,7 @@ function NameList.reset(self)
         local row = NameList.getRow(self, i);
         NameList.setRowData(row, nil, nil, nil, nil, nil, nil, nil);
     end
+    self.playerIndicator:Hide();
 end
 
 function NameList.getRow(self, index)
@@ -61,7 +62,19 @@ function NameList.getRow(self, index)
     return self.rows[index];
 end
 
-function NameList.setRowData(row, index, name, classToken, rank, k, d, hk)
+function NameList.setRowData(self, index, name, classToken, rank, k, d, hk)
+    local MAX_ROWS = 15;
+
+    local isPlayer = name == UnitName("player");
+    local row;
+    if (index <= MAX_ROWS) then
+        row = NameList.getRow(self, index);
+    elseif (isPlayer) then
+        row = NameList.getRow(self, MAX_ROWS);
+    else
+        return;
+    end
+
     row.indexText:SetText(index);
     if (classToken) then
         row.classTexture:SetTexture("Interface/Glues/CharacterCreate/UI-CharacterCreate-Classes");
@@ -74,6 +87,13 @@ function NameList.setRowData(row, index, name, classToken, rank, k, d, hk)
     row.killsText:SetText(k);
     row.deathsText:SetText(d);
     row.hkText:SetText(hk);
+
+    if (isPlayer) then
+        local indicator = row:GetParent().playerIndicator;
+        indicator:ClearAllPoints();
+        indicator:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", 0, -4);
+        indicator:Show();
+    end
 end
 
 function NameList.newRow(self, width, height, r, g, b)
@@ -230,24 +250,12 @@ function Scoreboard.refresh(self)
                 -- horde
                 numHordes = numHordes + 1;
                 numHordeKills = numHordeKills + kills;
-                local row = NameList.getRow(self.hordeListFrame, numHordes);
-                NameList.setRowData(row, numHordes, name, classToken, rank, kills, deaths, honorableKills);
-                if (name == UnitName("player")) then
-                    self.hordeListFrame.playerIndicator:ClearAllPoints()
-                    self.hordeListFrame.playerIndicator:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", 0, -4);
-                    self.hordeListFrame.playerIndicator:Show();
-                end
+                NameList.setRowData(self.hordeListFrame, numHordes, name, classToken, rank, kills, deaths, honorableKills);
             elseif (faction == 1) then
                 -- alliance
                 numAlliances = numAlliances + 1;
                 numAllianceKills = numAllianceKills + kills;
-                local row = NameList.getRow(self.allianceListFrame, numAlliances);
-                NameList.setRowData(row, numAlliances, name, classToken, rank, kills, deaths, honorableKills);
-                if (name == UnitName("player")) then
-                    self.allianceListFrame.playerIndicator:ClearAllPoints()
-                    self.allianceListFrame.playerIndicator:SetPoint("BOTTOMLEFT", row, "BOTTOMLEFT", 0, -4);
-                    self.allianceListFrame.playerIndicator:Show();
-                end
+                NameList.setRowData(self.allianceListFrame, numAlliances, name, classToken, rank, kills, deaths, honorableKills);
             end
         end
     end
