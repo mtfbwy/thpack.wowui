@@ -5,7 +5,7 @@ end
 
 local function createTempEnchantChargesText(buff)
     local textView = buff:CreateFontString(nil, "ARTWORK", "NumberFontNormal");
-    textView:SetPoint("BOTTOMLEFT", 1, 1);
+    textView:SetPoint("BOTTOMRIGHT", 3, 2);
     textView:SetText(nil);
     return textView;
 end
