@@ -1,14 +1,15 @@
 (function()
 
     local SPELL_REAGENTS = GetText("SPELL_REAGENTS");
-    local tooltip = CreateFrame("GameTooltip");
+    local tooltip = CreateFrame("GameTooltip", "ReagentCountTooltip", nil, "GameTooltipTemplate");
     local function getReagentName(actionSlot)
         tooltip:ClearLines();
+        tooltip:SetOwner(UIParent, "ANCHOR_NONE");
         tooltip:SetAction(actionSlot);
         for _, region in pairs({ tooltip:GetRegions() }) do
             if (region and region:GetObjectType() == "FontString") then
                 local line = region:GetText();
-                local s = string.match(line, SPELL_REAGENTS .. "(.+)");
+                local s = string.match(line or "", SPELL_REAGENTS .. "(.+)");
                 if (s) then
                     return s;
                 end
