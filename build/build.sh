@@ -100,8 +100,8 @@ src/triggerwatch/CellCtrl.lua
 src/triggerwatch/TriggerWatch.lua
 src/triggerwatch/fury.lua
 
-src/wtf/cvar.lua
-#src/wtf/hotKey.lua
+src/x/cvar.lua
+#src/x/hotKey.lua
 "
 
 buildAddon thpack.FlatNamePlate $UI_VERSION_CLASSIC "
