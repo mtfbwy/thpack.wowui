@@ -12,7 +12,7 @@ local function getTimeRepresentString(seconds)
         return string.format("%dm", m);
     else
         local d, h, m, s = ChatFrame_TimeBreakDown(seconds);
-        return string.format("%dh", h);
+        return string.format("%dh%02d", h, m);
     end
 end
 
