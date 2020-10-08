@@ -36,3 +36,15 @@
 --  reskin: thin bar, text above bar
 
 -- 中国国务院 2013 年发布的《通用规范汉字表》
+
+
+
+AutoTrinket
+    扫描背包，列出可用的饰品
+    自动换装，优先级队列
+        P=index, EffP=P
+        主动饰品CD时，P+=1000
+        主动饰品以buff为可更换标志
+        主动切换的饰品EffP=-1，此饰品CD后EffP重置
+    上马换萝卜
+
