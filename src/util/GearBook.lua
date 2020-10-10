@@ -33,7 +33,30 @@ local GEAR_SETS_11300 = {
             },
         }
     },
-}
+};
+
+local ENCHANTS_11300 = {
+    ["2624"] = {
+        -- Minor Mana Oil
+        [STAT_KEY_MP5] = 4,
+    },
+    ["2625"] = {
+        -- Lesser Mana Oil
+        [STAT_KEY_MP5] = 8,
+    },
+    ["2629"] = {
+        -- Brilliant Mana Oil
+        [STAT_KEY_MP5] = 12,
+    },
+    ["2565"] = {
+        -- Enchant Bracer - Mana Regeneration
+        [STAT_KEY_MP5] = 4,
+    },
+    ["2590"] = {
+        -- Prophetic Aura
+        [STAT_KEY_MP5] = 4,
+    },
+};
 
 --------
 
@@ -73,8 +96,16 @@ function GearBook.getUnitEquippedGearsMp5(unit)
             if (itemMp5) then
                 mp5 = mp5 + itemMp5 + 1;
             end
+            mp5 = mp5 + GearBook.getGearEnchantMp5(itemLink);
         end
     end
     mp5 = mp5 + getUnitGearSetEligibleBonusMp5(unit);
     return mp5;
+end
+
+function GearBook.getGearEnchantMp5(itemLink)
+    local statKey = STAT_KEY_MP5;
+    local _, _, enchantId = string.find(itemLink, "item:%d+:(%d*)");
+    local effects = enchantId and ENCHANTS_11300[enchantId];
+    return effects and effects[statKey] or 0;
 end

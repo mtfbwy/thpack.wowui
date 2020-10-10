@@ -34,8 +34,8 @@ function CharacterBook.getManaRegenPerPulse()
     else
         baseRegen = 0;
     end
-    local mp1 = GearBook.getUnitEquippedGearsMp5("player") / 5;
-    return baseRegen * NUM_SECONDS_PER_PULSE, mp1 * NUM_SECONDS_PER_PULSE;
+    local mp5 = GearBook.getUnitEquippedGearsMp5("player");
+    return baseRegen * NUM_SECONDS_PER_PULSE, mp5 / 5 * NUM_SECONDS_PER_PULSE, mp5;
 end
 
 -- including wand
@@ -55,12 +55,13 @@ function CharacterBook.getCharacterAttributes(cti)
     local data = CharacterBook.characterAttributes;
 
     if (cti == "all" or cti == "primary") then
-        local spiritManaRegen, gearManaRegen = CharacterBook.getManaRegenPerPulse();
+        local spiritManaRegen, gearManaRegen, gearMp5 = CharacterBook.getManaRegenPerPulse();
         data.primary = data.primary or {};
         data.primary.health = UnitHealthMax("player");
         data.primary.mana = UnitPowerMax("player", Enum.PowerType.Mana);
         data.primary.spiritManaRegen = spiritManaRegen;
         data.primary.gearManaRegen = gearManaRegen;
+        data.primary.gearMp5 = gearMp5;
     end
 
     if (cti == "all" or cti == "physical") then

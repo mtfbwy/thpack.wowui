@@ -73,7 +73,7 @@ function AnchorFrame.getRowItems(data)
             local primaryString = tostring(primary.health) .. "/" .. tostring(primary.mana);
             array.insert(rowItems, { "primary", 134800, primaryString });
             local totalRegen = (primary.spiritManaRegen or 0) + primary.gearManaRegen;
-            local manaRegenString = string.format("+%d(+%d)", totalRegen, primary.gearManaRegen);
+            local manaRegenString = string.format("+%d/%d", totalRegen, primary.gearMp5);
             array.insert(rowItems, { "manaRegen", 135970, manaRegenString });
         else
             array.insert(rowItems, { "primary", 134830, tostring(primary.health) });
