@@ -6,8 +6,6 @@
 
 # 热键原则
 
-## 战斗
-
 b 重要但低频的技能
 
 c 读条 e aoe f 常用攻击 r 瞬发/dot
@@ -24,7 +22,7 @@ x 打断
 
 z 位移技能
 
-1-4 按需
+1-4 治疗 2 瞬发/dot
 
 mouse3 自动前进
 
@@ -34,15 +32,11 @@ mouse5 糖/血瓶
 
 mouse6-9 按需
 
-## 移动控制
-
 alt-w 自动前进
 
 shift-s 上马
 
 alt-a 宝宝攻击
-
-## 面板
 
 f1 角色
 
@@ -54,7 +48,18 @@ f4 开关姓名板
 
 f10 系统菜单
 
-# 通用宏
+# 宏
+
+## 通用宏
+
+上马宏
+```
+/changeactionbar 2
+#showtooltip
+/施放 召唤战马(召唤)
+/cast 迅捷霜刃豹缰绳
+/cast 寻找矿物
+```
 
 饰品宏。结合TrinketMenu相当有效
 ```
@@ -95,7 +100,7 @@ f10 系统菜单
 /run QuestFrameCompleteQuestButton:Click()
 ```
 
-# 战士宏
+## 战士宏
 
 一键压制：切战斗姿态立即压制
 ```
@@ -159,12 +164,6 @@ aoe/e
 /stopcasting
 ```
 
-g
-```
-/cast 破胆怒吼
-```
-
-r
 ```
 #showtooltip
 /cast [mod] 破甲攻击
@@ -174,7 +173,7 @@ r
 /cast [stance:3] 狂暴之怒
 ```
 
-斩杀+保命，绑q。注意保命的2姿态决不可绑嘲讽
+斩杀+保命。保命的2姿态决不可绑嘲讽
 ```
 #showtooltip
 /equip [mod] 钻孔虫之碟
@@ -186,7 +185,7 @@ r
 /cast [stance:2] 盾牌格挡; 斩杀
 ```
 
-嘲讽，t
+嘲讽
 ```
 #showtooltip
 /cast [mod] 挑战怒吼
@@ -197,19 +196,19 @@ r
 /cast [stance:2] 嘲讽
 ```
 
-控制，绑v
+减速控制
 ```
 #showtooltip
 /cast [mod] 刺耳怒吼; [stance:2] 缴械; 断筋
 ```
 
-打断，绑x
+打断
 ```
 #showtooltip
 /cast [stance:3] 拳击; 盾击
 ```
 
-冲锋，绑z
+冲锋
 ```
 #showtooltip
 /cast [nostance:1,nocombat] 战斗姿态
@@ -217,13 +216,217 @@ r
 /castsequence reset=6/target 断筋, 撕裂
 ```
 
-## 衣品
+### 衣品
 
-一身黑，有人追
+p4 一身黑，有人追
 ```
 /黑色龙鳞胸肩腿鞋 (鞋 驱逐者胫甲)
 /equip 祭祀护手
 /equip 塞拉赞恩之链 (教官的腰带)
 /equip 漂亮的黑衬衣
 /equip 削骨之刃
+```
+
+p5 吸血套
+```
+/equip 英勇头盔
+/equip 英勇护手
+/equip 英勇胸甲
+/equip 英勇长靴
+/equipslot 14 暗月卡片：英雄
+/equipslot 17 上古哈卡莱之斧
+/equipslot 18 上古哈卡莱之斧
+```
+
+## 圣骑士宏
+
+驱邪
+```
+/startattack
+#showtooltip
+/cast [nomod] 驱邪术; 神圣愤怒
+```
+
+奉献
+```
+#showtooltip
+/cast [mod] 奉献(等级 1); 奉献
+```
+
+审判
+```
+/changeactionbar 2
+/dismount
+#showtooltip
+/cast [mod] 命令圣印
+/stopmacro [mod]
+/startattack
+/castsequence reset=1 审判, 命令圣印
+```
+
+我给你讲个笑话
+```
+#showtooltip
+/cast [mod:alt] 圣盾术; 愤怒之锤
+```
+
+制裁
+```
+#showtooltip
+/cast [@mouseover,exists][] 制裁之锤
+```
+
+8印
+```
+#showtooltip
+/cast [nomod] 正义圣印; 十字军圣印
+```
+
+9印
+```
+#showtooltip
+/cast [nomod] 智慧圣印; 光明圣印
+```
+
+闪
+```
+/changeactionbar 2
+/stand
+/dismount
+#showtooltip
+/cast [mod:alt,@player] [@mouseover,exists] [] 圣光闪现
+```
+
+清
+```
+/changeactionbar 2
+/stand
+/dismount
+#showtooltip
+/cast [mod:alt,@player] [@mouseover,exists] [] 清洁术
+```
+
+大光
+```
+#showtooltip
+/cast [mod:alt,@player] [@mouseover,exists] [] 圣光术
+```
+
+小闪
+```
+#showtooltip
+/cast [mod:alt,@player] [@mouseover,exists] [] 圣光闪现(等级 1)
+```
+
+buff1
+```
+#showtooltip
+/cast [raid,nomod] 强效拯救祝福; [raid] 强效光明祝福
+```
+
+buff2
+```
+#showtooltip
+/cast [raid,nomod] 强效智慧祝福; [raid] 强效力量祝福
+```
+
+王者
+```
+#showtooltip
+/cast [mod] 强效王者祝福; 王者祝福
+```
+
+自庇
+```
+#showtooltip
+/cast [nomod,@player] 庇护祝福; [mod:alt,@player] 强效庇护祝福; 正义之怒
+```
+
+### 衣品
+
+很美
+```
+/equip 命运
+/equip 斩龙者护肩
+/equip 暴君胸甲
+/equip 野熊之蛮兽护臂
+/equip 哈库的板甲手套
+/equip 杉德尔船长的腰带
+/equip 典狱官热裤
+/equip 夜枭之血纹长靴
+```
+
+反伤
+```
+/equip 魔铸胸甲
+/equip 烈焰披风
+/equip 阿格曼奇之戒
+/equipslot 13 纯焰精华
+/equipslot 14 意志之力
+/equip 爱德华之手
+/equip 骨火
+```
+
+## 盗贼宏
+
+```
+#showtooltip
+/cast [stance:0] 邪恶攻击; [stance:1] 绞喉
+```
+
+伏击
+```
+#showtooltip
+/cast [stance:0] 背刺; [stance:1] 伏击
+```
+
+stun
+```
+#showtooltip
+/cast [mod][stance:0] 肾击; [stance:1] 偷袭
+```
+
+潜行
+```
+#showtooltip
+/cast [mod:alt] 消失; [stance:1] 搜索; [combat] 刺骨; [stance:0] 潜行;
+```
+
+打断
+```
+#showtooltip
+/cast 脚踢
+/cast 投掷
+/startattack
+```
+
+## 术士宏(开发中)
+
+```
+#showtooltip
+/changeactionbar 2
+/startattack
+/petattack
+/castsequence reset=6/target 腐蚀术, 痛苦诅咒
+```
+
+```
+#showtooltip
+/cast [mod,pet:虚空行者] 牺牲
+```
+
+```
+#showtooltip
+/cast [mod] 吸取法力
+/cast [nomod] 吸取灵魂
+```
+
+```
+#showtooltip
+/cast [mod] 吸取法力; [help,pet] 生命通道; 吸取生命
+```
+
+```
+#showtooltip
+/cast [nomod] 献祭; 灼热之痛
 ```
