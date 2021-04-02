@@ -6,37 +6,33 @@ else
     TOP=$(realpath $(pwd)/$(dirname $BASH_SOURCE)/..)
 fi
 
-function buildScoreboard() {
-    local UI_VERSION=11300
-    local ADDON_NAME="thpack.Scoreboard"
-    local ADDON_DATE=$(date +%Y-%m-%d)
-    local ADDON_FILES="
-bindings.xml
-scoreboard.lua
-"
-    local ADDON_ZIP_NAME=$ADDON_NAME.$UI_VERSION.$ADDON_DATE.zip
+function buildPackage() {
+    packageId=$1
+    interfaceVersion=$2
+    buildDate=$(date +%Y-%m-%d)
+    tocFile=$TOP/$packageId.toc
 
-    echo "building [$ADDON_ZIP_NAME] ..."
+    dstRoot=$TOP/out/$packageId
+    rm -rf $dstRoot
+    mkdir -p $dstRoot
 
-    local ADDON_OUT_ROOT=$TOP/out/$ADDON_NAME
+    dstTocFile=$dstRoot/$packageId.toc
+    cp $tocFile $dstTocFile
+    sed "s/{Interface}/$interfaceVersion/" -i $dstTocFile
+    sed "s/{BuildDate}/$buildDate/" -i $dstTocFile
 
-    rm -rf $ADDON_OUT_ROOT
-    mkdir -p $ADDON_OUT_ROOT
+    while read line; do
+        if [[ "$line" =~ ^[^#]+ ]]; then
+            cd ..
+            cp --parents -t $dstRoot $line
+            cd - >/dev/null
+        fi
+    done < $dstTocFile
 
-    cat > $ADDON_OUT_ROOT/$ADDON_NAME.toc << EOF
-## Interface: $UI_VERSION
-## Title: $ADDON_NAME
-## X-BuildDate: $ADDON_DATE
-$ADDON_FILES
-EOF
-
-    cd $TOP/scoreboard
-    cp --parents -t $ADDON_OUT_ROOT $ADDON_FILES
-    cd - >/dev/null
-
-    cd $TOP/out
-    zip -r $ADDON_ZIP_NAME $ADDON_NAME >/dev/null
+    dstZipFile=$dstRoot/../$packageId.$interfaceVersion.$buildDate.zip
+    cd $dstRoot/..
+    zip -r $dstZipFile $packageId >/dev/null
     cd - >/dev/null
 }
 
-buildScoreboard
+buildPackage thpack.scoreboard 11300

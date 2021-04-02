@@ -1,0 +1,6 @@
+## Interface: {Interface}
+## Title: thpack.scoreboard
+## X-BuildDate: {BuildDate}
+
+scoreboard/bindings.xml
+scoreboard/scoreboard.lua
