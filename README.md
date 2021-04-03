@@ -1,5 +1,6 @@
-thpack, wow ui once more
-==================================
+# thpack, wow ui once more
+
+## Acknowledge
 
 一开始是个盗贼。
 
@@ -16,4 +17,4 @@ thpack, wow ui once more
 某天有感，又看了看这个世界。
 o键无一不黯淡，旧人和往事却如潮水般涌回。
 
-致已经模糊的名字和仍然鲜活的昨日。献给[糖水茶]。
+献给[糖水茶]。
