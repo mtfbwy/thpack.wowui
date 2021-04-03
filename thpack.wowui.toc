@@ -1,0 +1,45 @@
+## Interface: 11300
+## Title: thpack.wowui
+## X-BuildDate: {date}
+
+#res/healthbar32.tga
+#res/tile32.tga
+#res/3p/glow.tga
+#res/3p/norm.tga
+
+src/util/Proto.lua
+src/util/Color.lua
+src/util/Seg.lua
+src/util/GearBook.lua
+src/util/SpellBook.lua
+src/util/CharacterBook.lua
+src/util/FrameBook.lua
+src/util/A.lua
+src/util/A.Res.lua
+
+src/misc/init.lua
+src/misc/action.reagent.lua
+src/misc/autoDismount.lua
+src/misc/backpack.lua
+src/misc/backpack.remaining.lua
+src/misc/backpack.autorepair.lua
+src/misc/backpack.autosell.lua
+src/misc/buff.ttl.lua
+src/misc/buff.poison.lua
+src/misc/chat.tab.lua
+src/misc/doll.stat.lua
+src/misc/fastLoot.lua
+src/misc/filterErrorMessage.lua
+src/misc/player.castbar.pixelstyle.lua
+src/misc/player.mp5.lua
+src/misc/performanceTip.lua
+src/misc/quest.reward.lua
+src/misc/target.classfix.lua
+src/misc/target.distance.lua
+src/misc/tooltip.buff.lua
+src/misc/tooltip.item.lua
+src/misc/tooltip.pixelstyle.lua
+src/misc/tooltip.unit.lua
+
+src/x/cvar.lua
+#src/x/hotKey.lua

@@ -4,7 +4,7 @@ all:
 
 .PHONY: install
 install:
-	@bash build/install.sh
+	@bash build/build.sh install
 
 .PHONY: clean
 clean:

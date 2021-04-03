@@ -126,7 +126,8 @@ textView:SetJustifyH("RIGHT");
 textView:SetPoint("TOP", TargetFrame, "TOPLEFT", 112, -6);
 f.textView = textView;
 
-if (select(4, GetBuildInfo()) >= 20000) then
+local wowInterfaceVersion = select(4, GetBuildInfo());
+if (wowInterfaceVersion >= 20000) then
     f:RegisterEvent("PLAYER_TALENT_UPDATE");
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 end

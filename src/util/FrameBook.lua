@@ -1,11 +1,13 @@
-A = A or {};
+addonName, addon = ...;
 
--- lowerCamelCase for variable and method
--- UpperCamelCase for class
--- UpperCamelCase for package; package is more like static class rather than variable: it should not be duplicated
-A.Frame = A.Frame or {};
+if (addon.FrameBook) then
+    return;
+end
 
-A.Frame.safeInvoke = A.Frame.safeInvoke or function(callback, f)
+addon.FrameBook = {};
+local FrameBook = addon.FrameBook;
+
+FrameBook.safeInvoke = FrameBook.safeInvoke or function(callback, f)
     if (not InCombatLockdown()) then
         callback();
         return;
@@ -21,7 +23,7 @@ A.Frame.safeInvoke = A.Frame.safeInvoke or function(callback, f)
     end);
 end;
 
-A.Frame.attachEventHandlers = A.Frame.attachEventHandlers or function(frame, eventHandlers)
+FrameBook.attachEventHandlers = FrameBook.attachEventHandlers or function(frame, eventHandlers)
     for eventName, handler in pairs(eventHandlers) do
         frame:RegisterEvent(eventName)
     end
@@ -33,7 +35,7 @@ A.Frame.attachEventHandlers = A.Frame.attachEventHandlers or function(frame, eve
     end);
 end;
 
-A.Frame.createBlizzardRoundButton = A.Frame.createBlizzardRoundButton or function(parent, template, size)
+FrameBook.createBlizzardRoundButton = FrameBook.createBlizzardRoundButton or function(parent, template, size)
     local button = CreateFrame("Button", nil, parent, template);
     button:SetSize(size, size);
 
@@ -62,7 +64,7 @@ A.Frame.createBlizzardRoundButton = A.Frame.createBlizzardRoundButton or functio
     return button;
 end;
 
-table.merge(A.Frame, (function()
+table.merge(FrameBook, (function()
 
     -- frame strata > frame level
     local FrameStratas = {

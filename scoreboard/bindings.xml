@@ -1,5 +1,5 @@
 <Bindings>
-    <Binding name="Toggle Scoreboard" runOnUp="true" header="thpack.scoreboard">
+    <Binding name="Toggle Scoreboard" runOnUp="true" header="thpack">
         if (keystate == "down") then
             showScoreboard();
         else

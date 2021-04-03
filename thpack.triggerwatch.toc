@@ -1,0 +1,14 @@
+## Interface: {Interface}
+## Title: TriggerWatch
+## X-BuildDate: {date}
+
+#res/tile32.tga
+#res/3p/glow.tga
+
+src/util/A.Res.lua
+src/util/FrameBook.lua
+src/util/SpellBook.lua
+
+triggerwatch/CellCtrl.lua
+triggerwatch/TriggerWatch.lua
+triggerwatch/fury.lua

@@ -1,6 +1,4 @@
-A = A or {};
-
-A.post = A.post or (function()
+post = post or (function()
     local dp = A and A.dp or 0.75;
 
     -- relative to the canvas

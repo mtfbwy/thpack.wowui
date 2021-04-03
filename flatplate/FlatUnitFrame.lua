@@ -1,3 +1,7 @@
+addonName, addon = ...;
+
+local FrameBook = addon.FrameBook;
+
 if (FlatUnitFrame) then
     return;
 end
@@ -258,7 +262,7 @@ function FlatUnitFrame.createHealthFrame(uf)
     healthBar:SetPoint("BOTTOM", uf, "BOTTOM", 0, 0);
     healthFrame.healthBar = healthBar;
 
-    local healthGlowFrame = A.createBorderFrame(healthBar, {
+    local healthGlowFrame = FrameBook.createBorderFrame(healthBar, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 5,
     });

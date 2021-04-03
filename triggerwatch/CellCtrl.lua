@@ -2,6 +2,8 @@ local addonName, addon = ...;
 
 local A = A;
 
+local FrameBook = addon.FrameBook;
+
 --------
 
 local CellView = {};
@@ -83,7 +85,7 @@ function CellView.newView(parent)
     ttcBar:SetFrameLevel(f.ttlBar:GetFrameLevel() + 1);
     f.ttcBar = ttcBar;
 
-    local glowFrame = A.createBorderFrame(f, {
+    local glowFrame = FrameBook.createBorderFrame(f, {
         edgeFile = A.Res.path .. "/3p/glow.tga",
         edgeSize = 8,
     });

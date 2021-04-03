@@ -1,3 +1,10 @@
+A.addSlashCommand("thpackDebug", "/debug", function(x)
+    A.logi("-------- printing: " .. x);
+    A.logd(loadstring("return " .. x)());
+end);
+
+A.addSlashCommand("thpackReload", "/reload", ReloadUI);
+
 -- pixel perfect
 (function()
 

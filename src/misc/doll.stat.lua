@@ -42,10 +42,10 @@ function AnchorFrame.getRowItems(data)
     local withSpell = 0;
     local _, class = UnitClass("player");
     if (class == "WARRIOR") then
-        withDefense = 9;
+        withDefense = 3;
         withMelee = 9;
     elseif (class == "PALADIN") then
-        withDefense = 9;
+        withDefense = 3;
         withMelee = 9;
         withSpell = 9;
     elseif (class == "HUNTER") then
@@ -54,7 +54,7 @@ function AnchorFrame.getRowItems(data)
     elseif (class == "ROGUE") then
         withMelee = 9;
     elseif (class == "DRUID") then
-        withDefense = 9;
+        withDefense = 3;
         withMelee = 1;
         withSpell = 1;
     elseif (class == "MAGE" or class == "WARLOCK" or class == "PRIEST") then
@@ -89,12 +89,13 @@ function AnchorFrame.getRowItems(data)
         local defense = data.physical.defense;
         local defenseString = string.format("%d/%d", defense.rank, defense.armor);
         array.insert(rowItems, { "defense", 132341, defenseString });
+        if (withDefense >= 3) then
+            array.insert(rowItems, { "dodge", 136047, string.format("%.1f%%", defense.dodge) });
+            array.insert(rowItems, { "parry", 132269, string.format("%.1f%%", defense.parry) });
+        end
         if (withDefense == 9) then
-            array.concat(rowItems, {
-                { "dodge", 136047, string.format("%.1f%%", defense.dodge) },
-                { "parry", 132269, string.format("%.1f%%", defense.parry) },
-                { "block", 132110, string.format("%.1f%%/%d", defense.blockChance, defense.blockAmount) },
-            });
+            array.insert(rowItems,
+                { "block", 132110, string.format("%.1f%%/%d", defense.blockChance, defense.blockAmount) });
         end
     end
 

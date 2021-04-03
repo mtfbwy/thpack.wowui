@@ -117,10 +117,9 @@ end);
 
 if (isMpClass) then
     f:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player");
+    f:SetScript("OnEvent", function(self, event, ...)
+        if (event == "UNIT_SPELLCAST_SUCCEEDED") then
+            findManaPulseProgress(self.manaData, true);
+        end
+    end);
 end
-
-f:SetScript("OnEvent", function(self, event, ...)
-    if (event == "UNIT_SPELLCAST_SUCCEEDED") then
-        findManaPulseProgress(self.manaData, true);
-    end
-end);

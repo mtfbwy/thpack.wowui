@@ -1,0 +1,17 @@
+## Interface: {Interface}
+## Title: thpack.flatplate
+## X-BuildDate: {BuildDate}
+
+#res/3p/highlight.tga
+#res/3p/glow.tga
+#res/3p/impact.ttf
+#res/healthbar32.tga
+#res/tile32.tga
+
+src/util/Proto.lua
+src/util/Color.lua
+src/util/A.lua
+src/util/A.Res.lua
+src/util/FrameBook.lua
+flatplate/FlatUnitFrame.lua
+flatplate/FlatPlate.lua
