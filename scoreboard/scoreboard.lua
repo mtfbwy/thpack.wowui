@@ -67,6 +67,8 @@ function NameList.setRowData(self, index, name, classToken, rank, k, d, hk)
 
     local isPlayer = name == UnitName("player");
     local row;
+    if (not index) then
+        return;
     if (index <= MAX_ROWS) then
         row = NameList.getRow(self, index);
     elseif (isPlayer) then
