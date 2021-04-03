@@ -35,4 +35,33 @@ function buildPackage() {
     cd - >/dev/null
 }
 
-buildPackage thpack.scoreboard 11300
+function installPackage() {
+    local zipFile=$1
+    local wowRoot=$2
+
+    echo "deploying [$zipFile] ..."
+
+    if test ! -d "$wowRoot"; then
+        echo "E: invalid wow dir [$wowRoot]"
+        return
+    fi
+
+    local INTERFACE_VERSION_CLASSIC=11300
+    if [[ $zipFile == *.$INTERFACE_VERSION_CLASSIC.* ]]; then
+        local wowBranch="_classic_"
+    else
+        local wowBranch="_retail_"
+    fi
+    unzip -o $zipFile -d "$wowRoot/$wowBranch/Interface/AddOns" >/dev/null
+}
+
+########################################
+
+if [[ "$1" == "release" ]]; then
+    wowRoot="$HOME/app/World of Warcraft"
+    for f in `\ls $TOP/out/*.zip`; do
+        installPackage $f "$wowRoot"
+    done
+else
+    buildPackage thpack.scoreboard 11300
+fi
