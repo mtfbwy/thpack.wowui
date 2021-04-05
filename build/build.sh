@@ -31,10 +31,16 @@ function buildPackage() {
                     cp --parents -t $dstRoot $line
                 fi
             else
-                cp --parents -t $dstRoot $line
+                if test `basename $line ` == "bindings.xml"; then
+                    cp -t $dstRoot $line
+                else
+                    cp --parents -t $dstRoot $line
+                fi
             fi
         fi
     done < $dstTocFile
+
+    sed "s/.*\/bindings.xml/bindings.xml/" -i $dstTocFile
 
     pushd out >/dev/null
     zip -qr $packageId.$interfaceVersion.$buildDate.zip $packageId

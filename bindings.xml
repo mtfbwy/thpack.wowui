@@ -1,5 +1,5 @@
 <Bindings>
-    <Binding name="Toggle Worldmap" runOnUp="true" header="thpack">
+    <Binding name="Toggle Worldmap" runOnUp="true" header="thpack.mapmark">
         if keystate == "down" then
             if not InCombatLockdown() then
                 ShowUIPanel(WorldMapFrame)
@@ -8,7 +8,7 @@
             HideUIPanel(WorldMapFrame)
         end
     </Binding>
-    <Binding name="Toggle Scoreboard" runOnUp="true" header="thpack">
+    <Binding name="Toggle Scoreboard" runOnUp="true" header="thpack.scoreboard">
         if (keystate == "down") then
             showScoreboard();
         else
