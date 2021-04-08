@@ -47,7 +47,13 @@ function CastFrame.malloc(uf)
     }, 1);
     castFrame.castGlowFrame = castGlowFrame;
 
-    -- TODO castBar
+    local castBar = CreateFrame("Frame", nil, castFrame, nil);
+    castBar:SetAllPoints();
+    castBar:SetStatusBarTexture(A.Res.tile32);
+    castBar:SetStatusBarColor(1, 0.7, 0, 1);
+    castBar:SetMinMaxValues(0, 1);
+    castBar:SetValue(0.7749); -- for debug
+    castFrame.castBar = castBar;
 
     -- for cast end events, it will play an ending animation
     castFrame.eventHandlers = {
