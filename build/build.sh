@@ -31,7 +31,7 @@ function buildPackage() {
                     cp --parents -t $dstRoot $line
                 fi
             else
-                if test `basename $line ` == "bindings.xml"; then
+                if test `basename $line` == "bindings.xml"; then
                     cp -t $dstRoot $line
                 else
                     cp --parents -t $dstRoot $line
@@ -67,10 +67,10 @@ function installPackage() {
 
 ########################################
 
-packages="thpack.wowui thpack.flatplate thpack.scoreboard thpack.triggerwatch"
+packages="thplus"
 
 for packageId in $packages; do
-    echo "building $packageId ..."
+    echo "building $packageId[11300] ..."
     buildPackage $packageId 11300
 done
 

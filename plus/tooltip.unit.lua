@@ -1,3 +1,6 @@
+local addonName, addon = ...;
+local A = addon.A;
+
 GameTooltip:HookScript("OnTooltipSetUnit", function(self)
     local _, unit = self:GetUnit();
     if not unit then

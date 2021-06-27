@@ -1,3 +1,6 @@
+local addonName, addon = ...;
+local A = addon.A;
+
 local _, classNameEn = UnitClass("player");
 
 local isEpClass = false;
@@ -25,7 +28,7 @@ end
 
 local energyData = {
     unit = "player",
-    pulseTime = 0,
+    pulseTimestamp = 0,
     energy = 0,
 };
 
@@ -37,18 +40,30 @@ local function findEnergyPulseProgress(data)
     local diff = energy - data.energy;
     -- exclude [Thistle Tea] and [Adrenaline Rush]
     if (diff > PULSE_AMOUNT - 1 and diff < PULSE_AMOUNT + 1) then
-        data.pulseTime = now;
+        data.pulseTimestamp = now;
     end
     data.energy = energy;
-    return (now - data.pulseTime) / PULSE_INTERVAL % 1;
+    return (now - data.pulseTimestamp) / PULSE_INTERVAL % 1;
 end
 
 local manaData = {
     unit = "player",
-    pulseTime = 0,
+    pulseTimestamp = 0,
     nextPulseTime = 0,
     mana = 0,
 };
+
+-- mana regen out side 5-second-rule
+local function getManaRegenPerTick()
+    local tocVersion = select(4, GetBuildInfo());
+    if (tocVersion < 20000) then
+        -- in 60s, GetManaRegen() has serious bug; we need much enumeration work to get the correct value
+        return A.getManaRegenPerTick_11300();
+    else
+        local NUM_SECONDS_PER_TICK = 2;
+        return GetManaRegen() * NUM_SECONDS_PER_TICK;
+    end
+end
 
 local function findManaPulseProgress(data, onCastSucc)
     local PULSE_COOLDOWN = 5;
@@ -60,28 +75,27 @@ local function findManaPulseProgress(data, onCastSucc)
 
     if (mana > data.mana) then
         -- increased mana, is it a pulse?
-        local baseRegen, castRegen = CharacterBook.getManaRegenPerPulse();
+        local baseRegen = getManaRegenPerTick();
         if (baseRegen > 0) then
-            local regen = baseRegen + castRegen;
             local diff = mana - data.mana;
-            if (diff > regen - 1 and diff < regen + 1) then
-                data.pulseTime = now;
+            if (diff > baseRegen - 1 and diff < baseRegen + 1) then
+                data.pulseTimestamp = now;
             end
         end
     elseif (onCastSucc and mana < data.mana) then
         -- mp consumed, start cooldown
-        local sinceLastPulse = (now - data.pulseTime) % PULSE_INTERVAL;
+        local sinceLastPulse = (now - data.pulseTimestamp) % PULSE_INTERVAL;
         local pulseInterval = math.ceil((sinceLastPulse + PULSE_COOLDOWN) / PULSE_INTERVAL) * PULSE_INTERVAL;
         local lastPulseTimeAsIf = now - sinceLastPulse - (PULSE_MAX_INTERVAL - pulseInterval);
-        data.pulseTime = lastPulseTimeAsIf;
+        data.pulseTimestamp = lastPulseTimeAsIf;
         data.nextPulseTime = lastPulseTimeAsIf + PULSE_MAX_INTERVAL;
     end
     data.mana = mana;
 
     if (now < data.nextPulseTime) then
-        return (now - data.pulseTime) / PULSE_MAX_INTERVAL;
+        return (now - data.pulseTimestamp) / PULSE_MAX_INTERVAL;
     else
-        return (now - data.pulseTime) / PULSE_INTERVAL % 1;
+        return (now - data.pulseTimestamp) / PULSE_INTERVAL % 1;
     end
 end
 

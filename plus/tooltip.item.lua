@@ -17,7 +17,7 @@ local function addItemInfo(tooltip)
         end
 
         if (itemSellPrice and itemSellPrice > 0 and not MerchantFrame:IsShown()) then
-            tooltip:AddLine("Sell for " .. GetCoinTextureString(itemSellPrice), 1, 1, 1);
+            tooltip:AddLine("Recycle for " .. GetCoinTextureString(itemSellPrice), 1, 1, 1);
         end
 
         if (itemQuality) then

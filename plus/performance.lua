@@ -1,3 +1,6 @@
+local addonName, addon = ...;
+local A = addon.A;
+
 (function()
 
     local getFps = function()
@@ -11,7 +14,7 @@
         end
     end;
 
-    A.addSlashCommand("thpackGetFps", "/fps", function()
+    A.addSlashCommand("thplusGetFps", "/fps", function()
         local fps, r, g, b = getFps();
         A.logi(string.format("fps: %d", fps), r, g, b);
     end);
@@ -27,7 +30,7 @@
         end
     end;
 
-    A.addSlashCommand("thpackGetLag", "/lag", function()
+    A.addSlashCommand("thplusGetLag", "/lag", function()
         local lag, r, g, b = getLag();
         A.logi(string.format("lag: %d ms", lag), r, g, b);
     end);

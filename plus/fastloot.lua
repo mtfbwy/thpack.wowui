@@ -1,5 +1,4 @@
 (function()
-
     local f = CreateFrame("Frame");
     f:RegisterEvent("LOOT_READY");
     f:SetScript("OnEvent", function ()

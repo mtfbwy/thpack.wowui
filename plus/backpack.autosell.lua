@@ -1,12 +1,14 @@
-(function()
+local addonName, addon = ...;
+local A = addon.A;
 
+(function()
     local tooltipAmount = 0;
     local tooltip = CreateFrame("GameTooltip");
     tooltip:SetScript("OnTooltipAddMoney", function(self, amount)
         tooltipAmount = amount;
     end)
 
-    local function sellThem()
+    local function sellAllGrayItems()
         local amount = 0;
         for id = 0, NUM_BAG_FRAMES, 1 do
             for slot = 1, GetContainerNumSlots(id), 1 do
@@ -25,7 +27,7 @@
     local f = CreateFrame("Frame");
     f:RegisterEvent("MERCHANT_SHOW");
     f:SetScript("OnEvent", function(self, event, ...)
-        local amount = sellThem();
+        local amount = sellAllGrayItems();
         if amount > 0 then
             A.logi("Auto sell for " .. GetCoinTextureString(amount));
         end

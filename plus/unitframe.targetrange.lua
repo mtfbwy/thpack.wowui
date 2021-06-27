@@ -1,7 +1,28 @@
-local addonName, addon = ...;
+local SpellBook = {};
 
-addon.RangeBook = {};
-local RangeBook = addon.RangeBook;
+function SpellBook.getSpellName(spellIdOrName, notCheck)
+    local localName = GetSpellInfo(spellIdOrName);
+    if (notCheck) then
+        return localName;
+    end
+    if (localName) then
+        return GetSpellInfo(localName);
+    end
+    return nil;
+end
+
+function SpellBook.getSpellRange(spellIdOrName)
+    local localName, _, _, _, minRange, maxRange = GetSpellInfo(spellIdOrName);
+    if (not localName) then
+        return nil;
+    else
+        return minRange, maxRange;
+    end
+end
+
+--------
+
+local RangeBook = {};
 
 RangeBook.candidateSpells = {
     -- mutual
@@ -12,11 +33,11 @@ RangeBook.candidateSpells = {
     -- monk
     "碎玉闪电", "嚎镇八方", "分筋错骨", "怒雷破",
     -- paladin
-    853, -- 制裁之锤 [0,10]
-    879, -- 驱邪术 [0,30]
-    20271, -- 审判 [0,10]
-    635, -- 圣光术 [0,40]
-    1152, -- 纯净术 [0,30]
+    "制裁之锤", -- [0,10]
+    "驱邪术", -- [0,30]
+    "审判", -- [0,10]
+    "圣光术", -- [0,40]
+    "保护祝福", -- [0,30]
     -- priest
     "惩击", "暗言术：痛",
     -- rogue
@@ -87,17 +108,17 @@ function RangeBook.getUnitRangeString(unit)
     end
 
     if (resultRanges[2] == 0) then
-        return ".";
+        return "*";
     end
     if (resultRanges[2] == 99) then
-        return ".";
+        return "*";
     end
 
     if (array.size(resultRanges) == 2) then
         if (resultRanges[2] == 0) then
             return 0;
         elseif (resultRanges[2] == 99) then
-            return "."
+            return "*"
         elseif (resultRanges[1] == 0 or resultRanges[1] >= 10) then
             return resultRanges[2];
         end
@@ -119,15 +140,17 @@ local f = CreateFrame("Frame", nil, UIParent, nil);
 f:SetSize(1, 1);
 f:SetPoint("TOPLEFT");
 
-local textView = f:CreateFontString();
-textView:SetFont(DAMAGE_TEXT_FONT, 16, "OUTLINE");
-textView:SetTextColor(0, 1, 0);
-textView:SetJustifyH("RIGHT");
-textView:SetPoint("TOP", TargetFrame, "TOPLEFT", 112, -6);
-f.textView = textView;
+local rangeText = f:CreateFontString();
+rangeText:SetFont(DAMAGE_TEXT_FONT, 16, "OUTLINE");
+rangeText:SetTextColor(0, 1, 0);
+--rangeText:SetJustifyH("RIGHT");
+--rangeText:SetPoint("TOP", TargetFrame, "TOPLEFT", 112, -6);
+rangeText:SetJustifyH("LEFT");
+rangeText:SetPoint("BOTTOMLEFT", TargetFrame, "BOTTOMRIGHT", -40, 33);
+f.rangeText = rangeText;
 
-local wowInterfaceVersion = select(4, GetBuildInfo());
-if (wowInterfaceVersion >= 20000) then
+local tocVersion = select(4, GetBuildInfo());
+if (tocVersion >= 21000) then
     f:RegisterEvent("PLAYER_TALENT_UPDATE");
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED");
 end
@@ -145,9 +168,9 @@ f:SetScript("OnEvent", function(self, event, ...)
         self:UnregisterEvent("PLAYER_ENTERING_WORLD");
         RangeBook.init();
     elseif (event == "PLAYER_REGEN_ENABLED") then
-        self.textView:SetTextColor(0, 1, 0);
+        self.rangeText:SetTextColor(0, 1, 0);
     elseif (event == "PLAYER_REGEN_DISABLED") then
-        self.textView:SetTextColor(1, 0, 0);
+        self.rangeText:SetTextColor(1, 0, 0);
     elseif (event == "PLAYER_TARGET_CHANGED") then
         -- update immediately
         self:GetScript("OnUpdate")(self, 99);
@@ -158,6 +181,10 @@ f:SetScript("OnUpdate", function(self, elapsed)
     self.elapsed = (self.elapsed or 0) + elapsed;
     if (self.elapsed > 0.1) then
         self.elapsed = 0;
-        self.textView:SetText(RangeBook.getUnitRangeString("target"));
+        local rangeString = RangeBook.getUnitRangeString("target");
+        if (rangeString and rangeString ~= "*") then
+            rangeString = rangeString .. "yd";
+        end
+        self.rangeText:SetText(rangeString);
     end
 end);

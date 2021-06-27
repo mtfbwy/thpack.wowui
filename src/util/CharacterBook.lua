@@ -28,14 +28,14 @@ end
 function CharacterBook.getManaRegenPerPulse()
     local NUM_SECONDS_PER_PULSE = 2;
     -- GetManaRegen() gives 0.00xxx within 5s after a mana-cost cast
-    local baseRegen = GetManaRegen();
-    if (baseRegen >= 1) then
-        baseRegen = baseRegen * getSpiritManaRegenTalentMultiplier();
+    local baseManaRegen = GetManaRegen();
+    if (baseManaRegen >= 1) then
+        baseManaRegen = baseManaRegen * getSpiritManaRegenTalentMultiplier();
     else
-        baseRegen = 0;
+        baseManaRegen = 0;
     end
     local mp5 = GearBook.getUnitEquippedGearsMp5("player");
-    return baseRegen * NUM_SECONDS_PER_PULSE, mp5 / 5 * NUM_SECONDS_PER_PULSE, mp5;
+    return (baseManaRegen + mp5 / 5) * NUM_SECONDS_PER_PULSE, mp5;
 end
 
 -- including wand
@@ -55,12 +55,11 @@ function CharacterBook.getCharacterAttributes(cti)
     local data = CharacterBook.characterAttributes;
 
     if (cti == "all" or cti == "primary") then
-        local spiritManaRegen, gearManaRegen, gearMp5 = CharacterBook.getManaRegenPerPulse();
+        local baseManaRegen, gearMp5 = CharacterBook.getManaRegenPerPulse();
         data.primary = data.primary or {};
         data.primary.health = UnitHealthMax("player");
         data.primary.mana = UnitPowerMax("player", Enum.PowerType.Mana);
-        data.primary.spiritManaRegen = spiritManaRegen;
-        data.primary.gearManaRegen = gearManaRegen;
+        data.primary.baseManaRegen = baseManaRegen;
         data.primary.gearMp5 = gearMp5;
     end
 

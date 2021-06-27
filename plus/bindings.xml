@@ -8,11 +8,4 @@
             HideUIPanel(WorldMapFrame)
         end
     </Binding>
-    <Binding name="Toggle Scoreboard" runOnUp="true" header="thpack.scoreboard">
-        if (keystate == "down") then
-            showScoreboard();
-        else
-            hideScoreboard();
-        end
-    </Binding>
 </Bindings>

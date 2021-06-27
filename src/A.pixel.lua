@@ -1,11 +1,9 @@
-A.addSlashCommand("thpackDebug", "/debug", function(x)
-    A.logi("-------- printing: " .. x);
-    A.logd(loadstring("return " .. x)());
-end);
+local addonName, addon = ...;
+local A = addon.A;
 
-A.addSlashCommand("thpackReload", "/reload", ReloadUI);
-
+----------------------------------------
 -- pixel perfect
+
 (function()
 
     WTF = WTF or {}; -- used to be saved variables

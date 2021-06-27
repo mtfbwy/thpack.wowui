@@ -1,8 +1,9 @@
+local addonName, addon = ...;
+local A = addon.A;
+
 (function()
-
     local tooltip = CreateFrame("GameTooltip");
-
-    local function repairThem()
+    local function repairAll()
         local amount, fixable = GetRepairAllCost();
         if fixable then
             RepairAllItems();
@@ -25,7 +26,7 @@
     f:RegisterEvent("MERCHANT_SHOW");
     f:SetScript("OnEvent", function(self, event, ...)
         if CanMerchantRepair() then
-            local amount = repairThem();
+            local amount = repairAll();
             if amount > 0 then
                 A.logi("Auto repair for " .. GetCoinTextureString(amount));
             end
