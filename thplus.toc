@@ -2,8 +2,6 @@
 ## Title: thplus
 ## X-BuildDate: {BuildDate}
 
-plus/bindings.xml
-
 src/Proto.lua
 src/Color.lua
 src/Seg.lua
