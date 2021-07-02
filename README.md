@@ -38,6 +38,7 @@ Fragmentary functionalities.
 - 快速拾取
 - 显示各插件内存占用
 - 去除短时间内的重复警告
+- 显示命中、暴击等属性
 
 ## Acknowledge
 

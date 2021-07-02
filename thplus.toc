@@ -25,6 +25,7 @@ plus/chat.tab.lua
 plus/fastloot.lua
 plus/performance.lua
 plus/quest.reward.lua
+plus/stat.lua
 plus/tooltip.item.lua
 plus/tooltip.unit.lua
 plus/warning.lua
