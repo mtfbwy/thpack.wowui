@@ -67,7 +67,7 @@ function installPackage() {
 
 ########################################
 
-packages="thplus"
+packages="thplus thpack.scoreboard"
 
 for packageId in $packages; do
     echo "building $packageId[11300] ..."
